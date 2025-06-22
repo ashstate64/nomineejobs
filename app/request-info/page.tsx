@@ -39,8 +39,31 @@ export default function RequestInfoPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!formData.name || !formData.email || !formData.message) {
-      setSubmitError('Please fill in all required fields.')
+    // Enhanced validation
+    if (!formData.name.trim()) {
+      setSubmitError('Please enter your name.')
+      return
+    }
+    
+    if (!formData.email.trim()) {
+      setSubmitError('Please enter your email address.')
+      return
+    }
+    
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      setSubmitError('Please enter a valid email address.')
+      return
+    }
+    
+    if (!formData.message.trim()) {
+      setSubmitError('Please enter your message.')
+      return
+    }
+    
+    if (formData.message.trim().length < 10) {
+      setSubmitError('Please provide a more detailed message (at least 10 characters).')
       return
     }
 
@@ -51,19 +74,19 @@ export default function RequestInfoPage() {
       // Create FormData for submission
       const submitData = new FormData()
       
-      // Add all form fields
+      // Add all form fields with proper encoding
       Object.entries(formData).forEach(([key, value]) => {
-        if (value) {
-          submitData.append(key, value)
+        if (value && value.trim()) {
+          submitData.append(key, value.trim())
         }
       })
 
       // Add FormSubmit configuration fields
       submitData.append('_next', SUCCESS_URL)
-      submitData.append('_subject', `New Info Request: ${formData.inquiry_type || 'General Inquiry'}`)
+      submitData.append('_subject', `New Info Request from ${formData.name}: ${formData.inquiry_type || 'General Inquiry'}`)
       submitData.append('_template', 'table')
       submitData.append('_captcha', 'true')
-      submitData.append('_autoresponse', 'Thank you for your inquiry! We have received your message and will respond within 24 hours during business days.')
+      submitData.append('_autoresponse', 'Thank you for your inquiry! We have received your message and will respond within 24 hours during business days. Your inquiry is important to us.')
       
       // Add honeypot for spam protection
       submitData.append('_honey', '')
@@ -71,14 +94,33 @@ export default function RequestInfoPage() {
       // Add blacklist for spam filtering
       submitData.append('_blacklist', 'spam, viagra, crypto, bitcoin, investment scheme')
 
-      // Submit to FormSubmit
+      // Submit to FormSubmit with timeout
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
+
       const response = await fetch(`https://formsubmit.co/${FORMSUBMIT_EMAIL}`, {
         method: 'POST',
         body: submitData,
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/json, text/html, */*',
+        }
       })
 
-      if (response.ok) {
+      clearTimeout(timeoutId)
+
+      if (response.ok || response.status === 200) {
         setSubmitSuccess(true)
+        
+        // Clear form data
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          inquiry_type: "",
+          message: "",
+          preferred_contact: "",
+        })
         
         // Redirect after a brief success display
         setTimeout(() => {
@@ -90,7 +132,15 @@ export default function RequestInfoPage() {
       
     } catch (error) {
       console.error('Submission error:', error)
-      setSubmitError('Failed to send message. Please check your internet connection and try again.')
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          setSubmitError('Request timed out. Please check your internet connection and try again.')
+        } else {
+          setSubmitError(`Failed to send message: ${error.message}. Please try again.`)
+        }
+      } else {
+        setSubmitError('Failed to send message. Please check your internet connection and try again.')
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -99,14 +149,22 @@ export default function RequestInfoPage() {
   if (submitSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 flex items-center justify-center">
-        <div className="text-center py-12">
-          <div className="bg-green-50 border border-green-200 rounded-2xl p-8 max-w-md mx-auto">
-            <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-green-800 mb-2">Message Sent!</h2>
-            <p className="text-green-700 mb-4">
-              Thank you for your inquiry. We'll get back to you within 24 hours.
+        <div className="text-center py-12 animate-fade-in">
+          <div className="bg-white border-2 border-green-200 rounded-2xl p-8 max-w-md mx-auto shadow-xl transform animate-bounce-in">
+            <div className="relative mb-6">
+              <CheckCircle className="h-20 w-20 text-green-600 mx-auto animate-scale-in" />
+              <div className="absolute inset-0 rounded-full bg-green-100 opacity-50 animate-ping"></div>
+            </div>
+            <h2 className="text-3xl font-bold text-green-800 mb-3">Message Sent Successfully!</h2>
+            <p className="text-green-700 mb-4 text-lg">
+              Thank you for your inquiry, <strong>{formData.name}</strong>. We'll get back to you within 24 hours.
             </p>
-            <p className="text-sm text-green-600">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+              <p className="text-sm text-green-600">
+                📧 Confirmation email sent to: <strong>{formData.email}</strong>
+              </p>
+            </div>
+            <p className="text-sm text-green-600 animate-pulse">
               Redirecting to confirmation page...
             </p>
           </div>
@@ -155,7 +213,7 @@ export default function RequestInfoPage() {
                       name="name"
                       placeholder="Enter your full name"
                       required
-                      className="bg-white/80 focus:bg-white transition-all duration-200"
+                      className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white text-gray-900 placeholder:text-gray-500 rounded-lg px-4 py-3 transition-all duration-200"
                       value={formData.name}
                       onChange={handleInputChange}
                     />
@@ -172,7 +230,7 @@ export default function RequestInfoPage() {
                       type="email"
                       placeholder="you@example.com"
                       required
-                      className="bg-white/80 focus:bg-white transition-all duration-200"
+                      className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white text-gray-900 placeholder:text-gray-500 rounded-lg px-4 py-3 transition-all duration-200"
                       value={formData.email}
                       onChange={handleInputChange}
                     />
@@ -191,7 +249,7 @@ export default function RequestInfoPage() {
                       name="phone"
                       type="tel"
                       placeholder="07123 456789"
-                      className="bg-white/80 focus:bg-white transition-all duration-200"
+                      className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white text-gray-900 placeholder:text-gray-500 rounded-lg px-4 py-3 transition-all duration-200"
                       value={formData.phone}
                       onChange={handleInputChange}
                     />
@@ -202,13 +260,13 @@ export default function RequestInfoPage() {
                       Preferred Contact Method
                     </Label>
                     <Select value={formData.preferred_contact} onValueChange={handleSelectChange('preferred_contact')}>
-                      <SelectTrigger className="bg-white/80 focus:bg-white transition-all duration-200">
+                      <SelectTrigger className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white text-gray-900 rounded-lg px-4 py-3 h-12 transition-all duration-200">
                         <SelectValue placeholder="Select preference" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="email">Email</SelectItem>
-                        <SelectItem value="phone">Phone Call</SelectItem>
-                        <SelectItem value="either">Either Email or Phone</SelectItem>
+                      <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-lg">
+                        <SelectItem value="email" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Email</SelectItem>
+                        <SelectItem value="phone" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Phone Call</SelectItem>
+                        <SelectItem value="either" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Either Email or Phone</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -220,18 +278,18 @@ export default function RequestInfoPage() {
                     What would you like to know about?
                   </Label>
                   <Select value={formData.inquiry_type} onValueChange={handleSelectChange('inquiry_type')}>
-                    <SelectTrigger className="bg-white/80 focus:bg-white transition-all duration-200">
+                    <SelectTrigger className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white text-gray-900 rounded-lg px-4 py-3 h-12 transition-all duration-200">
                       <SelectValue placeholder="Select inquiry type" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="general">General Information</SelectItem>
-                      <SelectItem value="application">Application Process</SelectItem>
-                      <SelectItem value="earnings">Earnings & Payments</SelectItem>
-                      <SelectItem value="legal">Legal Requirements</SelectItem>
-                      <SelectItem value="responsibilities">Role Responsibilities</SelectItem>
-                      <SelectItem value="training">Training & Support</SelectItem>
-                      <SelectItem value="timeline">Timeline & Schedule</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                    <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                      <SelectItem value="general" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">General Information</SelectItem>
+                      <SelectItem value="application" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Application Process</SelectItem>
+                      <SelectItem value="earnings" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Earnings & Payments</SelectItem>
+                      <SelectItem value="legal" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Legal Requirements</SelectItem>
+                      <SelectItem value="responsibilities" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Role Responsibilities</SelectItem>
+                      <SelectItem value="training" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Training & Support</SelectItem>
+                      <SelectItem value="timeline" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Timeline & Schedule</SelectItem>
+                      <SelectItem value="other" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Other</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -247,7 +305,7 @@ export default function RequestInfoPage() {
                     placeholder="Please describe your questions or what information you'd like to receive..."
                     required
                     rows={6}
-                    className="bg-white/80 focus:bg-white transition-all duration-200 resize-none"
+                    className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white text-gray-900 placeholder:text-gray-500 rounded-lg px-4 py-3 transition-all duration-200 resize-none"
                     value={formData.message}
                     onChange={handleInputChange}
                   />
@@ -258,9 +316,9 @@ export default function RequestInfoPage() {
 
                 {/* Error Display */}
                 {submitError && (
-                  <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg p-3">
-                    <AlertTriangle className="h-4 w-4" />
-                    {submitError}
+                  <div className="flex items-center gap-3 text-red-700 text-sm bg-red-50 border-2 border-red-200 rounded-lg p-4 shadow-sm">
+                    <AlertTriangle className="h-5 w-5 flex-shrink-0" />
+                    <span className="font-medium">{submitError}</span>
                   </div>
                 )}
 
@@ -268,16 +326,16 @@ export default function RequestInfoPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 py-3"
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] disabled:hover:scale-100 shadow-lg hover:shadow-xl"
                 >
                   {isSubmitting ? (
                     <>
-                      <Clock className="h-4 w-4 animate-spin" />
+                      <Clock className="h-5 w-5 animate-spin" />
                       Sending Message...
                     </>
                   ) : (
                     <>
-                      <Send className="h-4 w-4" />
+                      <Send className="h-5 w-5" />
                       Send Message
                     </>
                   )}

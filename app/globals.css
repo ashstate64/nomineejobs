@@ -143,6 +143,11 @@ body {
   100% { transform: scale(1); opacity: 1; }
 }
 
+@keyframes scale-in {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-4px); }
@@ -194,6 +199,10 @@ body {
 
 @utility animate-bounce-in {
   animation: bounce-in 0.5s ease-out;
+}
+
+@utility animate-scale-in {
+  animation: scale-in 0.6s ease-out 0.2s both;
 }
 
 @utility animate-shake {
