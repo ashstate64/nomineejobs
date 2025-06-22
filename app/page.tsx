@@ -642,11 +642,11 @@ export default function LandingPage() {
               {[...Array(5)].map((_, i) => (
                 <Star key={i} className="h-5 w-5 fill-current" />
               ))}
-              <span className="ml-2 text-gray-600 font-medium">4.9/5 from 2,847+ reviews</span>
+              <span className="ml-2 text-gray-600 font-medium">4.9/5 from 3,142+ reviews</span>
             </div>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 name: "Thomas B.",
@@ -654,7 +654,7 @@ export default function LandingPage() {
                 role: "Retired Teacher",
                 quote:
                   "Nominee Jobs UK provided clear guidance and prompt payments—for 12 companies I now earn just over £9,000 per year in under four hours of total work.",
-                avatar: "/placeholder.svg?width=100&height=100",
+                avatar: "/thomas-avatar.svg",
                 rating: 5,
                 earnings: "£9,000+/year",
                 timeframe: "18 months",
@@ -665,10 +665,21 @@ export default function LandingPage() {
                 role: "Part-time Consultant",
                 quote:
                   "Within a fortnight of approval the first retainer reached my account. The workflow is structured, insured, and entirely remote.",
-                avatar: "/placeholder.svg?width=100&height=100",
+                avatar: "/sarah-avatar.svg",
                 rating: 5,
                 earnings: "£5,200/year",
                 timeframe: "8 months",
+              },
+              {
+                name: "James M.",
+                location: "Manchester",
+                role: "Business Owner",
+                quote:
+                  "The process was seamless and professional. I'm now servicing 8 companies and earning a steady £7,200 annually while maintaining my main business.",
+                avatar: "/james-avatar.svg",
+                rating: 5,
+                earnings: "£7,200/year",
+                timeframe: "14 months",
               },
             ].map((testimonial, index) => (
               <GlassCard key={index} className="flex flex-col">
@@ -682,9 +693,15 @@ export default function LandingPage() {
                 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                   <div className="flex items-center">
-                    <Avatar className="h-12 w-12 mr-4">
-                      <AvatarImage src={testimonial.avatar || "/placeholder.svg"} alt={testimonial.name} />
-                      <AvatarFallback>{testimonial.name.substring(0, 1)}</AvatarFallback>
+                    <Avatar className="h-14 w-14 mr-4 ring-2 ring-white shadow-lg">
+                      <AvatarImage 
+                        src={testimonial.avatar || "/placeholder.svg"} 
+                        alt={`${testimonial.name} - ${testimonial.role}`}
+                        className="object-cover"
+                      />
+                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
+                        {testimonial.name.substring(0, 1)}
+                      </AvatarFallback>
                     </Avatar>
                     <div>
                       <p className="font-semibold text-gray-800">{testimonial.name}</p>
