@@ -83,10 +83,53 @@ const nextConfig = {
   },
   // Bundle size optimizations
   webpack: (config, { isServer, dev }) => {
+    // Optimize Lucide React imports to reduce bundle size and main-thread work
+    if (!isServer) {
+      config.optimization.splitChunks = {
+        ...config.optimization.splitChunks,
+        cacheGroups: {
+          ...config.optimization.splitChunks?.cacheGroups,
+          // Split Lucide React into smaller chunks to prevent large bundles
+          lucideIcons: {
+            test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
+            name: 'lucide-icons',
+            chunks: 'all',
+            priority: 15,
+            minSize: 0,
+            maxSize: 30000, // Keep icon chunks small (30KB max)
+            enforce: true,
+          },
+          // Split other vendor libraries
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+            priority: 10,
+            maxSize: 80000, // Split vendor chunks at 80KB
+            minChunks: 1,
+          },
+          // Common components and utilities
+          common: {
+            name: 'common',
+            minChunks: 2,
+            priority: 5,
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      }
+    }
+    
     // Optimize for better tree shaking
     config.resolve.alias = {
       ...config.resolve.alias,
     }
+    
+    // Enable tree shaking for lucide-react specifically
+    config.module.rules.push({
+      test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
+      sideEffects: false,
+    })
     
     // Client-side optimizations
     if (!isServer) {

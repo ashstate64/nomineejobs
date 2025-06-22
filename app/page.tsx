@@ -5,8 +5,7 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 
 // Lazy load only critical icons for above-the-fold content
-const AlertCircle = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.AlertCircle })))
-const ArrowRight = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.ArrowRight })))
+import { AlertCircle, ArrowRight, IconWrapper } from '@/components/icons/optimized-icons'
 
 // Dynamic imports for heavy sections (below the fold)
 const HeroSection = dynamic(() => import("@/components/sections/hero-section"), {

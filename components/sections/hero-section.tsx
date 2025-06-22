@@ -6,16 +6,19 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 
 // Lazy load only essential icons for hero
-const ChevronRight = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.ChevronRight })))
-const MessageSquare = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.MessageSquare })))
-const Users = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Users })))
-const Target = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Target })))
-const Star = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Star })))
-const Timer = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Timer })))
-const ShieldCheck = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.ShieldCheck })))
-const Briefcase = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Briefcase })))
-const UserCheck = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.UserCheck })))
-const Eye = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Eye })))
+import { 
+  ChevronRight, 
+  MessageSquare, 
+  Users, 
+  Target, 
+  Star, 
+  Timer, 
+  ShieldCheck, 
+  Briefcase, 
+  UserCheck, 
+  Eye,
+  IconWrapper
+} from '@/components/icons/optimized-icons'
 
 // Optimized counter component
 const AnimatedCounter = memo(({ value, prefix = "", suffix = "" }: { value: number; prefix?: string; suffix?: string }) => {

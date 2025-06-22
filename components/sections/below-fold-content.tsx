@@ -5,12 +5,17 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 // Lazy load icons that are only used below the fold
-const ArrowRight = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.ArrowRight })))
-const Info = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Info })))
-const Building = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.Building })))
+import { 
+  ArrowRight, 
+  Info, 
+  Building, 
+  TrendingUp, 
+  HelpCircle,
+  IconWrapper
+} from '@/components/icons/optimized-icons'
+
+// ListChecks isn't in our optimized icons yet, so keep it lazy
 const ListChecks = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.ListChecks })))
-const TrendingUp = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.TrendingUp })))
-const HelpCircle = React.lazy(() => import("lucide-react").then(mod => ({ default: mod.HelpCircle })))
 
 // Optimized FAQ data (moved out of render)
 const FAQ_DATA = [
