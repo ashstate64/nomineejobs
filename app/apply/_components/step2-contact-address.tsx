@@ -291,11 +291,11 @@ export default function Step2ContactAddress({ formData, updateFormData }: StepPr
               Country
             </Label>
             <Select value={formData.country || "United Kingdom"} onValueChange={handleSelectChange}>
-              <SelectTrigger className="mt-1 bg-white/80 focus:bg-white">
-                <SelectValue placeholder="Select country" />
+              <SelectTrigger className="mt-1 bg-white/80 focus:bg-white text-gray-900">
+                <SelectValue placeholder="Select country" className="text-gray-700" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+              <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-lg z-50">
+                <SelectItem value="United Kingdom" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">United Kingdom</SelectItem>
               </SelectContent>
             </Select>
             <p className="text-xs text-gray-500">Must be UK resident to participate</p>

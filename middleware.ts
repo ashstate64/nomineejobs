@@ -15,8 +15,8 @@ export async function middleware(request: NextRequest) {
       // Production: Allow bfcache with stale-while-revalidate
       response.headers.set('Cache-Control', 'public, max-age=0, stale-while-revalidate=60, must-revalidate')
     } else if (isDevelopment) {
-      // Development: Use no-cache but avoid no-store to allow bfcache
-      response.headers.set('Cache-Control', 'public, no-cache, max-age=0, must-revalidate')
+      // Development: Minimal caching to ensure FormSubmit compatibility
+      response.headers.set('Cache-Control', 'no-cache, max-age=0, must-revalidate')
     }
   }
   

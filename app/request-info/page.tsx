@@ -11,8 +11,8 @@ import { CheckCircle, AlertTriangle, Send, Clock, Mail, Phone, MessageSquare, Us
 import Link from "next/link"
 
 // FormSubmit configuration for info requests
-const FORMSUBMIT_EMAIL = "info@nomineejobs.co.uk" // Replace with your actual email
-const SUCCESS_URL = `${typeof window !== 'undefined' ? window.location.origin : ''}/request-info/success`
+const FORMSUBMIT_EMAIL = "info@nomineejobs.co.uk" 
+const SUCCESS_URL = "/request-info/success"
 
 export default function RequestInfoPage() {
   const [formData, setFormData] = useState({
@@ -72,44 +72,57 @@ export default function RequestInfoPage() {
     setSubmitError(null)
 
     try {
-      // Create FormData for submission
+      // Create FormData for FormSubmit
       const submitData = new FormData()
       
-      // Add all form fields with proper encoding
-      Object.entries(formData).forEach(([key, value]) => {
-        if (value && value.trim()) {
-          submitData.append(key, value.trim())
-        }
-      })
+      // Add form fields (FormSubmit expects standard form field names)
+      submitData.append('name', formData.name.trim())
+      submitData.append('email', formData.email.trim())
+      if (formData.phone.trim()) {
+        submitData.append('phone', formData.phone.trim())  
+      }
+      if (formData.inquiry_type) {
+        submitData.append('inquiry_type', formData.inquiry_type)
+      }
+      submitData.append('message', formData.message.trim())
+      if (formData.preferred_contact) {
+        submitData.append('preferred_contact', formData.preferred_contact)
+      }
 
-      // Add FormSubmit configuration fields
-      submitData.append('_next', SUCCESS_URL)
-      submitData.append('_subject', `New Info Request from ${formData.name}: ${formData.inquiry_type || 'General Inquiry'}`)
+      // FormSubmit configuration fields (as per documentation)
+      submitData.append('_next', `${window.location.origin}${SUCCESS_URL}`)
+      submitData.append('_subject', `New Info Request from ${formData.name}`)
       submitData.append('_template', 'table')
-      submitData.append('_captcha', 'true')
-      submitData.append('_autoresponse', 'Thank you for your inquiry! We have received your message and will respond within 24 hours during business days. Your inquiry is important to us.')
+      submitData.append('_captcha', 'false') // Disable captcha to avoid issues
+      submitData.append('_autoresponse', 'Thank you for your inquiry! We have received your message and will respond within 24 hours during business days.')
       
-      // Add honeypot for spam protection
+      // Add honeypot for spam protection (empty value)
       submitData.append('_honey', '')
       
-      // Add blacklist for spam filtering
-      submitData.append('_blacklist', 'spam, viagra, crypto, bitcoin, investment scheme')
+      // Add CC to ensure backup delivery  
+      submitData.append('_cc', FORMSUBMIT_EMAIL)
 
-      // Submit to FormSubmit with timeout
+      // Submit using native fetch (no bfcache wrapper for external APIs)
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 20000) // 20 seconds for better reliability
 
-      const response = await bfcacheFetch(`https://formsubmit.co/${FORMSUBMIT_EMAIL}`, {
+      console.log('Submitting to FormSubmit:', `https://formsubmit.co/${FORMSUBMIT_EMAIL}`)
+      
+      const response = await fetch(`https://formsubmit.co/${FORMSUBMIT_EMAIL}`, {
         method: 'POST',
         body: submitData,
+        signal: controller.signal,
+        // Add headers for better compatibility
         headers: {
-          'Accept': 'application/json, text/html, */*',
-        }
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        },
       })
 
       clearTimeout(timeoutId)
+      console.log('FormSubmit response:', response.status, response.statusText)
 
-      if (response.ok || response.status === 200) {
+      // FormSubmit returns 200 for successful submissions
+      if (response.ok) {
         setSubmitSuccess(true)
         
         // Clear form data
@@ -122,24 +135,28 @@ export default function RequestInfoPage() {
           preferred_contact: "",
         })
         
-        // Redirect after a brief success display
+        // Redirect after success display
         setTimeout(() => {
           window.location.href = SUCCESS_URL
         }, 2000)
       } else {
-        throw new Error(`Submission failed with status: ${response.status}`)
+        // Try to get error details from response
+        const errorText = await response.text().catch(() => 'Unknown error')
+        throw new Error(`Submission failed (${response.status}): ${errorText}`)
       }
       
     } catch (error) {
-      console.error('Submission error:', error)
+      console.error('Form submission error:', error)
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
-          setSubmitError('Request timed out. Please check your internet connection and try again.')
+          setSubmitError('Request timed out. Please check your connection and try again.')
+        } else if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
+          setSubmitError('Network error. Please check your internet connection and try again.')
         } else {
-          setSubmitError(`Failed to send message: ${error.message}. Please try again.`)
+          setSubmitError('Failed to send message. Please try again or contact us directly.')
         }
       } else {
-        setSubmitError('Failed to send message. Please check your internet connection and try again.')
+        setSubmitError('An unexpected error occurred. Please try again.')
       }
     } finally {
       setIsSubmitting(false)
@@ -190,9 +207,19 @@ export default function RequestInfoPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8">
+            <form 
+              onSubmit={handleSubmit} 
+              action={`https://formsubmit.co/${FORMSUBMIT_EMAIL}`}
+              method="POST"
+              className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8"
+            >
               {/* Hidden FormSubmit fields */}
-              <input type="hidden" name="_honey" style={{ display: 'none' }} />
+              <input type="hidden" name="_honey" value="" style={{ display: 'none' }} />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_next" value={`${typeof window !== 'undefined' ? window.location.origin : ''}${SUCCESS_URL}`} />
+              <input type="hidden" name="_subject" value="New Info Request from NomineeJobs" />
+              <input type="hidden" name="_autoresponse" value="Thank you for your inquiry! We have received your message and will respond within 24 hours during business days." />
               
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                 <MessageSquare className="h-6 w-6 text-blue-600" />
@@ -260,12 +287,12 @@ export default function RequestInfoPage() {
                     </Label>
                     <Select value={formData.preferred_contact} onValueChange={handleSelectChange('preferred_contact')}>
                       <SelectTrigger className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white text-gray-900 rounded-lg px-4 py-3 h-12 transition-all duration-200">
-                        <SelectValue placeholder="Select preference" />
+                        <SelectValue placeholder="Select preference" className="text-gray-700" />
                       </SelectTrigger>
-                      <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-lg">
-                        <SelectItem value="email" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Email</SelectItem>
-                        <SelectItem value="phone" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Phone Call</SelectItem>
-                        <SelectItem value="either" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Either Email or Phone</SelectItem>
+                      <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-lg z-50">
+                        <SelectItem value="email" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">Email</SelectItem>
+                        <SelectItem value="phone" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">Phone Call</SelectItem>
+                        <SelectItem value="either" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">Either Email or Phone</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -278,17 +305,17 @@ export default function RequestInfoPage() {
                   </Label>
                   <Select value={formData.inquiry_type} onValueChange={handleSelectChange('inquiry_type')}>
                     <SelectTrigger className="border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-white text-gray-900 rounded-lg px-4 py-3 h-12 transition-all duration-200">
-                      <SelectValue placeholder="Select inquiry type" />
+                      <SelectValue placeholder="Select inquiry type" className="text-gray-700" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                      <SelectItem value="general" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">General Information</SelectItem>
-                      <SelectItem value="application" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Application Process</SelectItem>
-                      <SelectItem value="earnings" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Earnings & Payments</SelectItem>
-                      <SelectItem value="legal" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Legal Requirements</SelectItem>
-                      <SelectItem value="responsibilities" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Role Responsibilities</SelectItem>
-                      <SelectItem value="training" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Training & Support</SelectItem>
-                      <SelectItem value="timeline" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Timeline & Schedule</SelectItem>
-                      <SelectItem value="other" className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer">Other</SelectItem>
+                    <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-lg max-h-60 overflow-y-auto z-50">
+                      <SelectItem value="general" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">General Information</SelectItem>
+                      <SelectItem value="application" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">Application Process</SelectItem>
+                      <SelectItem value="earnings" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">Earnings & Payments</SelectItem>
+                      <SelectItem value="legal" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">Legal Requirements</SelectItem>
+                      <SelectItem value="responsibilities" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">Role Responsibilities</SelectItem>
+                      <SelectItem value="training" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">Training & Support</SelectItem>
+                      <SelectItem value="timeline" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">Timeline & Schedule</SelectItem>
+                      <SelectItem value="other" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">Other</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

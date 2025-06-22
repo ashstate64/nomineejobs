@@ -191,13 +191,13 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
               {getValidationIcon('idType')}
             </Label>
             <Select value={formData.idType || ""} onValueChange={handleSelectChange('idType')}>
-              <SelectTrigger className={getInputClassName('idType')}>
-                <SelectValue placeholder="Select your primary ID document" />
+              <SelectTrigger className={`${getInputClassName('idType')} text-gray-900`}>
+                <SelectValue placeholder="Select your primary ID document" className="text-gray-700" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="passport">🇬🇧 UK Passport (Recommended)</SelectItem>
-                <SelectItem value="driving_licence">🚗 UK Driving Licence</SelectItem>
-                <SelectItem value="national_id">🆔 National Identity Card</SelectItem>
+              <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-lg z-50">
+                <SelectItem value="passport" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">🇬🇧 UK Passport (Recommended)</SelectItem>
+                <SelectItem value="driving_licence" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">🚗 UK Driving Licence</SelectItem>
+                <SelectItem value="national_id" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">🆔 National Identity Card</SelectItem>
               </SelectContent>
             </Select>
             {validationState.idType.message && (
