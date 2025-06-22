@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -74,11 +74,44 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/safari-pinned-tab.svg',
+        color: '#2563eb',
+      },
+    ],
+  },
+  manifest: '/site.webmanifest',
+
   category: 'business',
   classification: 'Business Services',
   other: {
     'google-site-verification': 'your-google-verification-code', // Add your actual verification code
+    'msapplication-TileColor': '#2563eb',
+    'msapplication-config': '/browserconfig.xml',
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#2563eb' },
+    { media: '(prefers-color-scheme: dark)', color: '#1d4ed8' }
+  ],
 }
 
 export default function RootLayout({
@@ -150,6 +183,40 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+        
+        {/* Favicon and App Icons */}
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+        
+        {/* Web App Manifest */}
+        <link rel="manifest" href="/site.webmanifest" />
+        
+        {/* App Meta Tags */}
+        <meta name="msapplication-TileColor" content="#2563eb" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        
+        {/* iOS Meta Tags */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="NomineeJobs" />
+        
+        {/* Android/Chrome Meta Tags */}
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="application-name" content="NomineeJobs" />
+        
+        {/* Windows Meta Tags */}
+        <meta name="msapplication-tooltip" content="NomineeJobs - UK Nominee Director Services" />
+        <meta name="msapplication-starturl" content="/" />
+        <meta name="msapplication-navbutton-color" content="#2563eb" />
+        
+        {/* Additional PWA Meta Tags */}
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="HandheldFriendly" content="true" />
+        <meta name="MobileOptimized" content="320" />
       </head>
       <body suppressHydrationWarning={true}>
         {children}

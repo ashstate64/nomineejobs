@@ -148,8 +148,8 @@ export default function RequestInfoPage() {
 
   if (submitSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 flex items-center justify-center">
-        <div className="text-center py-12 animate-fade-in">
+      <div className="flex items-center justify-center py-16">
+        <div className="text-center animate-fade-in">
           <div className="bg-white border-2 border-green-200 rounded-2xl p-8 max-w-md mx-auto shadow-xl transform animate-bounce-in">
             <div className="relative mb-6">
               <CheckCircle className="h-20 w-20 text-green-600 mx-auto animate-scale-in" />
@@ -174,19 +174,18 @@ export default function RequestInfoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <HelpCircle className="h-8 w-8 text-blue-600" />
-            <h1 className="text-4xl font-bold text-gray-800">Request Information</h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Have questions about becoming a nominee director? We're here to help. 
-            Get personalized answers from our expert team.
-          </p>
+    <div className="max-w-6xl mx-auto px-4 py-12">
+      {/* Header */}
+      <div className="text-center mb-12">
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <HelpCircle className="h-8 w-8 text-blue-600" />
+          <h1 className="text-4xl font-bold text-gray-800">Request Information</h1>
         </div>
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          Have questions about becoming a nominee director? We're here to help. 
+          Get personalized answers from our expert team.
+        </p>
+      </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Form */}
@@ -432,7 +431,6 @@ export default function RequestInfoPage() {
             </div>
           </div>
         </div>
-      </div>
     </div>
   )
 }

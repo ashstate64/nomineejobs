@@ -210,8 +210,8 @@ export default function ApplyPage() {
 
   if (submitSuccess) {
     return (
-      <div className="text-center py-12">
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-8 max-w-md mx-auto">
+      <div className="text-center py-8">
+        <div className="bg-green-50 border border-green-200 rounded-2xl p-8">
           <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-green-800 mb-2">Application Submitted!</h2>
           <p className="text-green-700 mb-4">
@@ -226,7 +226,7 @@ export default function ApplyPage() {
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+    <form ref={formRef} onSubmit={handleSubmit} className="w-full">
       {/* Hidden FormSubmit fields */}
       <input type="hidden" name="_honey" style={{ display: 'none' }} />
       
@@ -301,10 +301,8 @@ export default function ApplyPage() {
       </div>
 
       {/* Form Content */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-        <div className="p-6 sm:p-8">
-          {renderCurrentStep()}
-        </div>
+      <div className="mb-8">
+        {renderCurrentStep()}
       </div>
 
       {/* Navigation Buttons */}
