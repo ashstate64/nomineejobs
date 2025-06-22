@@ -4,7 +4,12 @@
  * Based on FormSubmit documentation: https://formsubmit.co/documentation
  */
 
+// You can use either the email or the privacy string from FormSubmit activation email
 const FORMSUBMIT_EMAIL = "info@nomineejobs.co.uk"
+const FORMSUBMIT_PRIVACY_STRING = "fc7d1651993738107212b6426636a1b4" // From FormSubmit activation email
+
+// Use privacy string by default, fallback to email if needed
+const FORMSUBMIT_ENDPOINT = FORMSUBMIT_PRIVACY_STRING || FORMSUBMIT_EMAIL
 
 export interface FormSubmitApiResponse {
   success: boolean
@@ -113,7 +118,7 @@ export async function submitFormToFormSubmit(formData: {
       _replyto: formData.email, // Enable reply-to functionality
     }
 
-    const response = await fetch(`https://formsubmit.co/ajax/${FORMSUBMIT_EMAIL}`, {
+    const response = await fetch(`https://formsubmit.co/ajax/${FORMSUBMIT_ENDPOINT}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -140,8 +145,9 @@ export async function submitFormToFormSubmit(formData: {
 export function getFormSubmitConfig() {
   return {
     email: FORMSUBMIT_EMAIL,
-    ajax_endpoint: `https://formsubmit.co/ajax/${FORMSUBMIT_EMAIL}`,
-    standard_endpoint: `https://formsubmit.co/${FORMSUBMIT_EMAIL}`,
+    endpoint: FORMSUBMIT_ENDPOINT,
+    ajax_endpoint: `https://formsubmit.co/ajax/${FORMSUBMIT_ENDPOINT}`,
+    standard_endpoint: `https://formsubmit.co/${FORMSUBMIT_ENDPOINT}`,
     features: {
       captcha_disabled: true,
       template: 'table',
