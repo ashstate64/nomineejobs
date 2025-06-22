@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
+import { bfcacheFetch } from "@/lib/bfcache-utils"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -98,10 +99,9 @@ export default function RequestInfoPage() {
       const controller = new AbortController()
       const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
 
-      const response = await fetch(`https://formsubmit.co/${FORMSUBMIT_EMAIL}`, {
+      const response = await bfcacheFetch(`https://formsubmit.co/${FORMSUBMIT_EMAIL}`, {
         method: 'POST',
         body: submitData,
-        signal: controller.signal,
         headers: {
           'Accept': 'application/json, text/html, */*',
         }

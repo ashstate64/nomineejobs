@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
+import { bfcacheFetch } from "@/lib/bfcache-utils"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, ChevronLeft, ChevronRight, Send, AlertTriangle, Clock, Users, Trophy, Shield } from "lucide-react"
@@ -164,8 +165,8 @@ export default function ApplyPage() {
       // Add blacklist for spam filtering
       submitData.append('_blacklist', 'spam, viagra, crypto, bitcoin, investment scheme, make money fast')
 
-      // Submit to FormSubmit
-      const response = await fetch(`https://formsubmit.co/${FORMSUBMIT_EMAIL}`, {
+      // Submit to FormSubmit using bfcache-compatible fetch
+      const response = await bfcacheFetch(`https://formsubmit.co/${FORMSUBMIT_EMAIL}`, {
         method: 'POST',
         body: submitData,
       })

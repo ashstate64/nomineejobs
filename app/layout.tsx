@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import { BFCacheOptimizer } from '@/components/bfcache-optimizer'
 
 export const metadata: Metadata = {
   title: {
@@ -219,6 +220,7 @@ export default function RootLayout({
         <meta name="MobileOptimized" content="320" />
       </head>
       <body suppressHydrationWarning={true}>
+        <BFCacheOptimizer />
         {children}
       </body>
     </html>
