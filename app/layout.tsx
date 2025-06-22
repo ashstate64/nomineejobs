@@ -109,6 +109,7 @@ export default function RootLayout({
               contactPoint: {
                 '@type': 'ContactPoint',
                 telephone: '+44-xxx-xxx-xxxx',
+                email: 'info@nomineejobs.co.uk',
                 contactType: 'customer service',
                 availableLanguage: 'English'
               },

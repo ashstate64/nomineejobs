@@ -897,6 +897,12 @@ export default function LandingPage() {
             <Building className="h-5 w-5 mr-2 text-gray-400" />
             <p className="font-semibold text-gray-700">Nominee Jobs UK Ltd</p>
           </div>
+          <div className="mb-4">
+            <p className="text-sm text-gray-600 mb-2">Contact Us</p>
+            <a href="mailto:info@nomineejobs.co.uk" className="text-blue-600 hover:text-blue-700 font-medium">
+              info@nomineejobs.co.uk
+            </a>
+          </div>
           <p>Company No. 12345678 &emsp; Registered in England & Wales</p>
           <p>Supervised by the Financial Conduct Authority for anti-money-laundering purposes</p>
           <p>Information Commissioner's Office Registration ZA999999</p>
