@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { bfcacheFetch } from "@/lib/bfcache-utils"
+import { submitFormToFormSubmit } from "@/lib/formsubmit-api"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -72,57 +72,21 @@ export default function RequestInfoPage() {
     setSubmitError(null)
 
     try {
-      // Create FormData for FormSubmit
-      const submitData = new FormData()
+      console.log('🚀 Submitting contact form using FormSubmit AJAX API...')
       
-      // Add form fields (FormSubmit expects standard form field names)
-      submitData.append('name', formData.name.trim())
-      submitData.append('email', formData.email.trim())
-      if (formData.phone.trim()) {
-        submitData.append('phone', formData.phone.trim())  
-      }
-      if (formData.inquiry_type) {
-        submitData.append('inquiry_type', formData.inquiry_type)
-      }
-      submitData.append('message', formData.message.trim())
-      if (formData.preferred_contact) {
-        submitData.append('preferred_contact', formData.preferred_contact)
-      }
-
-      // FormSubmit configuration fields (as per documentation)
-      submitData.append('_next', `${window.location.origin}${SUCCESS_URL}`)
-      submitData.append('_subject', `New Info Request from ${formData.name}`)
-      submitData.append('_template', 'table')
-      submitData.append('_captcha', 'false') // Disable captcha to avoid issues
-      submitData.append('_autoresponse', 'Thank you for your inquiry! We have received your message and will respond within 24 hours during business days.')
-      
-      // Add honeypot for spam protection (empty value)
-      submitData.append('_honey', '')
-      
-      // Add CC to ensure backup delivery  
-      submitData.append('_cc', FORMSUBMIT_EMAIL)
-
-      // Submit using native fetch (no bfcache wrapper for external APIs)
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 20000) // 20 seconds for better reliability
-
-      console.log('Submitting to FormSubmit:', `https://formsubmit.co/${FORMSUBMIT_EMAIL}`)
-      
-      const response = await fetch(`https://formsubmit.co/${FORMSUBMIT_EMAIL}`, {
-        method: 'POST',
-        body: submitData,
-        signal: controller.signal,
-        // Add headers for better compatibility
-        headers: {
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        },
+      // Use the FormSubmit utility for reliable submission
+      const result = await submitFormToFormSubmit({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        message: formData.message.trim(),
+        phone: formData.phone.trim(),
+        inquiry_type: formData.inquiry_type,
+        preferred_contact: formData.preferred_contact,
       })
 
-      clearTimeout(timeoutId)
-      console.log('FormSubmit response:', response.status, response.statusText)
+      console.log('✅ FormSubmit success:', result)
 
-      // FormSubmit returns 200 for successful submissions
-      if (response.ok) {
+      if (result.success) {
         setSubmitSuccess(true)
         
         // Clear form data
@@ -140,23 +104,21 @@ export default function RequestInfoPage() {
           window.location.href = SUCCESS_URL
         }, 2000)
       } else {
-        // Try to get error details from response
-        const errorText = await response.text().catch(() => 'Unknown error')
-        throw new Error(`Submission failed (${response.status}): ${errorText}`)
+        throw new Error(result.message || 'Submission failed - please try again')
       }
       
     } catch (error) {
-      console.error('Form submission error:', error)
+      console.error('❌ FormSubmit error:', error)
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          setSubmitError('Request timed out. Please check your connection and try again.')
-        } else if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
-          setSubmitError('Network error. Please check your internet connection and try again.')
+        if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
+          setSubmitError('🌐 Network connection error. Please check your internet and try again.')
+        } else if (error.message.includes('timeout')) {
+          setSubmitError('⏱️ Request timed out. Please try again.')
         } else {
-          setSubmitError('Failed to send message. Please try again or contact us directly.')
+          setSubmitError(`📧 ${error.message}. Need help? Email us directly at info@nomineejobs.co.uk`)
         }
       } else {
-        setSubmitError('An unexpected error occurred. Please try again.')
+        setSubmitError('❗ Unexpected error. Please email us directly at info@nomineejobs.co.uk')
       }
     } finally {
       setIsSubmitting(false)
@@ -209,17 +171,18 @@ export default function RequestInfoPage() {
           <div className="lg:col-span-2">
             <form 
               onSubmit={handleSubmit} 
-              action={`https://formsubmit.co/${FORMSUBMIT_EMAIL}`}
-              method="POST"
               className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8"
             >
-              {/* Hidden FormSubmit fields */}
-              <input type="hidden" name="_honey" value="" style={{ display: 'none' }} />
-              <input type="hidden" name="_captcha" value="false" />
-              <input type="hidden" name="_template" value="table" />
-              <input type="hidden" name="_next" value={`${typeof window !== 'undefined' ? window.location.origin : ''}${SUCCESS_URL}`} />
-              <input type="hidden" name="_subject" value="New Info Request from NomineeJobs" />
-              <input type="hidden" name="_autoresponse" value="Thank you for your inquiry! We have received your message and will respond within 24 hours during business days." />
+              {/* Honeypot field for spam protection - hidden with CSS */}
+              <input 
+                type="text" 
+                name="_honey" 
+                value="" 
+                onChange={() => {}} // Keep React happy
+                style={{ display: 'none' }} 
+                tabIndex={-1}
+                autoComplete="off"
+              />
               
               <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                 <MessageSquare className="h-6 w-6 text-blue-600" />
