@@ -39,9 +39,9 @@ export default function RequestInfoLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
+    <div className="min-h-screen bg-gray-50">
       {/* Enhanced Header */}
-      <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* Back Navigation */}
@@ -81,7 +81,7 @@ export default function RequestInfoLayout({
       </header>
 
       {/* Enhanced Breadcrumb */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100">
+      <div className="bg-white border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm">
@@ -113,7 +113,7 @@ export default function RequestInfoLayout({
       {/* Enhanced Footer */}
       <footer className="mt-16 pb-8">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="bg-gradient-to-r from-gray-50 to-blue-50/30 rounded-xl p-6 border border-gray-200/60">
+          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <div className="flex flex-col gap-4">
               {/* Contact Notice */}
               <div className="text-center">
