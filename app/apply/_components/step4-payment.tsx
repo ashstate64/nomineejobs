@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { CheckCircle, AlertCircle, CreditCard, Building2, DollarSign, Shield, Info, Eye, EyeOff, Zap, TrendingUp, Banknote, Lock } from "lucide-react"
+import { CheckCircle, AlertCircle, CreditCard, Building2, DollarSign, Shield, Info, Eye, EyeOff, Zap, TrendingUp, Banknote, Lock, Coins, Bitcoin } from "lucide-react"
 import type { FormData } from "../page"
 import type React from "react"
 
@@ -18,6 +18,7 @@ interface StepProps {
 export default function Step4Payment({ formData, updateFormData }: StepProps) {
   const [validationState, setValidationState] = useState({
     paymentMethod: { isValid: false, message: "" },
+    preferredCrypto: { isValid: false, message: "" },
     bankName: { isValid: false, message: "" },
     accountHolderName: { isValid: false, message: "" },
     accountNumber: { isValid: false, message: "" },
@@ -36,6 +37,16 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
           paymentMethod: {
             isValid: paymentValid,
             message: paymentValid ? "✓ Payment method selected" : value.length === 0 ? "" : "Please select a payment method"
+          }
+        }))
+        break
+      case 'preferredCrypto':
+        const cryptoValid = Boolean(value && value.length > 0)
+        setValidationState(prev => ({
+          ...prev,
+          preferredCrypto: {
+            isValid: cryptoValid,
+            message: cryptoValid ? "✓ Cryptocurrency selected" : value.length === 0 ? "" : "Please select your preferred cryptocurrency"
           }
         }))
         break
@@ -133,10 +144,11 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
     return null
   }
 
-  const allValid = Object.values(validationState).every(v => v.isValid) && 
-                   formData.paymentMethod && 
-                   (formData.paymentMethod !== 'bank_transfer' || 
-                    (formData.bankName && formData.accountHolderName && formData.accountNumber && formData.sortCode))
+  const allValid = formData.paymentMethod && (
+    (formData.paymentMethod === 'crypto' && formData.preferredCrypto) ||
+    (formData.paymentMethod === 'bank_transfer' && formData.bankName && formData.accountHolderName && formData.accountNumber && formData.sortCode) ||
+    (formData.paymentMethod === 'paypal')
+  )
 
   return (
     <div className="space-y-8">
@@ -207,6 +219,30 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
               </div>
             </div>
 
+            <div className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+              <div className="flex items-center space-x-3">
+                <RadioGroupItem value="crypto" id="crypto" />
+                <Label htmlFor="crypto" className="flex-1 cursor-pointer text-gray-800">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Coins className="h-5 w-5 text-orange-600" />
+                      <div>
+                        <div className="font-medium text-gray-800">Cryptocurrency</div>
+                        <div className="text-sm text-gray-600">Bitcoin, Ethereum, USDC and more</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="bg-orange-100 text-orange-700 border-orange-300 text-xs">
+                        <Bitcoin className="h-3 w-3 mr-1" />
+                        Digital
+                      </Badge>
+                      <div className="text-sm font-medium text-green-600">FREE</div>
+                    </div>
+                  </div>
+                </Label>
+              </div>
+            </div>
+
             <div className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors opacity-60">
               <div className="flex items-center space-x-3">
                 <RadioGroupItem value="paypal" id="paypal" disabled />
@@ -233,6 +269,112 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
           </p>
         )}
       </div>
+
+      {/* Cryptocurrency Selection */}
+      {formData.paymentMethod === 'crypto' && (
+        <div className="space-y-6 animate-bounce-in">
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+            <div className="flex items-start gap-2">
+              <Coins className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
+              <div className="text-sm text-orange-700">
+                <p className="font-medium mb-1 text-orange-800">🪙 Cryptocurrency Payments</p>
+                <p className="text-xs text-orange-600">Select your preferred cryptocurrency. We'll provide wallet details when you have your first payment ready.</p>
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <Bitcoin className="h-5 w-5 text-orange-600" />
+            Preferred Cryptocurrency
+          </h3>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="preferredCrypto" className="text-gray-800 font-medium flex items-center gap-2">
+                Cryptocurrency *
+                {getValidationIcon('preferredCrypto')}
+              </Label>
+              <Select value={formData.preferredCrypto || ""} onValueChange={handleSelectChange('preferredCrypto')}>
+                <SelectTrigger className="bg-white text-gray-900 border-gray-300 focus:border-orange-500 focus:ring-orange-500">
+                  <SelectValue placeholder="Select your preferred cryptocurrency" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-gray-300">
+                  <SelectItem value="bitcoin" className="text-gray-900 hover:bg-orange-50">
+                    <div className="flex items-center gap-2">
+                      <Bitcoin className="h-4 w-4 text-orange-500" />
+                      Bitcoin (BTC)
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="ethereum" className="text-gray-900 hover:bg-blue-50">
+                    <div className="flex items-center gap-2">
+                      <Coins className="h-4 w-4 text-blue-500" />
+                      Ethereum (ETH)
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="usdc" className="text-gray-900 hover:bg-green-50">
+                    <div className="flex items-center gap-2">
+                      <DollarSign className="h-4 w-4 text-green-500" />
+                      USD Coin (USDC)
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="usdt" className="text-gray-900 hover:bg-green-50">
+                    <div className="flex items-center gap-2">
+                      <DollarSign className="h-4 w-4 text-green-600" />
+                      Tether (USDT)
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="litecoin" className="text-gray-900 hover:bg-gray-50">
+                    <div className="flex items-center gap-2">
+                      <Coins className="h-4 w-4 text-gray-500" />
+                      Litecoin (LTC)
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="cardano" className="text-gray-900 hover:bg-blue-50">
+                    <div className="flex items-center gap-2">
+                      <Coins className="h-4 w-4 text-blue-600" />
+                      Cardano (ADA)
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="polygon" className="text-gray-900 hover:bg-purple-50">
+                    <div className="flex items-center gap-2">
+                      <Coins className="h-4 w-4 text-purple-500" />
+                      Polygon (MATIC)
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="solana" className="text-gray-900 hover:bg-purple-50">
+                    <div className="flex items-center gap-2">
+                      <Coins className="h-4 w-4 text-purple-600" />
+                      Solana (SOL)
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {validationState.preferredCrypto.message && (
+                <p className={`text-xs mt-1 ${validationState.preferredCrypto.isValid ? 'text-green-600' : 'text-red-600'}`}>
+                  {validationState.preferredCrypto.message}
+                </p>
+              )}
+              <p className="text-xs text-gray-500">We support major cryptocurrencies with low transaction fees</p>
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start gap-2">
+                <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-blue-700">
+                  <p className="font-medium mb-2 text-blue-800">💰 Crypto Payment Benefits:</p>
+                  <ul className="space-y-1 text-xs text-blue-700">
+                    <li>• Zero transaction fees (you keep 100% of earnings)</li>
+                    <li>• Instant global payments</li>
+                    <li>• No bank account required</li>
+                    <li>• Full privacy and security</li>
+                    <li>• Multiple blockchain networks supported</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Bank Details Form */}
       {formData.paymentMethod === 'bank_transfer' && (

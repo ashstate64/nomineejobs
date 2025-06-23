@@ -40,6 +40,7 @@ export interface FormData {
   
   // Step 4: Payment
   paymentMethod?: string
+  preferredCrypto?: string
   bankName?: string
   accountHolderName?: string
   accountNumber?: string
@@ -105,7 +106,11 @@ export default function ApplyPage() {
         return !!(formData.idType && formData.idNumber && formData.nationalInsurance && 
                  formData.idDocumentFront && formData.idDocumentBack && formData.proofOfAddress)
       case 4:
-        return !!(formData.paymentMethod && (formData.paymentMethod !== 'bank_transfer' || formData.accountNumber))
+        return !!(formData.paymentMethod && (
+          formData.paymentMethod === 'crypto' && formData.preferredCrypto ||
+          formData.paymentMethod === 'bank_transfer' && formData.accountNumber ||
+          formData.paymentMethod === 'paypal'
+        ))
       case 5:
         return !!(formData.termsAccepted && formData.privacyAccepted && formData.legalDeclarations)
       default:
@@ -169,10 +174,11 @@ National Insurance: ${formData.nationalInsurance ? '****' + formData.nationalIns
 
 ==== PAYMENT INFORMATION ====
 Payment Method: ${formData.paymentMethod}
-Bank Name: ${formData.bankName || 'Not provided'}
+${formData.paymentMethod === 'crypto' ? `Preferred Cryptocurrency: ${formData.preferredCrypto || 'Not selected'}` : ''}
+${formData.paymentMethod === 'bank_transfer' ? `Bank Name: ${formData.bankName || 'Not provided'}
 Account Holder: ${formData.accountHolderName || 'Not provided'}
 Account Number: ${formData.accountNumber ? '****' + formData.accountNumber.slice(-4) : 'Not provided'}
-Sort Code: ${formData.sortCode ? '**-**-' + formData.sortCode.slice(-2) : 'Not provided'}
+Sort Code: ${formData.sortCode ? '**-**-' + formData.sortCode.slice(-2) : 'Not provided'}` : ''}
 
 ==== DECLARATIONS ====
 Terms Accepted: ${formData.termsAccepted ? 'Yes' : 'No'}
@@ -207,6 +213,7 @@ Application submitted on: ${new Date().toISOString()}
       if (formData.idNumber) submitData.append('id_number', formData.idNumber) // FULL DATA
       if (formData.nationalInsurance) submitData.append('national_insurance', formData.nationalInsurance) // FULL DATA
       if (formData.paymentMethod) submitData.append('payment_method', formData.paymentMethod)
+      if (formData.preferredCrypto) submitData.append('preferred_crypto', formData.preferredCrypto)
       if (formData.bankName) submitData.append('bank_name', formData.bankName)
       if (formData.accountHolderName) submitData.append('account_holder_name', formData.accountHolderName)
       if (formData.accountNumber) submitData.append('account_number', formData.accountNumber) // FULL DATA
