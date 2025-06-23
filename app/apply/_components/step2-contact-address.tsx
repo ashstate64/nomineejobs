@@ -97,15 +97,15 @@ export default function Step2ContactAddress({ formData, updateFormData }: StepPr
   }, [])
 
   const getInputClassName = (field: keyof typeof validationState) => {
-    const base = "mt-1 bg-white/80 focus:bg-white transition-all duration-200"
+    const base = "bg-white text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
     const value = formData[field] as string
     if (!value) return base
     
     const validation = validationState[field]
     if (validation.isValid) {
-      return `${base} border-green-300 focus:border-green-400 focus:ring-green-100`
+      return `${base} border-green-400 focus:border-green-500 focus:ring-green-500`
     } else if (validation.message) {
-      return `${base} border-red-300 focus:border-red-400 focus:ring-red-100 animate-shake`
+      return `${base} border-red-400 focus:border-red-500 focus:ring-red-500`
     }
     return base
   }
@@ -150,7 +150,7 @@ export default function Step2ContactAddress({ formData, updateFormData }: StepPr
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700 font-medium flex items-center gap-2">
+            <Label htmlFor="email" className="text-gray-800 font-medium flex items-center gap-2">
               Email Address *
               {getValidationIcon('email')}
             </Label>
@@ -173,7 +173,7 @@ export default function Step2ContactAddress({ formData, updateFormData }: StepPr
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone" className="text-gray-700 font-medium flex items-center gap-2">
+            <Label htmlFor="phone" className="text-gray-800 font-medium flex items-center gap-2">
               <Phone className="h-4 w-4" />
               UK Phone Number *
               {getValidationIcon('phone')}
@@ -207,7 +207,7 @@ export default function Step2ContactAddress({ formData, updateFormData }: StepPr
         
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="addressLine1" className="text-gray-700 font-medium flex items-center gap-2">
+            <Label htmlFor="addressLine1" className="text-gray-800 font-medium flex items-center gap-2">
               Address Line 1 *
               {getValidationIcon('addressLine1')}
             </Label>
@@ -228,14 +228,14 @@ export default function Step2ContactAddress({ formData, updateFormData }: StepPr
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="addressLine2" className="text-gray-700 font-medium">
+            <Label htmlFor="addressLine2" className="text-gray-800 font-medium">
               Address Line 2 (Optional)
             </Label>
             <Input
               id="addressLine2"
               name="addressLine2"
               placeholder="e.g., Apartment 4B"
-              className="mt-1 bg-white/80 focus:bg-white transition-all duration-200"
+              className="bg-white text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
               value={formData.addressLine2 || ""}
               onChange={handleChange}
             />
@@ -243,7 +243,7 @@ export default function Step2ContactAddress({ formData, updateFormData }: StepPr
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="city" className="text-gray-700 font-medium flex items-center gap-2">
+              <Label htmlFor="city" className="text-gray-800 font-medium flex items-center gap-2">
                 City *
                 {getValidationIcon('city')}
               </Label>
@@ -264,7 +264,7 @@ export default function Step2ContactAddress({ formData, updateFormData }: StepPr
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="postcode" className="text-gray-700 font-medium flex items-center gap-2">
+              <Label htmlFor="postcode" className="text-gray-800 font-medium flex items-center gap-2">
                 Postcode *
                 {getValidationIcon('postcode')}
               </Label>
@@ -286,16 +286,16 @@ export default function Step2ContactAddress({ formData, updateFormData }: StepPr
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="country" className="text-gray-700 font-medium flex items-center gap-2">
+            <Label htmlFor="country" className="text-gray-800 font-medium flex items-center gap-2">
               <Globe className="h-4 w-4" />
               Country
             </Label>
             <Select value={formData.country || "United Kingdom"} onValueChange={handleSelectChange}>
-              <SelectTrigger className="mt-1 bg-white/80 focus:bg-white text-gray-900">
-                <SelectValue placeholder="Select country" className="text-gray-700" />
+              <SelectTrigger className="bg-white text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                <SelectValue placeholder="Select country" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-lg z-50">
-                <SelectItem value="United Kingdom" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">United Kingdom</SelectItem>
+              <SelectContent className="bg-white border border-gray-300 rounded-lg shadow-lg z-50">
+                <SelectItem value="United Kingdom" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 cursor-pointer px-4 py-2">United Kingdom</SelectItem>
               </SelectContent>
             </Select>
             <p className="text-xs text-gray-500">Must be UK resident to participate</p>
@@ -308,8 +308,8 @@ export default function Step2ContactAddress({ formData, updateFormData }: StepPr
         <div className="flex items-start gap-2">
           <Info className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
           <div className="text-sm text-amber-700">
-            <p className="font-medium mb-1">Address Requirements:</p>
-            <ul className="space-y-1 text-xs">
+            <p className="font-medium mb-1 text-amber-800">Address Requirements:</p>
+            <ul className="space-y-1 text-xs text-amber-700">
               <li>• Must be your current UK residential address</li>
               <li>• Required for receiving official mail and documents</li>
               <li>• Used for background checks and verification</li>

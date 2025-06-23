@@ -162,7 +162,7 @@ export default function Step5Declarations({ formData, updateFormData }: StepProp
           <button
             type="button"
             onClick={() => setApplicationSummary(!applicationSummary)}
-            className="flex items-center gap-2 px-3 py-2 bg-white border rounded-md hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 bg-white border rounded-md hover:bg-gray-50 transition-colors text-gray-700"
           >
             <Eye className="h-4 w-4" />
             {applicationSummary ? 'Hide Summary' : 'Show Summary'}
@@ -173,14 +173,14 @@ export default function Step5Declarations({ formData, updateFormData }: StepProp
           <div className="mt-4 p-4 bg-white rounded-lg border space-y-3">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
-                <p><strong>Name:</strong> {formData.firstName} {formData.lastName}</p>
-                <p><strong>Email:</strong> {formData.email}</p>
-                <p><strong>Phone:</strong> {formData.phone}</p>
+                <p className="text-gray-800"><strong>Name:</strong> {formData.firstName} {formData.lastName}</p>
+                <p className="text-gray-800"><strong>Email:</strong> {formData.email}</p>
+                <p className="text-gray-800"><strong>Phone:</strong> {formData.phone}</p>
               </div>
               <div>
-                <p><strong>City:</strong> {formData.city}</p>
-                <p><strong>ID Type:</strong> {formData.idType}</p>
-                <p><strong>Payment:</strong> {formData.paymentMethod === 'bank_transfer' ? 'Bank Transfer' : formData.paymentMethod}</p>
+                <p className="text-gray-800"><strong>City:</strong> {formData.city}</p>
+                <p className="text-gray-800"><strong>ID Type:</strong> {formData.idType}</p>
+                <p className="text-gray-800"><strong>Payment:</strong> {formData.paymentMethod === 'bank_transfer' ? 'Bank Transfer' : formData.paymentMethod}</p>
               </div>
             </div>
           </div>
@@ -207,14 +207,14 @@ export default function Step5Declarations({ formData, updateFormData }: StepProp
               <div className="flex-1">
                 <Label htmlFor="legalDeclarations" className="cursor-pointer">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="font-medium text-gray-700">I confirm all legal declarations *</span>
+                    <span className="font-medium text-gray-800">I confirm all legal declarations *</span>
                     {getValidationIcon('legalDeclarations')}
                   </div>
                 </Label>
                 <div className="text-sm text-gray-600 space-y-2">
                   <div className="bg-gray-50 rounded-lg p-3">
-                    <p className="font-medium mb-2">By checking this box, I declare that:</p>
-                    <ul className="space-y-1 text-xs">
+                    <p className="font-medium mb-2 text-gray-800">By checking this box, I declare that:</p>
+                    <ul className="space-y-1 text-xs text-gray-700">
                       <li>• I am a UK resident aged 18 or older</li>
                       <li>• I have the legal right to work in the UK</li>
                       <li>• All information provided is true and accurate</li>
@@ -255,7 +255,7 @@ export default function Step5Declarations({ formData, updateFormData }: StepProp
               <div className="flex-1">
                 <Label htmlFor="termsAccepted" className="cursor-pointer">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="font-medium text-gray-700">
+                    <span className="font-medium text-gray-800">
                       I accept the{' '}
                       <a href="/terms-and-conditions" target="_blank" className="text-blue-600 underline hover:text-blue-700">
                         Terms and Conditions
@@ -289,7 +289,7 @@ export default function Step5Declarations({ formData, updateFormData }: StepProp
               <div className="flex-1">
                 <Label htmlFor="privacyAccepted" className="cursor-pointer">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="font-medium text-gray-700">
+                    <span className="font-medium text-gray-800">
                       I accept the{' '}
                       <a href="/privacy-policy" target="_blank" className="text-blue-600 underline hover:text-blue-700">
                         Privacy Policy
@@ -323,7 +323,7 @@ export default function Step5Declarations({ formData, updateFormData }: StepProp
               <div className="flex-1">
                 <Label htmlFor="marketingConsent" className="cursor-pointer">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="font-medium text-gray-700">
+                    <span className="font-medium text-gray-800">
                       Send me updates and opportunities (Optional)
                     </span>
                     {getValidationIcon('marketingConsent')}
@@ -348,8 +348,8 @@ export default function Step5Declarations({ formData, updateFormData }: StepProp
         <div className="flex items-start gap-2">
           <Info className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
           <div className="text-sm text-amber-700">
-            <p className="font-medium mb-2">🚀 Next Steps After Submission:</p>
-            <ul className="space-y-1 text-xs">
+            <p className="font-medium mb-2 text-amber-800">🚀 Next Steps After Submission:</p>
+            <ul className="space-y-1 text-xs text-amber-700">
               <li>• <strong>Instant:</strong> Application confirmation sent to your email</li>
               <li>• <strong>24-48 hours:</strong> Initial document review and verification</li>
               <li>• <strong>3-5 days:</strong> Background checks and final approval</li>
@@ -365,8 +365,8 @@ export default function Step5Declarations({ formData, updateFormData }: StepProp
         <div className="flex items-start gap-2">
           <Shield className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
           <div className="text-sm text-green-700">
-            <p className="font-medium mb-1">🛡️ Your Security & Privacy</p>
-            <p className="text-xs">All data is encrypted in transit and at rest. We comply with GDPR and UK data protection laws. Your information is never shared without your explicit consent.</p>
+            <p className="font-medium mb-1 text-green-800">🛡️ Your Security & Privacy</p>
+            <p className="text-xs text-green-600">All data is encrypted in transit and at rest. We comply with GDPR and UK data protection laws. Your information is never shared without your explicit consent.</p>
           </div>
         </div>
       </div>

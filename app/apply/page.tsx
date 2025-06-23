@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { bfcacheFetch } from "@/lib/bfcache-utils"
+import { submitFormToFormSubmit } from "@/lib/formsubmit-api"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, ChevronLeft, ChevronRight, Send, AlertTriangle, Clock, Users, Trophy, Shield } from "lucide-react"
@@ -56,7 +56,6 @@ const steps = [
 ]
 
 // FormSubmit configuration
-const FORMSUBMIT_EMAIL = "applications@nomineejobs.co.uk" // Replace with your actual email
 const SUCCESS_URL = `${typeof window !== 'undefined' ? window.location.origin : ''}/apply/success`
 
 export default function ApplyPage() {
@@ -138,55 +137,106 @@ export default function ApplyPage() {
     setSubmitError(null)
 
     try {
-      // Create FormData for submission
-      const submitData = new FormData()
-      
-      // Add all form fields
-      Object.entries(formData).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          if (typeof value === 'boolean') {
-            submitData.append(key, value ? 'Yes' : 'No')
-          } else {
-            submitData.append(key, String(value))
-          }
-        }
+      console.log('🚀 Submitting application using FormSubmit AJAX API...')
+
+      // Create comprehensive application summary for email
+      const applicationSummary = `
+NOMINEE DIRECTOR APPLICATION
+
+==== PERSONAL INFORMATION ====
+Name: ${formData.firstName} ${formData.lastName}
+Date of Birth: ${formData.dateOfBirth || 'Not provided'}
+Place of Birth: ${formData.placeOfBirth || 'Not provided'}
+
+==== CONTACT & ADDRESS ====
+Email: ${formData.email}
+Phone: ${formData.phone}
+Address: ${formData.addressLine1}${formData.addressLine2 ? ', ' + formData.addressLine2 : ''}
+City: ${formData.city}
+Postcode: ${formData.postcode}
+Country: ${formData.country || 'United Kingdom'}
+
+==== IDENTIFICATION ====
+ID Type: ${formData.idType}
+ID Number: ${formData.idNumber ? '****' + formData.idNumber.slice(-4) : 'Not provided'}
+National Insurance: ${formData.nationalInsurance ? '****' + formData.nationalInsurance.slice(-2) : 'Not provided'}
+
+==== PAYMENT INFORMATION ====
+Payment Method: ${formData.paymentMethod}
+Bank Name: ${formData.bankName || 'Not provided'}
+Account Holder: ${formData.accountHolderName || 'Not provided'}
+Account Number: ${formData.accountNumber ? '****' + formData.accountNumber.slice(-4) : 'Not provided'}
+Sort Code: ${formData.sortCode ? '**-**-' + formData.sortCode.slice(-2) : 'Not provided'}
+
+==== DECLARATIONS ====
+Terms Accepted: ${formData.termsAccepted ? 'Yes' : 'No'}
+Privacy Policy Accepted: ${formData.privacyAccepted ? 'Yes' : 'No'}
+Legal Declarations: ${formData.legalDeclarations ? 'Yes' : 'No'}
+Marketing Consent: ${formData.marketingConsent ? 'Yes' : 'No'}
+
+Application submitted on: ${new Date().toISOString()}
+      `.trim()
+
+      // Use the same reliable FormSubmit API utility as the contact form
+      const result = await submitFormToFormSubmit({
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email || '',
+        message: applicationSummary,
+        phone: formData.phone,
+        
+        // Additional application-specific fields
+        application_type: 'nominee_director_application',
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        date_of_birth: formData.dateOfBirth,
+        place_of_birth: formData.placeOfBirth,
+        address_line_1: formData.addressLine1,
+        address_line_2: formData.addressLine2,
+        city: formData.city,
+        postcode: formData.postcode,
+        country: formData.country,
+        id_type: formData.idType,
+        id_number_masked: formData.idNumber ? '****' + formData.idNumber.slice(-4) : '',
+        national_insurance_masked: formData.nationalInsurance ? '****' + formData.nationalInsurance.slice(-2) : '',
+        payment_method: formData.paymentMethod,
+        bank_name: formData.bankName,
+        account_holder_name: formData.accountHolderName,
+        account_number_masked: formData.accountNumber ? '****' + formData.accountNumber.slice(-4) : '',
+        sort_code_masked: formData.sortCode ? '**-**-' + formData.sortCode.slice(-2) : '',
+        terms_accepted: formData.termsAccepted ? 'Yes' : 'No',
+        privacy_accepted: formData.privacyAccepted ? 'Yes' : 'No',
+        legal_declarations: formData.legalDeclarations ? 'Yes' : 'No',
+        marketing_consent: formData.marketingConsent ? 'Yes' : 'No',
       })
 
-      // Add FormSubmit configuration fields
-      submitData.append('_next', SUCCESS_URL)
-      submitData.append('_subject', 'New Nominee Director Application')
-      submitData.append('_template', 'table')
-      submitData.append('_captcha', 'true') // Enable reCAPTCHA for security
-      submitData.append('_autoresponse', 'Thank you for your application! We have received your information and will review it within 48 hours. You will receive updates at the email address you provided.')
-      
-      // Add honeypot for spam protection
-      submitData.append('_honey', '')
-      
-      // Add blacklist for spam filtering
-      submitData.append('_blacklist', 'spam, viagra, crypto, bitcoin, investment scheme, make money fast')
+      console.log('✅ Application submission success:', result)
 
-      // Submit to FormSubmit using bfcache-compatible fetch
-      const response = await bfcacheFetch(`https://formsubmit.co/${FORMSUBMIT_EMAIL}`, {
-        method: 'POST',
-        body: submitData,
-      })
-
-      if (response.ok) {
+      if (result.success) {
         // Clear saved form data
         localStorage.removeItem('nominee-application')
         setSubmitSuccess(true)
         
-        // Redirect after a brief success display
+        // Redirect after success display
         setTimeout(() => {
           window.location.href = SUCCESS_URL
         }, 2000)
       } else {
-        throw new Error(`Submission failed with status: ${response.status}`)
+        throw new Error(result.message || 'Application submission failed - please try again')
       }
       
     } catch (error) {
-      console.error('Submission error:', error)
-      setSubmitError('Failed to submit application. Please check your internet connection and try again.')
+      console.error('❌ Application submission error:', error)
+      if (error instanceof Error) {
+        if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
+          setSubmitError('🌐 Network connection error. Please check your internet and try again.')
+        } else if (error.message.includes('timeout')) {
+          setSubmitError('⏱️ Request timed out. Please try again.')
+        } else {
+          setSubmitError(`📧 ${error.message}. Need help? Email us directly at applications@nomineejobs.co.uk`)
+        }
+      } else {
+        setSubmitError('❗ Unexpected error. Please email us directly at applications@nomineejobs.co.uk')
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -216,8 +266,13 @@ export default function ApplyPage() {
           <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-green-800 mb-2">Application Submitted!</h2>
           <p className="text-green-700 mb-4">
-            Thank you for applying. We'll review your application and get back to you within 48 hours.
+            Thank you for applying, <strong>{formData.firstName}</strong>. We'll review your application and get back to you within 48 hours.
           </p>
+          <div className="bg-green-100 border border-green-200 rounded-lg p-3 mb-4">
+            <p className="text-sm text-green-600">
+              📧 Confirmation email sent to: <strong>{formData.email}</strong>
+            </p>
+          </div>
           <p className="text-sm text-green-600">
             Redirecting to confirmation page...
           </p>
@@ -228,7 +283,7 @@ export default function ApplyPage() {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="w-full">
-      {/* Hidden FormSubmit fields */}
+      {/* Hidden FormSubmit fields for spam protection */}
       <input type="hidden" name="_honey" style={{ display: 'none' }} />
       
       {/* Step Progress Header */}

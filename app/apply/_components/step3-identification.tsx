@@ -109,15 +109,15 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
   }, [formData.idType])
 
   const getInputClassName = (field: keyof typeof validationState) => {
-    const base = "mt-1 bg-white/80 focus:bg-white transition-all duration-200"
+    const base = "bg-white text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
     const value = formData[field] as string
     if (!value) return base
     
     const validation = validationState[field]
     if (validation.isValid) {
-      return `${base} border-green-300 focus:border-green-400 focus:ring-green-100`
+      return `${base} border-green-400 focus:border-green-500 focus:ring-green-500`
     } else if (validation.message) {
-      return `${base} border-red-300 focus:border-red-400 focus:ring-red-100 animate-shake`
+      return `${base} border-red-400 focus:border-red-500 focus:ring-red-500`
     }
     return base
   }
@@ -136,7 +136,7 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
   }
 
   const allValid = Object.values(validationState).every(v => v.isValid) && 
-                   formData.idType && formData.idNumber && formData.dateOfBirth && 
+                   formData.idType && formData.idNumber && 
                    formData.placeOfBirth && formData.nationalInsurance
 
   const getIdFormatHelp = () => {
@@ -171,8 +171,8 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
         <div className="flex items-start gap-3">
           <Lock className="h-5 w-5 text-gray-600 mt-0.5 flex-shrink-0" />
           <div className="text-sm text-gray-700">
-            <p className="font-medium mb-1">🔒 Your Security is Our Priority</p>
-            <p className="text-xs">All personal information is encrypted and stored securely. We never share your data with third parties without your consent.</p>
+            <p className="font-medium mb-1 text-gray-800">🔒 Your Security is Our Priority</p>
+            <p className="text-xs text-gray-600">All personal information is encrypted and stored securely. We never share your data with third parties without your consent.</p>
           </div>
         </div>
       </div>
@@ -186,18 +186,18 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
 
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="idType" className="text-gray-700 font-medium flex items-center gap-2">
+            <Label htmlFor="idType" className="text-gray-800 font-medium flex items-center gap-2">
               Document Type *
               {getValidationIcon('idType')}
             </Label>
             <Select value={formData.idType || ""} onValueChange={handleSelectChange('idType')}>
-              <SelectTrigger className={`${getInputClassName('idType')} text-gray-900`}>
-                <SelectValue placeholder="Select your primary ID document" className="text-gray-700" />
+              <SelectTrigger className="bg-white text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                <SelectValue placeholder="Select your primary ID document" />
               </SelectTrigger>
-              <SelectContent className="bg-white border-2 border-gray-200 rounded-lg shadow-lg z-50">
-                <SelectItem value="passport" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">🇬🇧 UK Passport (Recommended)</SelectItem>
-                <SelectItem value="driving_licence" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">🚗 UK Driving Licence</SelectItem>
-                <SelectItem value="national_id" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 focus:text-gray-900 cursor-pointer px-4 py-2">🆔 National Identity Card</SelectItem>
+              <SelectContent className="bg-white border border-gray-300 rounded-lg shadow-lg z-50">
+                <SelectItem value="passport" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 cursor-pointer px-4 py-2">🇬🇧 UK Passport (Recommended)</SelectItem>
+                <SelectItem value="driving_licence" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 cursor-pointer px-4 py-2">🚗 UK Driving Licence</SelectItem>
+                <SelectItem value="national_id" className="text-gray-900 hover:bg-blue-50 focus:bg-blue-50 cursor-pointer px-4 py-2">🆔 National Identity Card</SelectItem>
               </SelectContent>
             </Select>
             {validationState.idType.message && (
@@ -208,7 +208,7 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="idNumber" className="text-gray-700 font-medium flex items-center gap-2">
+            <Label htmlFor="idNumber" className="text-gray-800 font-medium flex items-center gap-2">
               Document Number *
               {getValidationIcon('idNumber')}
             </Label>
@@ -242,7 +242,7 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="dateOfBirth" className="text-gray-700 font-medium flex items-center gap-2">
+            <Label htmlFor="dateOfBirth" className="text-gray-800 font-medium flex items-center gap-2">
               <Calendar className="h-4 w-4" />
               Date of Birth *
               {getValidationIcon('dateOfBirth')}
@@ -266,7 +266,7 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="placeOfBirth" className="text-gray-700 font-medium flex items-center gap-2">
+            <Label htmlFor="placeOfBirth" className="text-gray-800 font-medium flex items-center gap-2">
               Place of Birth *
               {getValidationIcon('placeOfBirth')}
             </Label>
@@ -297,7 +297,7 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
         </h3>
 
         <div className="space-y-2">
-          <Label htmlFor="nationalInsurance" className="text-gray-700 font-medium flex items-center gap-2">
+          <Label htmlFor="nationalInsurance" className="text-gray-800 font-medium flex items-center gap-2">
             National Insurance Number *
             {getValidationIcon('nationalInsurance')}
           </Label>
@@ -333,8 +333,8 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
           <div className="flex items-start gap-2">
             <Camera className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
             <div className="text-sm text-amber-700">
-              <p className="font-medium mb-1">📸 Document Upload Requirements:</p>
-              <ul className="space-y-1 text-xs">
+              <p className="font-medium mb-1 text-amber-800">📸 Document Upload Requirements:</p>
+              <ul className="space-y-1 text-xs text-amber-700">
                 <li>• Clear, high-quality photo or scan of your ID document</li>
                 <li>• All text must be clearly readable</li>
                 <li>• No glare, shadows, or obstructions</li>
@@ -351,8 +351,8 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
         <div className="flex items-start gap-2">
           <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
           <div className="text-sm text-blue-700">
-            <p className="font-medium mb-2">🛡️ Why We Need This Information:</p>
-            <ul className="space-y-1 text-xs">
+            <p className="font-medium mb-2 text-blue-800">🛡️ Why We Need This Information:</p>
+            <ul className="space-y-1 text-xs text-blue-600">
               <li>• Legal requirement under UK Anti-Money Laundering regulations</li>
               <li>• Verify your eligibility to work in the UK</li>
               <li>• Prevent fraud and protect all participants</li>
@@ -373,7 +373,7 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
           <button
             type="button"
             onClick={() => setPreviewMode(!previewMode)}
-            className="flex items-center gap-2 px-3 py-2 bg-white border rounded-md hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 bg-white border rounded-md hover:bg-gray-50 transition-colors text-gray-700"
           >
             <Eye className="h-4 w-4" />
             {previewMode ? 'Hide Preview' : 'Show Preview'}
@@ -382,11 +382,11 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
 
         {previewMode && (
           <div className="mt-4 p-4 bg-white rounded-lg border space-y-2">
-            <p className="text-sm"><strong>ID Type:</strong> {formData.idType || 'Not selected'}</p>
-            <p className="text-sm"><strong>ID Number:</strong> {formData.idNumber ? '••••••' + formData.idNumber.slice(-3) : 'Not entered'}</p>
-            <p className="text-sm"><strong>Date of Birth:</strong> {formData.dateOfBirth || 'Not entered'}</p>
-            <p className="text-sm"><strong>Place of Birth:</strong> {formData.placeOfBirth || 'Not entered'}</p>
-            <p className="text-sm"><strong>NI Number:</strong> {formData.nationalInsurance ? '••••••' + formData.nationalInsurance.slice(-1) : 'Not entered'}</p>
+            <p className="text-sm text-gray-800"><strong>ID Type:</strong> {formData.idType || 'Not selected'}</p>
+            <p className="text-sm text-gray-800"><strong>ID Number:</strong> {formData.idNumber ? '••••••' + formData.idNumber.slice(-3) : 'Not entered'}</p>
+            <p className="text-sm text-gray-800"><strong>Date of Birth:</strong> {formData.dateOfBirth || 'Not entered'}</p>
+            <p className="text-sm text-gray-800"><strong>Place of Birth:</strong> {formData.placeOfBirth || 'Not entered'}</p>
+            <p className="text-sm text-gray-800"><strong>NI Number:</strong> {formData.nationalInsurance ? '••••••' + formData.nationalInsurance.slice(-1) : 'Not entered'}</p>
           </div>
         )}
       </div>

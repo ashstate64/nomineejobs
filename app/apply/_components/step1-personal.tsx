@@ -17,7 +17,7 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
   const [validationState, setValidationState] = useState({
     firstName: { isValid: false, message: "" },
     lastName: { isValid: false, message: "" },
-    dob: { isValid: false, message: "", age: 0 },
+    dateOfBirth: { isValid: false, message: "", age: 0 },
   })
 
   const calculateAge = (birthDate: string): number => {
@@ -45,12 +45,12 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
           }
         }))
         break
-      case 'dob':
+      case 'dateOfBirth':
         const age = calculateAge(value)
         const dobValid = age >= 18 && age <= 120
         setValidationState(prev => ({
           ...prev,
-          dob: {
+          dateOfBirth: {
             isValid: dobValid,
             message: age === 0 ? "" : age < 18 ? "You must be 18 or older" : age > 120 ? "Please enter a valid birth date" : `✓ Age ${age} - eligible`,
             age
@@ -70,19 +70,19 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
   useEffect(() => {
     if (formData.firstName) validateField('firstName', formData.firstName)
     if (formData.lastName) validateField('lastName', formData.lastName)
-    if (formData.dob) validateField('dob', formData.dob)
+    if (formData.dateOfBirth) validateField('dateOfBirth', formData.dateOfBirth)
   }, [])
 
   const getInputClassName = (field: keyof typeof validationState) => {
-    const base = "mt-1 bg-white/80 focus:bg-white transition-all duration-200"
+    const base = "bg-white text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
     const value = formData[field] as string
     if (!value) return base
     
     const validation = validationState[field]
     if (validation.isValid) {
-      return `${base} border-green-300 focus:border-green-400 focus:ring-green-100`
+      return `${base} border-green-400 focus:border-green-500 focus:ring-green-500`
     } else if (validation.message) {
-      return `${base} border-red-300 focus:border-red-400 focus:ring-red-100 animate-shake`
+      return `${base} border-red-400 focus:border-red-500 focus:ring-red-500`
     }
     return base
   }
@@ -101,7 +101,7 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
   }
 
   const allValid = Object.values(validationState).every(v => v.isValid) && 
-                   formData.firstName && formData.lastName && formData.dob
+                   formData.firstName && formData.lastName && formData.dateOfBirth
 
   return (
     <div className="space-y-8">
@@ -119,7 +119,7 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="firstName" className="text-gray-700 font-medium flex items-center gap-2">
+          <Label htmlFor="firstName" className="text-gray-800 font-medium flex items-center gap-2">
             First Name *
             {getValidationIcon('firstName')}
           </Label>
@@ -142,7 +142,7 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="lastName" className="text-gray-700 font-medium flex items-center gap-2">
+          <Label htmlFor="lastName" className="text-gray-800 font-medium flex items-center gap-2">
             Last Name *
             {getValidationIcon('lastName')}
           </Label>
@@ -166,26 +166,26 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="dob" className="text-gray-700 font-medium flex items-center gap-2">
+        <Label htmlFor="dateOfBirth" className="text-gray-800 font-medium flex items-center gap-2">
           <Calendar className="h-4 w-4" />
           Date of Birth *
-          {getValidationIcon('dob')}
+          {getValidationIcon('dateOfBirth')}
         </Label>
         <div className="relative">
           <Input
-            id="dob"
-            name="dob"
+            id="dateOfBirth"
+            name="dateOfBirth"
             type="date"
             required
-            className={getInputClassName('dob')}
-            value={formData.dob || ""}
+            className={getInputClassName('dateOfBirth')}
+            value={formData.dateOfBirth || ""}
             onChange={handleChange}
             max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
           />
         </div>
-        {validationState.dob.message && (
-          <p className={`text-xs mt-1 ${validationState.dob.isValid ? 'text-green-600' : 'text-red-600'}`}>
-            {validationState.dob.message}
+        {validationState.dateOfBirth.message && (
+          <p className={`text-xs mt-1 ${validationState.dateOfBirth.isValid ? 'text-green-600' : 'text-red-600'}`}>
+            {validationState.dateOfBirth.message}
           </p>
         )}
       </div>
@@ -194,9 +194,9 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
         <div className="flex items-start gap-2">
           <Info className="h-5 w-5 text-gray-500 mt-0.5 flex-shrink-0" />
-          <div className="text-sm text-gray-600">
-            <p className="font-medium mb-1">Important:</p>
-            <ul className="space-y-1 text-xs">
+          <div className="text-sm text-gray-700">
+            <p className="font-medium mb-1 text-gray-800">Important:</p>
+            <ul className="space-y-1 text-xs text-gray-600">
               <li>• Your name must match your passport or driving licence exactly</li>
               <li>• You must be 18+ years old to participate</li>
               <li>• This information will be used for identity verification</li>
@@ -212,7 +212,7 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
             <span className="font-semibold text-green-800">Ready to continue!</span>
           </div>
           <p className="text-sm text-green-700 mt-1">
-            Your personal information looks good. Click "Next" to proceed to contact details.
+            Your personal information looks good. Click "Continue" to proceed to contact details.
           </p>
         </div>
       )}

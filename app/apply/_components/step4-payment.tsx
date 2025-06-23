@@ -107,15 +107,15 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
   }, [])
 
   const getInputClassName = (field: keyof typeof validationState) => {
-    const base = "mt-1 bg-white/80 focus:bg-white transition-all duration-200"
+    const base = "bg-white text-gray-900 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
     const value = formData[field] as string
     if (!value) return base
     
     const validation = validationState[field]
     if (validation.isValid) {
-      return `${base} border-green-300 focus:border-green-400 focus:ring-green-100`
+      return `${base} border-green-400 focus:border-green-500 focus:ring-green-500`
     } else if (validation.message) {
-      return `${base} border-red-300 focus:border-red-400 focus:ring-red-100 animate-shake`
+      return `${base} border-red-400 focus:border-red-500 focus:ring-red-500`
     }
     return base
   }
@@ -186,12 +186,12 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
             <div className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
               <div className="flex items-center space-x-3">
                 <RadioGroupItem value="bank_transfer" id="bank_transfer" />
-                <Label htmlFor="bank_transfer" className="flex-1 cursor-pointer">
+                <Label htmlFor="bank_transfer" className="flex-1 cursor-pointer text-gray-800">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Building2 className="h-5 w-5 text-blue-600" />
                       <div>
-                        <div className="font-medium">UK Bank Transfer</div>
+                        <div className="font-medium text-gray-800">UK Bank Transfer</div>
                         <div className="text-sm text-gray-600">Direct deposit to your bank account</div>
                       </div>
                     </div>
@@ -210,13 +210,13 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
             <div className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors opacity-60">
               <div className="flex items-center space-x-3">
                 <RadioGroupItem value="paypal" id="paypal" disabled />
-                <Label htmlFor="paypal" className="flex-1 cursor-pointer">
+                <Label htmlFor="paypal" className="flex-1 cursor-pointer text-gray-600">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <CreditCard className="h-5 w-5 text-blue-600" />
                       <div>
-                        <div className="font-medium">PayPal</div>
-                        <div className="text-sm text-gray-600">Coming soon - Alternative payment option</div>
+                        <div className="font-medium text-gray-600">PayPal</div>
+                        <div className="text-sm text-gray-500">Coming soon - Alternative payment option</div>
                       </div>
                     </div>
                     <Badge variant="outline" className="text-xs">Coming Soon</Badge>
@@ -241,8 +241,8 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
             <div className="flex items-start gap-2">
               <Lock className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
               <div className="text-sm text-blue-700">
-                <p className="font-medium mb-1">🔒 Bank Details Security</p>
-                <p className="text-xs">Your banking information is encrypted using industry-standard security protocols. We never store your full account details.</p>
+                <p className="font-medium mb-1 text-blue-800">🔒 Bank Details Security</p>
+                <p className="text-xs text-blue-600">Your banking information is encrypted using industry-standard security protocols. We never store your full account details.</p>
               </div>
             </div>
           </div>
@@ -254,7 +254,7 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="bankName" className="text-gray-700 font-medium flex items-center gap-2">
+              <Label htmlFor="bankName" className="text-gray-800 font-medium flex items-center gap-2">
                 Bank Name *
                 {getValidationIcon('bankName')}
               </Label>
@@ -275,7 +275,7 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="accountHolderName" className="text-gray-700 font-medium flex items-center gap-2">
+              <Label htmlFor="accountHolderName" className="text-gray-800 font-medium flex items-center gap-2">
                 Account Holder Name *
                 {getValidationIcon('accountHolderName')}
               </Label>
@@ -298,7 +298,7 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="accountNumber" className="text-gray-700 font-medium flex items-center gap-2">
+                <Label htmlFor="accountNumber" className="text-gray-800 font-medium flex items-center gap-2">
                   Account Number *
                   {getValidationIcon('accountNumber')}
                 </Label>
@@ -330,7 +330,7 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="sortCode" className="text-gray-700 font-medium flex items-center gap-2">
+                <Label htmlFor="sortCode" className="text-gray-800 font-medium flex items-center gap-2">
                   Sort Code *
                   {getValidationIcon('sortCode')}
                 </Label>
@@ -361,8 +361,8 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
         <div className="flex items-start gap-2">
           <Info className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
           <div className="text-sm text-amber-700">
-            <p className="font-medium mb-2">💡 Payment Information:</p>
-            <ul className="space-y-1 text-xs">
+            <p className="font-medium mb-2 text-amber-800">💡 Payment Information:</p>
+            <ul className="space-y-1 text-xs text-amber-700">
               <li>• Payments are processed weekly on Fridays</li>
               <li>• Minimum payment threshold: £10</li>
               <li>• Bank transfers typically arrive within 1-2 business days</li>
@@ -384,7 +384,7 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
             <button
               type="button"
               onClick={() => setPreviewMode(!previewMode)}
-              className="flex items-center gap-2 px-3 py-2 bg-white border rounded-md hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 bg-white border rounded-md hover:bg-gray-50 transition-colors text-gray-700"
             >
               <Eye className="h-4 w-4" />
               {previewMode ? 'Hide Preview' : 'Show Preview'}
@@ -393,11 +393,11 @@ export default function Step4Payment({ formData, updateFormData }: StepProps) {
 
           {previewMode && (
             <div className="mt-4 p-4 bg-white rounded-lg border space-y-2">
-              <p className="text-sm"><strong>Payment Method:</strong> Bank Transfer</p>
-              <p className="text-sm"><strong>Bank:</strong> {formData.bankName || 'Not entered'}</p>
-              <p className="text-sm"><strong>Account Holder:</strong> {formData.accountHolderName || 'Not entered'}</p>
-              <p className="text-sm"><strong>Account Number:</strong> {formData.accountNumber ? '••••' + formData.accountNumber.slice(-4) : 'Not entered'}</p>
-              <p className="text-sm"><strong>Sort Code:</strong> {formData.sortCode ? '••-••-' + formData.sortCode.slice(-2) : 'Not entered'}</p>
+              <p className="text-sm text-gray-800"><strong>Payment Method:</strong> Bank Transfer</p>
+              <p className="text-sm text-gray-800"><strong>Bank:</strong> {formData.bankName || 'Not entered'}</p>
+              <p className="text-sm text-gray-800"><strong>Account Holder:</strong> {formData.accountHolderName || 'Not entered'}</p>
+              <p className="text-sm text-gray-800"><strong>Account Number:</strong> {formData.accountNumber ? '••••' + formData.accountNumber.slice(-4) : 'Not entered'}</p>
+              <p className="text-sm text-gray-800"><strong>Sort Code:</strong> {formData.sortCode ? '••-••-' + formData.sortCode.slice(-2) : 'Not entered'}</p>
             </div>
           )}
         </div>

@@ -89,6 +89,7 @@ export async function getFormSubmissions(apiKey: string): Promise<FormSubmitSubm
 /**
  * Submit form data using FormSubmit AJAX API
  * This is more reliable than standard form submission
+ * Supports both contact forms and application forms
  */
 export async function submitFormToFormSubmit(formData: {
   name: string
@@ -97,26 +98,72 @@ export async function submitFormToFormSubmit(formData: {
   phone?: string
   inquiry_type?: string
   preferred_contact?: string
+  application_type?: string
   [key: string]: any
 }): Promise<FormSubmitApiResponse> {
   try {
+    // Determine if this is an application or contact form
+    const isApplication = formData.application_type === 'nominee_director_application'
+    
     const ajaxData = {
       name: formData.name,
       email: formData.email,
       message: formData.message,
-      // Optional fields
-      ...(formData.phone && { phone: formData.phone }),
-      ...(formData.inquiry_type && { inquiry_type: formData.inquiry_type }),
-      ...(formData.preferred_contact && { preferred_contact: formData.preferred_contact }),
       
-      // FormSubmit configuration
-      _subject: `New Info Request from ${formData.name} - NomineeJobs`,
+      // Include all additional fields
+      ...Object.fromEntries(
+        Object.entries(formData)
+          .filter(([key]) => !['name', 'email', 'message'].includes(key))
+          .filter(([, value]) => value !== undefined && value !== null && value !== '')
+      ),
+      
+      // FormSubmit configuration - different for applications vs contact forms
+      _subject: isApplication 
+        ? `🎯 New Nominee Director Application - ${formData.name}`
+        : `📧 New Info Request from ${formData.name} - NomineeJobs`,
       _template: 'table',
       _captcha: 'false',
-      _autoresponse: 'Thank you for your inquiry! We have received your message and will respond within 24 hours during business days.',
+      _autoresponse: isApplication
+        ? `Thank you for your application, ${formData.name}! 
+
+We have successfully received your nominee director application and will begin processing it immediately.
+
+What happens next:
+✅ Initial review within 24 hours
+✅ Document verification within 48 hours  
+✅ Background checks within 3-5 business days
+✅ Welcome package and first opportunities within 1 week
+
+You will receive email updates throughout the process at ${formData.email}.
+
+If you have any questions, please don't hesitate to contact us at applications@nomineejobs.co.uk.
+
+Best regards,
+The NomineeJobs Team`
+        : `Thank you for your inquiry, ${formData.name}! 
+
+We have received your message and will respond within 24 hours during business days.
+
+Your inquiry details:
+📧 Contact Email: ${formData.email}
+📞 Phone: ${formData.phone || 'Not provided'}
+📋 Inquiry Type: ${formData.inquiry_type || 'General'}
+📞 Preferred Contact: ${formData.preferred_contact || 'Email'}
+
+For urgent matters, you can also reach us directly at info@nomineejobs.co.uk.
+
+Best regards,
+The NomineeJobs Team`,
+      
       _honey: '', // Honeypot spam protection
       _replyto: formData.email, // Enable reply-to functionality
     }
+
+    console.log('📤 Sending to FormSubmit:', { 
+      endpoint: FORMSUBMIT_ENDPOINT, 
+      type: isApplication ? 'Application' : 'Contact Form',
+      fields: Object.keys(ajaxData).length 
+    })
 
     const response = await fetch(`https://formsubmit.co/ajax/${FORMSUBMIT_ENDPOINT}`, {
       method: 'POST',
@@ -128,13 +175,39 @@ export async function submitFormToFormSubmit(formData: {
     })
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`FormSubmit API responded with status ${response.status}`)
     }
 
     const result = await response.json()
+    
+    // Enhanced success logging
+    if (result.success) {
+      console.log('✅ FormSubmit success:', {
+        type: isApplication ? 'Application' : 'Contact Form',
+        recipient: formData.email,
+        timestamp: new Date().toISOString()
+      })
+    }
+    
     return result
   } catch (error) {
-    console.error('Error submitting form to FormSubmit:', error)
+    console.error('❌ FormSubmit error:', error)
+    
+    // Enhanced error handling
+    if (error instanceof Error) {
+      if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
+        throw new Error('Network connection failed. Please check your internet and try again.')
+      } else if (error.message.includes('timeout')) {
+        throw new Error('Request timed out. Please try again.')
+      } else if (error.message.includes('status 429')) {
+        throw new Error('Too many requests. Please wait a moment and try again.')
+      } else if (error.message.includes('status 4')) {
+        throw new Error('Invalid submission data. Please check your information and try again.')
+      } else if (error.message.includes('status 5')) {
+        throw new Error('Server error. Our team has been notified. Please try again in a few minutes.')
+      }
+    }
+    
     throw error
   }
 }
