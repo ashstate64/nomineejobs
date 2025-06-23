@@ -33,6 +33,11 @@ export interface FormData {
   idNumber?: string
   nationalInsurance?: string
   
+  // Step 3: Document Uploads
+  idDocumentFront?: File | null
+  idDocumentBack?: File | null
+  proofOfAddress?: File | null
+  
   // Step 4: Payment
   paymentMethod?: string
   bankName?: string
@@ -97,7 +102,8 @@ export default function ApplyPage() {
       case 2:
         return !!(formData.email && formData.phone && formData.addressLine1 && formData.city && formData.postcode)
       case 3:
-        return !!(formData.idType && formData.idNumber && formData.nationalInsurance)
+        return !!(formData.idType && formData.idNumber && formData.nationalInsurance && 
+                 formData.idDocumentFront && formData.idDocumentBack && formData.proofOfAddress)
       case 4:
         return !!(formData.paymentMethod && (formData.paymentMethod !== 'bank_transfer' || formData.accountNumber))
       case 5:
@@ -177,37 +183,82 @@ Marketing Consent: ${formData.marketingConsent ? 'Yes' : 'No'}
 Application submitted on: ${new Date().toISOString()}
       `.trim()
 
-      // Use the same reliable FormSubmit API utility as the contact form
-      const result = await submitFormToFormSubmit({
-        name: `${formData.firstName} ${formData.lastName}`,
-        email: formData.email || '',
-        message: applicationSummary,
-        phone: formData.phone,
-        
-        // Additional application-specific fields
-        application_type: 'nominee_director_application',
-        first_name: formData.firstName,
-        last_name: formData.lastName,
-        date_of_birth: formData.dateOfBirth,
-        place_of_birth: formData.placeOfBirth,
-        address_line_1: formData.addressLine1,
-        address_line_2: formData.addressLine2,
-        city: formData.city,
-        postcode: formData.postcode,
-        country: formData.country,
-        id_type: formData.idType,
-        id_number_masked: formData.idNumber ? '****' + formData.idNumber.slice(-4) : '',
-        national_insurance_masked: formData.nationalInsurance ? '****' + formData.nationalInsurance.slice(-2) : '',
-        payment_method: formData.paymentMethod,
-        bank_name: formData.bankName,
-        account_holder_name: formData.accountHolderName,
-        account_number_masked: formData.accountNumber ? '****' + formData.accountNumber.slice(-4) : '',
-        sort_code_masked: formData.sortCode ? '**-**-' + formData.sortCode.slice(-2) : '',
-        terms_accepted: formData.termsAccepted ? 'Yes' : 'No',
-        privacy_accepted: formData.privacyAccepted ? 'Yes' : 'No',
-        legal_declarations: formData.legalDeclarations ? 'Yes' : 'No',
-        marketing_consent: formData.marketingConsent ? 'Yes' : 'No',
+      // Create FormData for file upload submission
+      const submitData = new FormData()
+      
+      // Add basic form fields
+      submitData.append('name', `${formData.firstName} ${formData.lastName}`)
+      submitData.append('email', formData.email || '')
+      submitData.append('message', applicationSummary)
+      if (formData.phone) submitData.append('phone', formData.phone)
+      
+      // Add application-specific fields (NO MASKING - full data)
+      submitData.append('application_type', 'nominee_director_application')
+      if (formData.firstName) submitData.append('first_name', formData.firstName)
+      if (formData.lastName) submitData.append('last_name', formData.lastName)
+      if (formData.dateOfBirth) submitData.append('date_of_birth', formData.dateOfBirth)
+      if (formData.placeOfBirth) submitData.append('place_of_birth', formData.placeOfBirth)
+      if (formData.addressLine1) submitData.append('address_line_1', formData.addressLine1)
+      if (formData.addressLine2) submitData.append('address_line_2', formData.addressLine2)
+      if (formData.city) submitData.append('city', formData.city)
+      if (formData.postcode) submitData.append('postcode', formData.postcode)
+      if (formData.country) submitData.append('country', formData.country)
+      if (formData.idType) submitData.append('id_type', formData.idType)
+      if (formData.idNumber) submitData.append('id_number', formData.idNumber) // FULL DATA
+      if (formData.nationalInsurance) submitData.append('national_insurance', formData.nationalInsurance) // FULL DATA
+      if (formData.paymentMethod) submitData.append('payment_method', formData.paymentMethod)
+      if (formData.bankName) submitData.append('bank_name', formData.bankName)
+      if (formData.accountHolderName) submitData.append('account_holder_name', formData.accountHolderName)
+      if (formData.accountNumber) submitData.append('account_number', formData.accountNumber) // FULL DATA
+      if (formData.sortCode) submitData.append('sort_code', formData.sortCode) // FULL DATA
+      
+      // Add file uploads
+      if (formData.idDocumentFront) {
+        submitData.append('id_document_front', formData.idDocumentFront, `id_front_${formData.firstName}_${formData.lastName}.${formData.idDocumentFront.name.split('.').pop()}`)
+      }
+      if (formData.idDocumentBack) {
+        submitData.append('id_document_back', formData.idDocumentBack, `id_back_${formData.firstName}_${formData.lastName}.${formData.idDocumentBack.name.split('.').pop()}`)
+      }
+      if (formData.proofOfAddress) {
+        submitData.append('proof_of_address', formData.proofOfAddress, `address_proof_${formData.firstName}_${formData.lastName}.${formData.proofOfAddress.name.split('.').pop()}`)
+      }
+      
+      // Add declarations
+      submitData.append('terms_accepted', formData.termsAccepted ? 'Yes' : 'No')
+      submitData.append('privacy_accepted', formData.privacyAccepted ? 'Yes' : 'No')
+      submitData.append('legal_declarations', formData.legalDeclarations ? 'Yes' : 'No')
+      submitData.append('marketing_consent', formData.marketingConsent ? 'Yes' : 'No')
+      
+      // Add FormSubmit configuration
+      submitData.append('_subject', `🎯 New Nominee Director Application - ${formData.firstName} ${formData.lastName}`)
+      submitData.append('_template', 'table')
+      submitData.append('_captcha', 'false')
+      submitData.append('_autoresponse', `Thank you for your application, ${formData.firstName}! 
+
+We have successfully received your nominee director application with all required documents and will begin processing it immediately.
+
+What happens next:
+✅ Initial review within 24 hours
+✅ Document verification within 48 hours  
+✅ Background checks within 3-5 business days
+✅ Welcome package and first opportunities within 1 week
+
+You will receive email updates throughout the process at ${formData.email}.
+
+If you have any questions, please don't hesitate to contact us at applications@nomineejobs.co.uk.
+
+Best regards,
+The NomineeJobs Team`)
+      submitData.append('_honey', '') // Honeypot spam protection
+      submitData.append('_replyto', formData.email || '')
+      
+      // Submit using standard FormSubmit endpoint (required for file uploads)
+      const response = await fetch('https://formsubmit.co/info@nomineejobs.co.uk', {
+        method: 'POST',
+        body: submitData, // FormData automatically sets correct Content-Type with boundary
       })
+      
+      const result = { success: response.ok, message: response.ok ? 'Success' : 'Failed' }
 
       console.log('✅ Application submission success:', result)
 
@@ -282,7 +333,7 @@ Application submitted on: ${new Date().toISOString()}
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="w-full">
+    <form ref={formRef} onSubmit={handleSubmit} className="w-full" encType="multipart/form-data">
       {/* Hidden FormSubmit fields for spam protection */}
       <input type="hidden" name="_honey" style={{ display: 'none' }} />
       

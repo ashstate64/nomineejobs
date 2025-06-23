@@ -42,14 +42,18 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
         let idNumberValid = false
         let idMessage = ""
         if (formData.idType === 'passport') {
-          idNumberValid = /^[A-Z]{1,2}\d{6,9}$/.test(value.replace(/\s/g, ''))
-          idMessage = idNumberValid ? "✓ Valid passport number" : value.length === 0 ? "" : "UK passport number format: ABC123456"
+          // UK passport: 9 digits (either 9 numbers OR 1 letter/digit + 8 digits)
+          idNumberValid = /^[A-Z0-9]\d{8}$/.test(value.replace(/\s/g, '').toUpperCase())
+          idMessage = idNumberValid ? "✓ Valid passport number" : value.length === 0 ? "" : "UK passport format: 9 characters (e.g., 123456789 or A12345678)"
         } else if (formData.idType === 'driving_licence') {
-          idNumberValid = /^[A-Z]{1,5}\d{6}[A-Z]{2}\d[A-Z]{2}$/.test(value.replace(/\s/g, ''))
-          idMessage = idNumberValid ? "✓ Valid driving licence number" : value.length === 0 ? "" : "UK driving licence format: ABCDE123456AB1CD"
+          // UK driving licence: 18 characters - SSSSS DYMMDD YF AAC II
+          // S=Surname(5), D=Decade, Y=Year, MM=Month(+50 if female), DD=Day, F=First/Middle initials, A=Arbitrary+Check, C=Issue counter
+          const cleanValue = value.replace(/\s/g, '').toUpperCase()
+          idNumberValid = /^[A-Z9]{5}\d{6}[A-Z9]{2}\d[A-Z0-9]{2}\d{2}$/.test(cleanValue)
+          idMessage = idNumberValid ? "✓ Valid driving licence number" : value.length === 0 ? "" : "UK driving licence: 18 characters (e.g., SMITH751125AB9CD01)"
         } else if (formData.idType === 'national_id') {
           idNumberValid = value.trim().length >= 8
-          idMessage = idNumberValid ? "✓ ID number accepted" : value.length === 0 ? "" : "Please enter a valid ID number"
+          idMessage = idNumberValid ? "✓ ID number accepted" : value.length === 0 ? "" : "Please enter a valid ID number (minimum 8 characters)"
         }
         setValidationState(prev => ({
           ...prev,
@@ -77,12 +81,17 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
         }))
         break
       case 'nationalInsurance':
-        const niValid = /^[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}\d{6}[A-D]{1}$/.test(value.replace(/\s/g, ''))
+        // UK National Insurance format: 2 letters + 6 digits + 1 letter (A, B, C, or D)
+        // First letter cannot be: D, F, I, Q, U, V
+        // Second letter cannot be: D, F, I, O, Q, U, V
+        // Forbidden prefixes: BG, GB, NK, KN, TN, NT, ZZ
+        // Suffix must be: A, B, C, or D
+        const niValid = /^[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}\d{6}[A-D]{1}$/.test(value.replace(/\s/g, '').toUpperCase())
         setValidationState(prev => ({
           ...prev,
           nationalInsurance: {
             isValid: niValid,
-            message: niValid ? "✓ Valid NI number" : value.length === 0 ? "" : "Format: AB123456C"
+            message: niValid ? "✓ Valid National Insurance number" : value.length === 0 ? "" : "UK NI format: 2 letters + 6 digits + 1 letter (e.g., AB123456C)"
           }
         }))
         break
@@ -93,6 +102,25 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
     const { name, value } = e.target
     updateFormData({ [name]: value })
     validateField(name, value)
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target
+    const file = files?.[0] || null
+    
+    // Validate file size (5MB limit)
+    if (file && file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB')
+      return
+    }
+    
+    // Validate file type
+    if (file && !['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'].includes(file.type)) {
+      alert('Please upload a JPG, PNG, or PDF file')
+      return
+    }
+    
+    updateFormData({ [name]: file })
   }
 
   const handleSelectChange = (name: string) => (value: string) => {
@@ -137,16 +165,17 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
 
   const allValid = Object.values(validationState).every(v => v.isValid) && 
                    formData.idType && formData.idNumber && 
-                   formData.placeOfBirth && formData.nationalInsurance
+                   formData.placeOfBirth && formData.nationalInsurance &&
+                   formData.idDocumentFront && formData.idDocumentBack && formData.proofOfAddress
 
   const getIdFormatHelp = () => {
     switch (formData.idType) {
       case 'passport':
-        return "UK passport numbers are typically 9 characters: 3 letters followed by 6 numbers (e.g., ABC123456)"
+        return "UK passport numbers are 9 characters: either 9 digits (e.g., 123456789) or 1 letter/digit + 8 digits (e.g., A12345678)"
       case 'driving_licence':
-        return "UK driving licence numbers are 16 characters in a specific format (e.g., SMITH123456AB1CD)"
+        return "UK driving licence numbers are 18 characters including surname, dates, and check digits (e.g., SMITH751125AB9CD01)"
       case 'national_id':
-        return "Enter your national identity card number as it appears on the document"
+        return "Enter your national identity card number as it appears on the document (minimum 8 characters)"
       default:
         return "Select an ID type to see format requirements"
     }
@@ -215,9 +244,9 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
             <Input
               id="idNumber"
               name="idNumber"
-              placeholder={formData.idType === 'passport' ? 'e.g., ABC123456' : 
-                          formData.idType === 'driving_licence' ? 'e.g., SMITH123456AB1CD' : 
-                          'Enter document number'}
+              placeholder={formData.idType === 'passport' ? 'e.g., 123456789 or A12345678' : 
+                          formData.idType === 'driving_licence' ? 'e.g., SMITH751125AB9CD01' : 
+                          'Enter document number (min 8 chars)'}
               required
               className={getInputClassName('idNumber')}
               value={formData.idNumber || ""}
@@ -326,22 +355,150 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
       <div className="space-y-6">
         <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
           <Upload className="h-5 w-5 text-sky-600" />
-          Document Upload (Next Step)
+          Document Upload Required
         </h3>
 
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
           <div className="flex items-start gap-2">
             <Camera className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
             <div className="text-sm text-amber-700">
               <p className="font-medium mb-1 text-amber-800">📸 Document Upload Requirements:</p>
               <ul className="space-y-1 text-xs text-amber-700">
-                <li>• Clear, high-quality photo or scan of your ID document</li>
+                <li>• Clear, high-quality photo or scan of your documents</li>
                 <li>• All text must be clearly readable</li>
                 <li>• No glare, shadows, or obstructions</li>
-                <li>• Accepted formats: JPG, PNG, PDF (max 5MB)</li>
-                <li>• Document must be current and not expired</li>
+                <li>• Accepted formats: JPG, PNG, PDF (max 5MB each)</li>
+                <li>• Documents must be current and not expired</li>
               </ul>
             </div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {/* ID Document Front */}
+          <div className="space-y-2">
+            <Label className="text-gray-800 font-medium flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              ID Document - Front Side *
+              {formData.idDocumentFront && <CheckCircle className="h-4 w-4 text-green-500" />}
+            </Label>
+            <div className="relative">
+              <input
+                type="file"
+                name="idDocumentFront"
+                accept="image/jpeg,image/jpg,image/png,application/pdf"
+                onChange={handleFileChange}
+                className="hidden"
+                id="idDocumentFront"
+              />
+              <label
+                htmlFor="idDocumentFront"
+                className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg cursor-pointer bg-gray-50 hover:bg-blue-50 transition-colors"
+              >
+                <div className="text-center">
+                  {formData.idDocumentFront ? (
+                    <div className="text-green-600">
+                      <CheckCircle className="h-8 w-8 mx-auto mb-2" />
+                      <p className="text-sm font-medium">✅ {formData.idDocumentFront.name}</p>
+                      <p className="text-xs text-gray-500">{(formData.idDocumentFront.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                  ) : (
+                    <div className="text-gray-600">
+                      <Upload className="h-8 w-8 mx-auto mb-2" />
+                      <p className="text-sm font-medium">Upload front side of ID</p>
+                      <p className="text-xs text-gray-500">JPG, PNG, or PDF (max 5MB)</p>
+                    </div>
+                  )}
+                </div>
+              </label>
+            </div>
+            <p className="text-xs text-gray-500">
+              Upload the front side of your {formData.idType === 'passport' ? 'passport' : formData.idType === 'driving_licence' ? 'driving licence' : 'ID document'}
+            </p>
+          </div>
+
+          {/* ID Document Back */}
+          <div className="space-y-2">
+            <Label className="text-gray-800 font-medium flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              ID Document - Back Side *
+              {formData.idDocumentBack && <CheckCircle className="h-4 w-4 text-green-500" />}
+            </Label>
+            <div className="relative">
+              <input
+                type="file"
+                name="idDocumentBack"
+                accept="image/jpeg,image/jpg,image/png,application/pdf"
+                onChange={handleFileChange}
+                className="hidden"
+                id="idDocumentBack"
+              />
+              <label
+                htmlFor="idDocumentBack"
+                className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg cursor-pointer bg-gray-50 hover:bg-blue-50 transition-colors"
+              >
+                <div className="text-center">
+                  {formData.idDocumentBack ? (
+                    <div className="text-green-600">
+                      <CheckCircle className="h-8 w-8 mx-auto mb-2" />
+                      <p className="text-sm font-medium">✅ {formData.idDocumentBack.name}</p>
+                      <p className="text-xs text-gray-500">{(formData.idDocumentBack.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                  ) : (
+                    <div className="text-gray-600">
+                      <Upload className="h-8 w-8 mx-auto mb-2" />
+                      <p className="text-sm font-medium">Upload back side of ID</p>
+                      <p className="text-xs text-gray-500">JPG, PNG, or PDF (max 5MB)</p>
+                    </div>
+                  )}
+                </div>
+              </label>
+            </div>
+            <p className="text-xs text-gray-500">
+              Upload the back side of your {formData.idType === 'passport' ? 'passport (photo page)' : formData.idType === 'driving_licence' ? 'driving licence' : 'ID document'}
+            </p>
+          </div>
+
+          {/* Proof of Address */}
+          <div className="space-y-2">
+            <Label className="text-gray-800 font-medium flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Proof of Address *
+              {formData.proofOfAddress && <CheckCircle className="h-4 w-4 text-green-500" />}
+            </Label>
+            <div className="relative">
+              <input
+                type="file"
+                name="proofOfAddress"
+                accept="image/jpeg,image/jpg,image/png,application/pdf"
+                onChange={handleFileChange}
+                className="hidden"
+                id="proofOfAddress"
+              />
+              <label
+                htmlFor="proofOfAddress"
+                className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 hover:border-blue-400 rounded-lg cursor-pointer bg-gray-50 hover:bg-blue-50 transition-colors"
+              >
+                <div className="text-center">
+                  {formData.proofOfAddress ? (
+                    <div className="text-green-600">
+                      <CheckCircle className="h-8 w-8 mx-auto mb-2" />
+                      <p className="text-sm font-medium">✅ {formData.proofOfAddress.name}</p>
+                      <p className="text-xs text-gray-500">{(formData.proofOfAddress.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                  ) : (
+                    <div className="text-gray-600">
+                      <Upload className="h-8 w-8 mx-auto mb-2" />
+                      <p className="text-sm font-medium">Upload proof of address</p>
+                      <p className="text-xs text-gray-500">JPG, PNG, or PDF (max 5MB)</p>
+                    </div>
+                  )}
+                </div>
+              </label>
+            </div>
+            <p className="text-xs text-gray-500">
+              Upload a recent utility bill, bank statement, or council tax document (within last 3 months)
+            </p>
           </div>
         </div>
       </div>
@@ -395,10 +552,10 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 animate-bounce-in">
           <div className="flex items-center gap-2">
             <CheckCircle className="h-5 w-5 text-green-600" />
-            <span className="font-semibold text-green-800">Identity information verified!</span>
+            <span className="font-semibold text-green-800">Identity verification complete!</span>
           </div>
           <p className="text-sm text-green-700 mt-1">
-            Your identification details look correct. Ready to proceed to payment setup.
+            ✅ All identification details and documents uploaded successfully. Ready to proceed to payment setup.
           </p>
         </div>
       )}
