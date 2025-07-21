@@ -19,8 +19,6 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
   const [validationState, setValidationState] = useState({
     idType: { isValid: false, message: "" },
     idNumber: { isValid: false, message: "" },
-    dateOfBirth: { isValid: false, message: "" },
-    placeOfBirth: { isValid: false, message: "" },
     nationalInsurance: { isValid: false, message: "" },
   })
 
@@ -29,69 +27,42 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
   const validateField = (field: string, value: string) => {
     switch (field) {
       case 'idType':
-        const idTypeValid = Boolean(value && value.length > 0)
+        const idValid = Boolean(value && value.length > 0)
         setValidationState(prev => ({
           ...prev,
           idType: {
-            isValid: idTypeValid,
-            message: idTypeValid ? "✓ ID type selected" : value.length === 0 ? "" : "Please select a valid form of identification"
+            isValid: idValid,
+            message: idValid ? "✓ ID type selected" : value.length === 0 ? "" : "Please select your ID type"
           }
         }))
         break
       case 'idNumber':
-        let idNumberValid = false
-        let idMessage = ""
-        if (formData.idType === 'passport') {
-          // UK passport: 9 digits (either 9 numbers OR 1 letter/digit + 8 digits)
-          idNumberValid = /^[A-Z0-9]\d{8}$/.test(value.replace(/\s/g, '').toUpperCase())
-          idMessage = idNumberValid ? "✓ Valid passport number" : value.length === 0 ? "" : "UK passport format: 9 characters (e.g., 123456789 or A12345678)"
-        } else if (formData.idType === 'driving_licence') {
-          // UK driving licence: 18 characters - SSSSS DYMMDD YF AAC II
-          // S=Surname(5), D=Decade, Y=Year, MM=Month(+50 if female), DD=Day, F=First/Middle initials, A=Arbitrary+Check, C=Issue counter
-          const cleanValue = value.replace(/\s/g, '').toUpperCase()
-          idNumberValid = /^[A-Z9]{5}\d{6}[A-Z9]{2}\d[A-Z0-9]{2}\d{2}$/.test(cleanValue)
-          idMessage = idNumberValid ? "✓ Valid driving licence number" : value.length === 0 ? "" : "UK driving licence: 18 characters (e.g., SMITH751125AB9CD01)"
-        } else if (formData.idType === 'national_id') {
-          idNumberValid = value.trim().length >= 8
-          idMessage = idNumberValid ? "✓ ID number accepted" : value.length === 0 ? "" : "Please enter a valid ID number (minimum 8 characters)"
+        let numberValid = false
+        switch (formData.idType) {
+          case 'passport':
+            numberValid = /^[A-Z0-9]{9}$/.test(value.toUpperCase())
+            break
+          case 'driving_licence':
+            numberValid = /^[A-Z0-9]{16}$/.test(value.toUpperCase().replace(/\s/g, ''))
+            break
+          default:
+            numberValid = value.length >= 8
         }
         setValidationState(prev => ({
           ...prev,
-          idNumber: { isValid: idNumberValid, message: idMessage }
-        }))
-        break
-      case 'dateOfBirth':
-        const dobValid = Boolean(value && new Date(value) < new Date() && new Date().getFullYear() - new Date(value).getFullYear() >= 18)
-        setValidationState(prev => ({
-          ...prev,
-          dateOfBirth: {
-            isValid: dobValid,
-            message: dobValid ? "✓ Valid date of birth" : value.length === 0 ? "" : "Must be 18+ and valid date"
-          }
-        }))
-        break
-      case 'placeOfBirth':
-        const pobValid = value.trim().length >= 2 && /^[a-zA-Z\s\-,.']+$/.test(value)
-        setValidationState(prev => ({
-          ...prev,
-          placeOfBirth: {
-            isValid: pobValid,
-            message: pobValid ? "✓ Valid place of birth" : value.length === 0 ? "" : "Enter city/country of birth"
+          idNumber: {
+            isValid: numberValid,
+            message: numberValid ? "✓ Valid ID number format" : value.length === 0 ? "" : getIdFormatHelp()
           }
         }))
         break
       case 'nationalInsurance':
-        // UK National Insurance format: 2 letters + 6 digits + 1 letter (A, B, C, or D)
-        // First letter cannot be: D, F, I, Q, U, V
-        // Second letter cannot be: D, F, I, O, Q, U, V
-        // Forbidden prefixes: BG, GB, NK, KN, TN, NT, ZZ
-        // Suffix must be: A, B, C, or D
-        const niValid = /^[A-CEGHJ-PR-TW-Z]{1}[A-CEGHJ-NPR-TW-Z]{1}\d{6}[A-D]{1}$/.test(value.replace(/\s/g, '').toUpperCase())
+        const niValid = /^[A-Z]{2}[0-9]{6}[A-D]$/i.test(value.replace(/\s/g, ''))
         setValidationState(prev => ({
           ...prev,
           nationalInsurance: {
             isValid: niValid,
-            message: niValid ? "✓ Valid National Insurance number" : value.length === 0 ? "" : "UK NI format: 2 letters + 6 digits + 1 letter (e.g., AB123456C)"
+            message: niValid ? "✓ Valid National Insurance number" : value.length === 0 ? "" : "Format: AB123456C"
           }
         }))
         break
@@ -165,7 +136,7 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
 
   const allValid = Object.values(validationState).every(v => v.isValid) && 
                    formData.idType && formData.idNumber && 
-                   formData.placeOfBirth && formData.nationalInsurance &&
+                   formData.nationalInsurance &&
                    formData.idDocumentFront && formData.idDocumentBack && formData.proofOfAddress
 
   const getIdFormatHelp = () => {
@@ -258,62 +229,6 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
               </p>
             )}
             <p className="text-xs text-gray-500">{getIdFormatHelp()}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Personal Details */}
-      <div className="space-y-6">
-        <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-          <User className="h-5 w-5 text-sky-600" />
-          Personal Details
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="dateOfBirth" className="text-gray-800 font-medium flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              Date of Birth *
-              {getValidationIcon('dateOfBirth')}
-            </Label>
-            <Input
-              id="dateOfBirth"
-              name="dateOfBirth"
-              type="date"
-              required
-              className={getInputClassName('dateOfBirth')}
-              value={formData.dateOfBirth || ""}
-              onChange={handleChange}
-              max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
-            />
-            {validationState.dateOfBirth.message && (
-              <p className={`text-xs mt-1 ${validationState.dateOfBirth.isValid ? 'text-green-600' : 'text-red-600'}`}>
-                {validationState.dateOfBirth.message}
-              </p>
-            )}
-            <p className="text-xs text-gray-500">Must be 18 or older to participate</p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="placeOfBirth" className="text-gray-800 font-medium flex items-center gap-2">
-              Place of Birth *
-              {getValidationIcon('placeOfBirth')}
-            </Label>
-            <Input
-              id="placeOfBirth"
-              name="placeOfBirth"
-              placeholder="e.g., London, United Kingdom"
-              required
-              className={getInputClassName('placeOfBirth')}
-              value={formData.placeOfBirth || ""}
-              onChange={handleChange}
-            />
-            {validationState.placeOfBirth.message && (
-              <p className={`text-xs mt-1 ${validationState.placeOfBirth.isValid ? 'text-green-600' : 'text-red-600'}`}>
-                {validationState.placeOfBirth.message}
-              </p>
-            )}
-            <p className="text-xs text-gray-500">City and country where you were born</p>
           </div>
         </div>
       </div>
@@ -541,8 +456,6 @@ export default function Step3Identification({ formData, updateFormData }: StepPr
           <div className="mt-4 p-4 bg-white rounded-lg border space-y-2">
             <p className="text-sm text-gray-800"><strong>ID Type:</strong> {formData.idType || 'Not selected'}</p>
             <p className="text-sm text-gray-800"><strong>ID Number:</strong> {formData.idNumber ? '••••••' + formData.idNumber.slice(-3) : 'Not entered'}</p>
-            <p className="text-sm text-gray-800"><strong>Date of Birth:</strong> {formData.dateOfBirth || 'Not entered'}</p>
-            <p className="text-sm text-gray-800"><strong>Place of Birth:</strong> {formData.placeOfBirth || 'Not entered'}</p>
             <p className="text-sm text-gray-800"><strong>NI Number:</strong> {formData.nationalInsurance ? '••••••' + formData.nationalInsurance.slice(-1) : 'Not entered'}</p>
           </div>
         )}

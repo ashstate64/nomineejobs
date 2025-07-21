@@ -4,8 +4,8 @@ import { useState, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle, AlertCircle, User, Calendar, Info } from "lucide-react"
-import type { FormData } from "../page" // Import FormData type
+import { CheckCircle, AlertCircle, User, Calendar, MapPin, Info } from "lucide-react"
+import type { FormData } from "../page"
 import type React from "react"
 
 interface StepProps {
@@ -18,6 +18,7 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
     firstName: { isValid: false, message: "" },
     lastName: { isValid: false, message: "" },
     dateOfBirth: { isValid: false, message: "", age: 0 },
+    placeOfBirth: { isValid: false, message: "" },
   })
 
   const calculateAge = (birthDate: string): number => {
@@ -57,6 +58,16 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
           }
         }))
         break
+      case 'placeOfBirth':
+        const placeValid = value.trim().length >= 2
+        setValidationState(prev => ({
+          ...prev,
+          placeOfBirth: {
+            isValid: placeValid,
+            message: placeValid ? "✓ Place of birth confirmed" : value.length === 0 ? "" : "Please enter your place of birth"
+          }
+        }))
+        break
     }
   }
 
@@ -68,9 +79,10 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
 
   // Validate initial values
   useEffect(() => {
-    if (formData.firstName) validateField('firstName', formData.firstName)
-    if (formData.lastName) validateField('lastName', formData.lastName)
-    if (formData.dateOfBirth) validateField('dateOfBirth', formData.dateOfBirth)
+    Object.keys(validationState).forEach(field => {
+      const value = formData[field as keyof FormData] as string
+      if (value) validateField(field, value)
+    })
   }, [])
 
   const getInputClassName = (field: keyof typeof validationState) => {
@@ -101,10 +113,10 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
   }
 
   const allValid = Object.values(validationState).every(v => v.isValid) && 
-                   formData.firstName && formData.lastName && formData.dateOfBirth
+                   formData.firstName && formData.lastName && formData.dateOfBirth && formData.placeOfBirth
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Progress indicator */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div className="flex items-center gap-2 mb-2">
@@ -113,27 +125,26 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
           {allValid && <Badge variant="outline" className="bg-green-100 text-green-700 border-green-300 text-xs">Complete</Badge>}
         </div>
         <p className="text-sm text-blue-700">
-          Please ensure your details match your identification documents exactly.
+          Tell us about yourself. All information must match your official ID documents.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-4">
+        {/* First Name */}
         <div className="space-y-2">
           <Label htmlFor="firstName" className="text-gray-800 font-medium flex items-center gap-2">
             First Name *
             {getValidationIcon('firstName')}
           </Label>
-          <div className="relative">
-            <Input
-              id="firstName"
-              name="firstName"
-              placeholder="e.g., John"
-              required
-              className={getInputClassName('firstName')}
-              value={formData.firstName || ""}
-              onChange={handleChange}
-            />
-          </div>
+          <Input
+            id="firstName"
+            name="firstName"
+            placeholder="e.g., John"
+            required
+            className={getInputClassName('firstName')}
+            value={formData.firstName || ""}
+            onChange={handleChange}
+          />
           {validationState.firstName.message && (
             <p className={`text-xs mt-1 ${validationState.firstName.isValid ? 'text-green-600' : 'text-red-600'}`}>
               {validationState.firstName.message}
@@ -141,37 +152,35 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
           )}
         </div>
 
+        {/* Last Name */}
         <div className="space-y-2">
           <Label htmlFor="lastName" className="text-gray-800 font-medium flex items-center gap-2">
             Last Name *
             {getValidationIcon('lastName')}
           </Label>
-          <div className="relative">
-            <Input
-              id="lastName"
-              name="lastName"
-              placeholder="e.g., Doe"
-              required
-              className={getInputClassName('lastName')}
-              value={formData.lastName || ""}
-              onChange={handleChange}
-            />
-          </div>
+          <Input
+            id="lastName"
+            name="lastName"
+            placeholder="e.g., Smith"
+            required
+            className={getInputClassName('lastName')}
+            value={formData.lastName || ""}
+            onChange={handleChange}
+          />
           {validationState.lastName.message && (
             <p className={`text-xs mt-1 ${validationState.lastName.isValid ? 'text-green-600' : 'text-red-600'}`}>
               {validationState.lastName.message}
             </p>
           )}
         </div>
-      </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="dateOfBirth" className="text-gray-800 font-medium flex items-center gap-2">
-          <Calendar className="h-4 w-4" />
-          Date of Birth *
-          {getValidationIcon('dateOfBirth')}
-        </Label>
-        <div className="relative">
+        {/* Date of Birth */}
+        <div className="space-y-2">
+          <Label htmlFor="dateOfBirth" className="text-gray-800 font-medium flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            Date of Birth *
+            {getValidationIcon('dateOfBirth')}
+          </Label>
           <Input
             id="dateOfBirth"
             name="dateOfBirth"
@@ -182,12 +191,36 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
             onChange={handleChange}
             max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
           />
+          {validationState.dateOfBirth.message && (
+            <p className={`text-xs mt-1 ${validationState.dateOfBirth.isValid ? 'text-green-600' : 'text-red-600'}`}>
+              {validationState.dateOfBirth.message}
+            </p>
+          )}
         </div>
-        {validationState.dateOfBirth.message && (
-          <p className={`text-xs mt-1 ${validationState.dateOfBirth.isValid ? 'text-green-600' : 'text-red-600'}`}>
-            {validationState.dateOfBirth.message}
-          </p>
-        )}
+
+        {/* Place of Birth */}
+        <div className="space-y-2">
+          <Label htmlFor="placeOfBirth" className="text-gray-800 font-medium flex items-center gap-2">
+            <MapPin className="h-4 w-4" />
+            Place of Birth *
+            {getValidationIcon('placeOfBirth')}
+          </Label>
+          <Input
+            id="placeOfBirth"
+            name="placeOfBirth"
+            placeholder="e.g., London, UK or Manchester, UK"
+            required
+            className={getInputClassName('placeOfBirth')}
+            value={formData.placeOfBirth || ""}
+            onChange={handleChange}
+          />
+          {validationState.placeOfBirth.message && (
+            <p className={`text-xs mt-1 ${validationState.placeOfBirth.isValid ? 'text-green-600' : 'text-red-600'}`}>
+              {validationState.placeOfBirth.message}
+            </p>
+          )}
+          <p className="text-xs text-gray-500">Enter the city and country where you were born</p>
+        </div>
       </div>
 
       {/* Helpful information */}
@@ -200,6 +233,7 @@ export default function Step1Personal({ formData, updateFormData }: StepProps) {
               <li>• Your name must match your passport or driving licence exactly</li>
               <li>• You must be 18+ years old to participate</li>
               <li>• This information will be used for identity verification</li>
+              <li>• Place of birth is required for background checks</li>
             </ul>
           </div>
         </div>

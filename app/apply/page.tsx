@@ -99,7 +99,7 @@ export default function ApplyPage() {
   const getStepValidation = (step: number): boolean => {
     switch (step) {
       case 1:
-        return !!(formData.firstName && formData.lastName && formData.dateOfBirth)
+        return !!(formData.firstName && formData.lastName && formData.dateOfBirth && formData.placeOfBirth)
       case 2:
         return !!(formData.email && formData.phone && formData.addressLine1 && formData.city && formData.postcode)
       case 3:
