@@ -92,6 +92,8 @@ export default function ApplyPage() {
     }
   }, [formData])
 
+
+
   const updateFormData = (newData: Partial<FormData>) => {
     setFormData(prev => ({ ...prev, ...newData }))
   }
@@ -141,6 +143,11 @@ export default function ApplyPage() {
     
     if (!getStepValidation(5)) {
       setSubmitError('Please complete all required fields before submitting.')
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      })
       return
     }
 
@@ -295,6 +302,13 @@ The NomineeJobs Team`)
       } else {
         setSubmitError('❗ Unexpected error. Please email us directly at applications@nomineejobs.co.uk')
       }
+      
+      // Scroll to top so user can see error message
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      })
     } finally {
       setIsSubmitting(false)
     }
