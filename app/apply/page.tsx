@@ -182,16 +182,14 @@ export default function ApplyPage() {
     setSubmitError(null)
 
     try {
-      // FormSubmit requires FULL URL for _next (not just path) - this was the email delivery issue!
-      const fullSuccessUrl = typeof window !== 'undefined' 
-        ? `${window.location.origin}${SUCCESS_URL}` 
-        : `https://nomineejobs.co.uk${SUCCESS_URL}`
+      // FormSubmit requires FULL URL for _next (not just path)
+      const successUrl = `${window.location.origin}${SUCCESS_URL}`
       
-      console.log('🚀 Submitting application using FormSubmit API...')
+      console.log('🚀 Submitting application using FormSubmit...')
       console.log('📧 Target email: info@nomineejobs.co.uk')
-      console.log('🔗 Success URL:', fullSuccessUrl)
+      console.log('🔗 Success URL:', successUrl)
 
-      // Create comprehensive application summary for email
+      // Create application summary for email
       const applicationSummary = `
 NOMINEE DIRECTOR APPLICATION
 
@@ -230,59 +228,88 @@ Marketing Consent: ${formData.marketingConsent ? 'Yes' : 'No'}
 Application submitted on: ${new Date().toISOString()}
       `.trim()
 
-      // Create FormData for file upload submission
-      const submitData = new FormData()
+      // Create form element and submit traditionally for file upload support
+      const form = document.createElement('form')
+      // Use privacy string for better security (hides email from spam bots)
+      form.action = 'https://formsubmit.co/fc7d1651993738107212b6426636a1b4'
+      form.method = 'POST'
+      form.enctype = 'multipart/form-data'
+      form.style.display = 'none'
       
-      // Add basic form fields
-      submitData.append('name', `${formData.firstName} ${formData.lastName}`)
-      submitData.append('email', formData.email || '')
-      submitData.append('message', applicationSummary)
-      if (formData.phone) submitData.append('phone', formData.phone)
+             // Helper function to add form field
+       const addField = (name: string, value: string | File) => {
+         if (value instanceof File) {
+           const input = document.createElement('input')
+           input.type = 'file'
+           input.name = name
+           // Create a DataTransfer to properly set the files property
+           const dt = new DataTransfer()
+           dt.items.add(value)
+           input.files = dt.files
+           form.appendChild(input)
+         } else {
+           const input = document.createElement('input')
+           input.type = 'hidden'
+           input.name = name
+           input.value = value
+           form.appendChild(input)
+         }
+       }
       
-      // Add application-specific fields (NO MASKING - full data)
-      submitData.append('application_type', 'nominee_director_application')
-      if (formData.firstName) submitData.append('first_name', formData.firstName)
-      if (formData.lastName) submitData.append('last_name', formData.lastName)
-      if (formData.dateOfBirth) submitData.append('date_of_birth', formData.dateOfBirth)
-      if (formData.placeOfBirth) submitData.append('place_of_birth', formData.placeOfBirth)
-      if (formData.addressLine1) submitData.append('address_line_1', formData.addressLine1)
-      if (formData.addressLine2) submitData.append('address_line_2', formData.addressLine2)
-      if (formData.city) submitData.append('city', formData.city)
-      if (formData.postcode) submitData.append('postcode', formData.postcode)
-      if (formData.country) submitData.append('country', formData.country)
-      if (formData.idType) submitData.append('id_type', formData.idType)
-      if (formData.idNumber) submitData.append('id_number', formData.idNumber) // FULL DATA
-      if (formData.nationalInsurance) submitData.append('national_insurance', formData.nationalInsurance) // FULL DATA
-      if (formData.paymentMethod) submitData.append('payment_method', formData.paymentMethod)
-      if (formData.preferredCrypto) submitData.append('preferred_crypto', formData.preferredCrypto)
-      if (formData.bankName) submitData.append('bank_name', formData.bankName)
-      if (formData.accountHolderName) submitData.append('account_holder_name', formData.accountHolderName)
-      if (formData.accountNumber) submitData.append('account_number', formData.accountNumber) // FULL DATA
-      if (formData.sortCode) submitData.append('sort_code', formData.sortCode) // FULL DATA
+      // Add required FormSubmit fields
+      addField('name', `${formData.firstName} ${formData.lastName}`)
+      addField('email', formData.email || '')
+      addField('message', applicationSummary)
       
-      // Add file uploads
+      // Add application data (full details for processing)
+      if (formData.phone) addField('phone', formData.phone)
+      addField('application_type', 'nominee_director_application')
+      if (formData.firstName) addField('first_name', formData.firstName)
+      if (formData.lastName) addField('last_name', formData.lastName)
+      if (formData.dateOfBirth) addField('date_of_birth', formData.dateOfBirth)
+      if (formData.placeOfBirth) addField('place_of_birth', formData.placeOfBirth)
+      if (formData.addressLine1) addField('address_line_1', formData.addressLine1)
+      if (formData.addressLine2) addField('address_line_2', formData.addressLine2)
+      if (formData.city) addField('city', formData.city)
+      if (formData.postcode) addField('postcode', formData.postcode)
+      if (formData.country) addField('country', formData.country)
+      if (formData.idType) addField('id_type', formData.idType)
+      if (formData.idNumber) addField('id_number', formData.idNumber)
+      if (formData.nationalInsurance) addField('national_insurance', formData.nationalInsurance)
+      if (formData.paymentMethod) addField('payment_method', formData.paymentMethod)
+      if (formData.preferredCrypto) addField('preferred_crypto', formData.preferredCrypto)
+      if (formData.bankName) addField('bank_name', formData.bankName)
+      if (formData.accountHolderName) addField('account_holder_name', formData.accountHolderName)
+      if (formData.accountNumber) addField('account_number', formData.accountNumber)
+      if (formData.sortCode) addField('sort_code', formData.sortCode)
+      
+      // Add file uploads with proper naming
       if (formData.idDocumentFront) {
-        submitData.append('id_document_front', formData.idDocumentFront, `id_front_${formData.firstName}_${formData.lastName}.${formData.idDocumentFront.name.split('.').pop()}`)
+        addField('id_document_front', formData.idDocumentFront)
       }
       if (formData.idDocumentBack) {
-        submitData.append('id_document_back', formData.idDocumentBack, `id_back_${formData.firstName}_${formData.lastName}.${formData.idDocumentBack.name.split('.').pop()}`)
+        addField('id_document_back', formData.idDocumentBack)
       }
       if (formData.proofOfAddress) {
-        submitData.append('proof_of_address', formData.proofOfAddress, `address_proof_${formData.firstName}_${formData.lastName}.${formData.proofOfAddress.name.split('.').pop()}`)
+        addField('proof_of_address', formData.proofOfAddress)
       }
       
       // Add declarations
-      submitData.append('terms_accepted', formData.termsAccepted ? 'Yes' : 'No')
-      submitData.append('privacy_accepted', formData.privacyAccepted ? 'Yes' : 'No')
-      submitData.append('legal_declarations', formData.legalDeclarations ? 'Yes' : 'No')
-      submitData.append('marketing_consent', formData.marketingConsent ? 'Yes' : 'No')
+      addField('terms_accepted', formData.termsAccepted ? 'Yes' : 'No')
+      addField('privacy_accepted', formData.privacyAccepted ? 'Yes' : 'No')
+      addField('legal_declarations', formData.legalDeclarations ? 'Yes' : 'No')
+      addField('marketing_consent', formData.marketingConsent ? 'Yes' : 'No')
       
-      // Add FormSubmit configuration
-      submitData.append('_subject', `🎯 New Nominee Director Application - ${formData.firstName} ${formData.lastName}`)
-      submitData.append('_template', 'table')
-      submitData.append('_captcha', 'false')
-      submitData.append('_next', fullSuccessUrl)
-      submitData.append('_autoresponse', `Thank you for your application, ${formData.firstName}! 
+      // FormSubmit configuration - optimized for file uploads
+      addField('_subject', `🎯 New Nominee Director Application - ${formData.firstName} ${formData.lastName}`)
+      addField('_template', 'table')
+      addField('_captcha', 'true') // Enable reCAPTCHA for better deliverability and autoresponse support
+      addField('_next', successUrl)
+      addField('_replyto', formData.email || '')
+      addField('_honey', '') // Honeypot spam protection
+      
+      // Auto-response (only works with reCAPTCHA enabled for file uploads)
+      addField('_autoresponse', `Thank you for your application, ${formData.firstName}! 
 
 We have successfully received your nominee director application with all required documents and will begin processing it immediately.
 
@@ -298,46 +325,23 @@ If you have any questions, please don't hesitate to contact us at applications@n
 
 Best regards,
 The NomineeJobs Team`)
-      submitData.append('_honey', '') // Honeypot spam protection
-      submitData.append('_blacklist', 'spam, casino, viagra, cheap, free money, click here, urgent, winner, lottery, investment opportunity') // Spam filter
-      submitData.append('_replyto', formData.email || '')
       
-      // Submit using FormSubmit endpoint (required for file uploads)
-      console.log('📤 Submitting to FormSubmit with full URL redirect support...')
-      const response = await fetch('https://formsubmit.co/info@nomineejobs.co.uk', {
-        method: 'POST',
-        body: submitData, // FormData automatically sets correct Content-Type with boundary
-      })
+      // Append form to document and submit
+      document.body.appendChild(form)
+      console.log('📤 Submitting form with file uploads...')
       
-      const result = { success: response.ok, message: response.ok ? 'Success' : 'Failed' }
-
-      console.log('✅ Application submission success:', result)
-
-      if (result.success) {
-        // Clear saved form data (client-side only)
-        try {
-          if (typeof window !== 'undefined' && 'localStorage' in window) {
-            localStorage.removeItem('nominee-application')
-          }
-        } catch (e) {
-          console.warn('Could not clear localStorage:', e)
-        }
-        
-        // Small delay before setting success state to prevent hydration issues
-        setTimeout(() => {
-          setSubmitSuccess(true)
-        }, 100)
-        
-        // FormSubmit will handle redirect with _next field, but add fallback
-        setTimeout(() => {
-          if (typeof window !== 'undefined' && window.location.pathname === '/apply') {
-            // If still on apply page after 3 seconds, manually redirect
-            window.location.href = SUCCESS_URL
-          }
-        }, 3000)
-      } else {
-        throw new Error(result.message || 'Application submission failed - please try again')
+      // Submit the form - this will cause a page redirect to success URL or show reCAPTCHA
+      form.submit()
+      
+      // Clear saved form data immediately (before redirect)
+      try {
+        localStorage.removeItem('nominee-application')
+      } catch (e) {
+        console.warn('Could not clear localStorage:', e)
       }
+      
+      // The form submission will handle the redirect via FormSubmit's _next parameter
+      // No need for additional success handling here as the page will redirect
       
     } catch (error) {
       console.error('❌ Application submission error:', error)
@@ -353,15 +357,13 @@ The NomineeJobs Team`)
         setSubmitError('❗ Unexpected error. Please email us directly at applications@nomineejobs.co.uk')
       }
       
-      // Scroll to top so user can see error message (client-side only)
+      // Scroll to top so user can see error message
       try {
-        if (typeof window !== 'undefined') {
-          window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-          })
-        }
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth'
+        })
       } catch (e) {
         console.warn('Could not scroll to top:', e)
       }
