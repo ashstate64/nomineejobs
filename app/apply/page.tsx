@@ -236,54 +236,54 @@ Application submitted on: ${new Date().toISOString()}
       form.enctype = 'multipart/form-data'
       form.style.display = 'none'
       
-             // Helper function to add form field
-       const addField = (name: string, value: string | File) => {
-         if (value instanceof File) {
-           const input = document.createElement('input')
-           input.type = 'file'
-           input.name = name
-           // Create a DataTransfer to properly set the files property
-           const dt = new DataTransfer()
-           dt.items.add(value)
-           input.files = dt.files
-           form.appendChild(input)
-         } else {
-           const input = document.createElement('input')
-           input.type = 'hidden'
-           input.name = name
-           input.value = value
-           form.appendChild(input)
-         }
-       }
+      // Helper function to add form field
+      const addField = (name: string, value: string | File) => {
+        if (value instanceof File) {
+          const input = document.createElement('input')
+          input.type = 'file'
+          input.name = name
+          // Create a DataTransfer to properly set the files property
+          const dt = new DataTransfer()
+          dt.items.add(value)
+          input.files = dt.files
+          form.appendChild(input)
+        } else if (value) { // Only add non-empty values
+          const input = document.createElement('input')
+          input.type = 'hidden'
+          input.name = name
+          input.value = String(value)
+          form.appendChild(input)
+        }
+      }
       
-      // Add required FormSubmit fields
-      addField('name', `${formData.firstName} ${formData.lastName}`)
+      // FormSubmit required fields (these must be present)
+      addField('name', `${formData.firstName || ''} ${formData.lastName || ''}`.trim())
       addField('email', formData.email || '')
       addField('message', applicationSummary)
       
-      // Add application data (full details for processing)
-      if (formData.phone) addField('phone', formData.phone)
+      // Application data - send ALL collected data
+      addField('phone', formData.phone || '')
       addField('application_type', 'nominee_director_application')
-      if (formData.firstName) addField('first_name', formData.firstName)
-      if (formData.lastName) addField('last_name', formData.lastName)
-      if (formData.dateOfBirth) addField('date_of_birth', formData.dateOfBirth)
-      if (formData.placeOfBirth) addField('place_of_birth', formData.placeOfBirth)
-      if (formData.addressLine1) addField('address_line_1', formData.addressLine1)
-      if (formData.addressLine2) addField('address_line_2', formData.addressLine2)
-      if (formData.city) addField('city', formData.city)
-      if (formData.postcode) addField('postcode', formData.postcode)
-      if (formData.country) addField('country', formData.country)
-      if (formData.idType) addField('id_type', formData.idType)
-      if (formData.idNumber) addField('id_number', formData.idNumber)
-      if (formData.nationalInsurance) addField('national_insurance', formData.nationalInsurance)
-      if (formData.paymentMethod) addField('payment_method', formData.paymentMethod)
-      if (formData.preferredCrypto) addField('preferred_crypto', formData.preferredCrypto)
-      if (formData.bankName) addField('bank_name', formData.bankName)
-      if (formData.accountHolderName) addField('account_holder_name', formData.accountHolderName)
-      if (formData.accountNumber) addField('account_number', formData.accountNumber)
-      if (formData.sortCode) addField('sort_code', formData.sortCode)
+      addField('first_name', formData.firstName || '')
+      addField('last_name', formData.lastName || '')
+      addField('date_of_birth', formData.dateOfBirth || '')
+      addField('place_of_birth', formData.placeOfBirth || '')
+      addField('address_line_1', formData.addressLine1 || '')
+      addField('address_line_2', formData.addressLine2 || '')
+      addField('city', formData.city || '')
+      addField('postcode', formData.postcode || '')
+      addField('country', formData.country || 'United Kingdom')
+      addField('id_type', formData.idType || '')
+      addField('id_number', formData.idNumber || '')
+      addField('national_insurance', formData.nationalInsurance || '')
+      addField('payment_method', formData.paymentMethod || '')
+      addField('preferred_crypto', formData.preferredCrypto || '')
+      addField('bank_name', formData.bankName || '')
+      addField('account_holder_name', formData.accountHolderName || '')
+      addField('account_number', formData.accountNumber || '')
+      addField('sort_code', formData.sortCode || '')
       
-      // Add file uploads with proper naming
+      // File uploads
       if (formData.idDocumentFront) {
         addField('id_document_front', formData.idDocumentFront)
       }
@@ -294,21 +294,21 @@ Application submitted on: ${new Date().toISOString()}
         addField('proof_of_address', formData.proofOfAddress)
       }
       
-      // Add declarations
+      // Declarations
       addField('terms_accepted', formData.termsAccepted ? 'Yes' : 'No')
       addField('privacy_accepted', formData.privacyAccepted ? 'Yes' : 'No')
       addField('legal_declarations', formData.legalDeclarations ? 'Yes' : 'No')
       addField('marketing_consent', formData.marketingConsent ? 'Yes' : 'No')
       
-      // FormSubmit configuration - optimized for file uploads
+      // FormSubmit configuration
       addField('_subject', `🎯 New Nominee Director Application - ${formData.firstName} ${formData.lastName}`)
       addField('_template', 'table')
-      addField('_captcha', 'true') // Enable reCAPTCHA for better deliverability and autoresponse support
-      addField('_next', successUrl)
+      addField('_captcha', 'true') // Required for autoresponse with file uploads
+      addField('_next', successUrl) // This should redirect properly
       addField('_replyto', formData.email || '')
       addField('_honey', '') // Honeypot spam protection
       
-      // Auto-response (only works with reCAPTCHA enabled for file uploads)
+      // Auto-response message
       addField('_autoresponse', `Thank you for your application, ${formData.firstName}! 
 
 We have successfully received your nominee director application with all required documents and will begin processing it immediately.
@@ -326,11 +326,21 @@ If you have any questions, please don't hesitate to contact us at applications@n
 Best regards,
 The NomineeJobs Team`)
       
+      // Debug: Log form data being sent
+      console.log('📋 Form fields being sent:', Array.from(form.elements).map(el => {
+        const input = el as HTMLInputElement
+        return {
+          name: input.name, 
+          type: input.type,
+          value: input.type === 'file' ? 'FILE' : input.value
+        }
+      }))
+      
       // Append form to document and submit
       document.body.appendChild(form)
-      console.log('📤 Submitting form with file uploads...')
+      console.log('📤 Submitting form with all data and files...')
       
-      // Submit the form - this will cause a page redirect to success URL or show reCAPTCHA
+      // Submit the form - this should redirect to successUrl after processing
       form.submit()
       
       // Clear saved form data immediately (before redirect)
