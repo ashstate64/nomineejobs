@@ -123,9 +123,9 @@ export default function ApplyPage() {
                  formData.idDocumentFront && formData.idDocumentBack && formData.proofOfAddress)
       case 4:
         return !!(formData.paymentMethod && (
-          formData.paymentMethod === 'crypto' && formData.preferredCrypto ||
-          formData.paymentMethod === 'bank_transfer' && formData.accountNumber ||
-          formData.paymentMethod === 'paypal'
+          (formData.paymentMethod === 'crypto' && formData.preferredCrypto) ||
+          (formData.paymentMethod === 'bank_transfer' && formData.bankName && formData.accountHolderName && formData.accountNumber && formData.sortCode) ||
+          (formData.paymentMethod === 'paypal')
         ))
       case 5:
         return !!(formData.termsAccepted && formData.privacyAccepted && formData.legalDeclarations)
