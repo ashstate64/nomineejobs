@@ -62,7 +62,7 @@ const steps = [
 ]
 
 // FormSubmit configuration
-const SUCCESS_URL = `${typeof window !== 'undefined' ? window.location.origin : ''}/apply/success`
+const SUCCESS_URL = '/apply/success' // Use relative URL to avoid hydration issues
 
 export default function ApplyPage() {
   const [currentStep, setCurrentStep] = useState(1)
@@ -70,27 +70,41 @@ export default function ApplyPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
 
-  // Load saved form data from localStorage
+  // Set mounted state to prevent hydration mismatches
   useEffect(() => {
-    const savedData = localStorage.getItem('nominee-application')
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData)
-        setFormData(parsed)
-      } catch (error) {
-        console.warn('Could not parse saved form data')
-      }
-    }
+    setIsMounted(true)
   }, [])
 
-  // Save form data to localStorage whenever it changes
+  // Load saved form data from localStorage (client-side only)
   useEffect(() => {
-    if (Object.keys(formData).length > 0) {
-      localStorage.setItem('nominee-application', JSON.stringify(formData))
+    if (!isMounted || typeof window === 'undefined') return
+    
+    try {
+      const savedData = localStorage.getItem('nominee-application')
+      if (savedData) {
+        const parsed = JSON.parse(savedData)
+        setFormData(parsed)
+      }
+    } catch (error) {
+      console.warn('Could not parse saved form data')
     }
-  }, [formData])
+  }, [isMounted])
+
+  // Save form data to localStorage whenever it changes (client-side only)
+  useEffect(() => {
+    if (!isMounted || typeof window === 'undefined') return
+    
+    if (Object.keys(formData).length > 0) {
+      try {
+        localStorage.setItem('nominee-application', JSON.stringify(formData))
+      } catch (error) {
+        console.warn('Could not save form data to localStorage')
+      }
+    }
+  }, [formData, isMounted])
 
 
 
@@ -127,14 +141,20 @@ export default function ApplyPage() {
   const nextStep = () => {
     if (currentStep < steps.length && canProceed) {
       setCurrentStep(currentStep + 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      // Client-side only scroll
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     }
   }
 
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      // Client-side only scroll
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     }
   }
 
@@ -143,11 +163,14 @@ export default function ApplyPage() {
     
     if (!getStepValidation(5)) {
       setSubmitError('Please complete all required fields before submitting.')
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      })
+      // Client-side only scroll
+      if (typeof window !== 'undefined') {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth'
+        })
+      }
       return
     }
 
@@ -247,7 +270,7 @@ Application submitted on: ${new Date().toISOString()}
       submitData.append('_subject', `🎯 New Nominee Director Application - ${formData.firstName} ${formData.lastName}`)
       submitData.append('_template', 'table')
       submitData.append('_captcha', 'false')
-      submitData.append('_next', SUCCESS_URL) // FormSubmit native redirect
+      submitData.append('_next', typeof window !== 'undefined' ? `${window.location.origin}${SUCCESS_URL}` : SUCCESS_URL) // FormSubmit native redirect
       submitData.append('_autoresponse', `Thank you for your application, ${formData.firstName}! 
 
 We have successfully received your nominee director application with all required documents and will begin processing it immediately.
@@ -285,7 +308,7 @@ The NomineeJobs Team`)
         
         // FormSubmit will handle redirect with _next field, but add fallback
         setTimeout(() => {
-          if (window.location.pathname === '/apply') {
+          if (typeof window !== 'undefined' && window.location.pathname === '/apply') {
             // If still on apply page after 3 seconds, manually redirect
             window.location.href = SUCCESS_URL
           }
@@ -308,12 +331,14 @@ The NomineeJobs Team`)
         setSubmitError('❗ Unexpected error. Please email us directly at applications@nomineejobs.co.uk')
       }
       
-      // Scroll to top so user can see error message
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      })
+      // Scroll to top so user can see error message (client-side only)
+      if (typeof window !== 'undefined') {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth'
+        })
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -334,6 +359,18 @@ The NomineeJobs Team`)
       default:
         return null
     }
+  }
+
+  // Show loading state during hydration to prevent mismatches
+  if (!isMounted) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading application form...</p>
+        </div>
+      </div>
+    )
   }
 
   if (submitSuccess) {
