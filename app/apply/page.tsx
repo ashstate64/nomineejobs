@@ -161,16 +161,20 @@ export default function ApplyPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    // Ensure we're client-side before proceeding
+    if (typeof window === 'undefined' || !isMounted) {
+      console.warn('Form submission attempted before client hydration')
+      return
+    }
+    
     if (!getStepValidation(5)) {
       setSubmitError('Please complete all required fields before submitting.')
       // Client-side only scroll
-      if (typeof window !== 'undefined') {
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: 'smooth'
-        })
-      }
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      })
       return
     }
 
@@ -302,9 +306,19 @@ The NomineeJobs Team`)
       console.log('✅ Application submission success:', result)
 
       if (result.success) {
-        // Clear saved form data
-        localStorage.removeItem('nominee-application')
-        setSubmitSuccess(true)
+        // Clear saved form data (client-side only)
+        try {
+          if (typeof window !== 'undefined' && 'localStorage' in window) {
+            localStorage.removeItem('nominee-application')
+          }
+        } catch (e) {
+          console.warn('Could not clear localStorage:', e)
+        }
+        
+        // Small delay before setting success state to prevent hydration issues
+        setTimeout(() => {
+          setSubmitSuccess(true)
+        }, 100)
         
         // FormSubmit will handle redirect with _next field, but add fallback
         setTimeout(() => {
@@ -332,12 +346,16 @@ The NomineeJobs Team`)
       }
       
       // Scroll to top so user can see error message (client-side only)
-      if (typeof window !== 'undefined') {
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: 'smooth'
-        })
+      try {
+        if (typeof window !== 'undefined') {
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+          })
+        }
+      } catch (e) {
+        console.warn('Could not scroll to top:', e)
       }
     } finally {
       setIsSubmitting(false)
@@ -396,7 +414,13 @@ The NomineeJobs Team`)
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="w-full" encType="multipart/form-data">
+    <form 
+      key={`form-${isMounted}`} 
+      ref={formRef} 
+      onSubmit={handleSubmit} 
+      className="w-full" 
+      encType="multipart/form-data"
+    >
       {/* Hidden FormSubmit fields for spam protection */}
       <input type="hidden" name="_honey" style={{ display: 'none' }} />
       
@@ -499,8 +523,9 @@ The NomineeJobs Team`)
           {currentStep === steps.length ? (
             <Button
               type="submit"
-              disabled={!canProceed || isSubmitting}
+              disabled={!canProceed || isSubmitting || !isMounted}
               className="flex items-center gap-2 px-8 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+              suppressHydrationWarning
             >
               {isSubmitting ? (
                 <>
