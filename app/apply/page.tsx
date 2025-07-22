@@ -70,17 +70,11 @@ export default function ApplyPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
-  const [isMounted, setIsMounted] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
-
-  // Set mounted state to prevent hydration mismatches
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
 
   // Load saved form data from localStorage (client-side only)
   useEffect(() => {
-    if (!isMounted || typeof window === 'undefined') return
+    if (typeof window === 'undefined') return
     
     try {
       const savedData = localStorage.getItem('nominee-application')
@@ -91,11 +85,11 @@ export default function ApplyPage() {
     } catch (error) {
       console.warn('Could not parse saved form data')
     }
-  }, [isMounted])
+  }, [])
 
   // Save form data to localStorage whenever it changes (client-side only)
   useEffect(() => {
-    if (!isMounted || typeof window === 'undefined') return
+    if (typeof window === 'undefined') return
     
     if (Object.keys(formData).length > 0) {
       try {
@@ -104,7 +98,7 @@ export default function ApplyPage() {
         console.warn('Could not save form data to localStorage')
       }
     }
-  }, [formData, isMounted])
+  }, [formData])
 
 
 
@@ -162,7 +156,7 @@ export default function ApplyPage() {
     e.preventDefault()
     
     // Ensure we're client-side before proceeding
-    if (typeof window === 'undefined' || !isMounted) {
+    if (typeof window === 'undefined') {
       console.warn('Form submission attempted before client hydration')
       return
     }
@@ -399,17 +393,7 @@ The NomineeJobs Team`)
     }
   }
 
-  // Show loading state during hydration to prevent mismatches
-  if (!isMounted) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading application form...</p>
-        </div>
-      </div>
-    )
-  }
+  // Form loads immediately - no hydration delay needed
 
   if (submitSuccess) {
     return (
@@ -435,7 +419,7 @@ The NomineeJobs Team`)
 
   return (
     <form 
-      key={`form-${isMounted}`} 
+      key="application-form" 
       ref={formRef} 
       onSubmit={handleSubmit} 
       className="w-full" 
@@ -543,7 +527,7 @@ The NomineeJobs Team`)
           {currentStep === steps.length ? (
             <Button
               type="submit"
-              disabled={!canProceed || isSubmitting || !isMounted}
+              disabled={!canProceed || isSubmitting}
               className="flex items-center gap-2 px-8 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
               suppressHydrationWarning
             >
