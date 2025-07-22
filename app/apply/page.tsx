@@ -259,8 +259,8 @@ The NomineeJobs Team`)
       submitData.append('_honey', '') // Honeypot spam protection
       submitData.append('_replyto', formData.email || '')
       
-      // Submit using standard FormSubmit endpoint (required for file uploads)
-      const response = await fetch('https://formsubmit.co/info@nomineejobs.co.uk', {
+      // Submit using FormSubmit privacy endpoint (required for file uploads)
+      const response = await fetch('https://formsubmit.co/fc7d1651993738107212b6426636a1b4', {
         method: 'POST',
         body: submitData, // FormData automatically sets correct Content-Type with boundary
       })
