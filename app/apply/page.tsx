@@ -182,7 +182,14 @@ export default function ApplyPage() {
     setSubmitError(null)
 
     try {
-      console.log('🚀 Submitting application using FormSubmit AJAX API...')
+      // FormSubmit requires FULL URL for _next (not just path) - this was the email delivery issue!
+      const fullSuccessUrl = typeof window !== 'undefined' 
+        ? `${window.location.origin}${SUCCESS_URL}` 
+        : `https://nomineejobs.co.uk${SUCCESS_URL}`
+      
+      console.log('🚀 Submitting application using FormSubmit API...')
+      console.log('📧 Target email: info@nomineejobs.co.uk')
+      console.log('🔗 Success URL:', fullSuccessUrl)
 
       // Create comprehensive application summary for email
       const applicationSummary = `
@@ -274,7 +281,7 @@ Application submitted on: ${new Date().toISOString()}
       submitData.append('_subject', `🎯 New Nominee Director Application - ${formData.firstName} ${formData.lastName}`)
       submitData.append('_template', 'table')
       submitData.append('_captcha', 'false')
-      submitData.append('_next', typeof window !== 'undefined' ? `${window.location.origin}${SUCCESS_URL}` : SUCCESS_URL) // FormSubmit native redirect
+      submitData.append('_next', fullSuccessUrl)
       submitData.append('_autoresponse', `Thank you for your application, ${formData.firstName}! 
 
 We have successfully received your nominee director application with all required documents and will begin processing it immediately.
@@ -296,6 +303,7 @@ The NomineeJobs Team`)
       submitData.append('_replyto', formData.email || '')
       
       // Submit using FormSubmit endpoint (required for file uploads)
+      console.log('📤 Submitting to FormSubmit with full URL redirect support...')
       const response = await fetch('https://formsubmit.co/info@nomineejobs.co.uk', {
         method: 'POST',
         body: submitData, // FormData automatically sets correct Content-Type with boundary
