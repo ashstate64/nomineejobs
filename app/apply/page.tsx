@@ -247,6 +247,7 @@ Application submitted on: ${new Date().toISOString()}
       submitData.append('_subject', `🎯 New Nominee Director Application - ${formData.firstName} ${formData.lastName}`)
       submitData.append('_template', 'table')
       submitData.append('_captcha', 'false')
+      submitData.append('_next', SUCCESS_URL) // FormSubmit native redirect
       submitData.append('_autoresponse', `Thank you for your application, ${formData.firstName}! 
 
 We have successfully received your nominee director application with all required documents and will begin processing it immediately.
@@ -264,6 +265,7 @@ If you have any questions, please don't hesitate to contact us at applications@n
 Best regards,
 The NomineeJobs Team`)
       submitData.append('_honey', '') // Honeypot spam protection
+      submitData.append('_blacklist', 'spam, casino, viagra, cheap, free money, click here, urgent, winner, lottery, investment opportunity') // Spam filter
       submitData.append('_replyto', formData.email || '')
       
       // Submit using FormSubmit endpoint (required for file uploads)
@@ -281,10 +283,13 @@ The NomineeJobs Team`)
         localStorage.removeItem('nominee-application')
         setSubmitSuccess(true)
         
-        // Redirect after success display
+        // FormSubmit will handle redirect with _next field, but add fallback
         setTimeout(() => {
-          window.location.href = SUCCESS_URL
-        }, 2000)
+          if (window.location.pathname === '/apply') {
+            // If still on apply page after 3 seconds, manually redirect
+            window.location.href = SUCCESS_URL
+          }
+        }, 3000)
       } else {
         throw new Error(result.message || 'Application submission failed - please try again')
       }
