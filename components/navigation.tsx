@@ -1,72 +1,102 @@
+"use client"
+
 import Link from "next/link"
-import { BookOpen, MapPin, Home, Users, Phone } from "lucide-react"
+import { BookOpen, Home, Phone, Menu, X } from "lucide-react"
+import { useState } from "react"
 
 export default function Navigation() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl text-blue-600">
-            <Home className="h-6 w-6" />
+          <Link href="/" className="flex items-center gap-2 font-bold text-xl text-blue-600 hover:text-blue-700 transition-colors">
+            <div className="p-1.5 bg-blue-600 rounded-lg">
+              <Home className="h-5 w-5 text-white" />
+            </div>
             NomineeJobs
           </Link>
 
-          {/* Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/learn-more" className="text-gray-600 hover:text-blue-600 transition-colors">
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex items-center space-x-1">
+            <Link 
+              href="/learn-more" 
+              className="px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium"
+            >
               Learn More
             </Link>
-            <Link href="/blog" className="text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1">
+            <Link 
+              href="/blog" 
+              className="px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium flex items-center gap-2"
+            >
               <BookOpen className="h-4 w-4" />
               Blog
             </Link>
-            <Link href="/locations" className="text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1">
-              <MapPin className="h-4 w-4" />
-              Locations
-            </Link>
-            <Link href="/request-info" className="text-gray-600 hover:text-blue-600 transition-colors flex items-center gap-1">
+            <Link 
+              href="/request-info" 
+              className="px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium flex items-center gap-2"
+            >
               <Phone className="h-4 w-4" />
               Contact
             </Link>
+            <div className="w-px h-6 bg-gray-300 mx-2"></div>
             <Link 
               href="/apply" 
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2.5 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-sm hover:shadow-md transform hover:scale-105"
             >
               Apply Now
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-3">
             <Link 
               href="/apply" 
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-semibold text-sm"
             >
               Apply
             </Link>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 rounded-lg text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-colors"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        <div className="md:hidden pb-4">
-          <div className="flex flex-wrap gap-4 text-sm">
-            <Link href="/learn-more" className="text-gray-600 hover:text-blue-600">
-              Learn More
-            </Link>
-            <Link href="/blog" className="text-gray-600 hover:text-blue-600 flex items-center gap-1">
-              <BookOpen className="h-3 w-3" />
-              Blog
-            </Link>
-            <Link href="/locations" className="text-gray-600 hover:text-blue-600 flex items-center gap-1">
-              <MapPin className="h-3 w-3" />
-              Locations
-            </Link>
-            <Link href="/request-info" className="text-gray-600 hover:text-blue-600">
-              Contact
-            </Link>
+        {/* Mobile Navigation Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-200 bg-white">
+            <div className="py-4 space-y-2">
+              <Link 
+                href="/learn-more" 
+                className="block px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Learn More
+              </Link>
+              <Link 
+                href="/blog" 
+                className="block px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <BookOpen className="h-4 w-4" />
+                Blog
+              </Link>
+              <Link 
+                href="/request-info" 
+                className="block px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Phone className="h-4 w-4" />
+                Contact
+              </Link>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   )
