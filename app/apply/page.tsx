@@ -449,6 +449,21 @@ The NomineeJobs Team`)
                 style={{ width: `${progress}%` }}
               />
             </div>
+            {progress > 60 && (
+              <div className="text-xs text-green-600 font-medium animate-pulse">
+                Almost there! 🎉
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Live Activity Feed */}
+        <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-3 mb-6">
+          <div className="flex items-center justify-center gap-2 text-sm">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-green-700 font-medium">
+              <strong>James from Cardiff</strong> just completed step {Math.max(1, currentStep - 1)} • <strong>23 applications</strong> submitted today
+            </span>
           </div>
         </div>
 

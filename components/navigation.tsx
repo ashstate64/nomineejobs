@@ -34,13 +34,24 @@ export default function Navigation() {
               <BookOpen className="h-4 w-4" />
               Blog
             </Link>
-            <Link 
-              href="/request-info" 
-              className="px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium flex items-center gap-2"
-            >
-              <Phone className="h-4 w-4" />
-              Contact
-            </Link>
+                          <Link 
+                href="/calculator" 
+                className="px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium"
+              >
+                Calculator
+              </Link>
+              <Link 
+                href="/about" 
+                className="px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium"
+              >
+                About
+              </Link>
+              <Link 
+                href="/resources" 
+                className="px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium"
+              >
+                Resources
+              </Link>
             <div className="w-px h-6 bg-gray-300 mx-2"></div>
             <Link 
               href="/apply" 
@@ -87,12 +98,25 @@ export default function Navigation() {
                 Blog
               </Link>
               <Link 
-                href="/request-info" 
-                className="block px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-2"
+                href="/calculator" 
+                className="block px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <Phone className="h-4 w-4" />
-                Contact
+                Calculator
+              </Link>
+              <Link 
+                href="/about" 
+                className="block px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                About
+              </Link>
+              <Link 
+                href="/resources" 
+                className="block px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Resources
               </Link>
             </div>
           </div>

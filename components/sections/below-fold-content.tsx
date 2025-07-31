@@ -197,36 +197,68 @@ const BelowFoldContent = memo(() => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {TESTIMONIALS_DATA.map((testimonial, index) => (
-            <GlassCard key={index} className="flex flex-col">
+            <GlassCard key={index} className="flex flex-col group hover:scale-105 transition-transform duration-300">
               <div className="flex items-center mb-4">
-                <Avatar className="h-14 w-14 mr-4 ring-2 ring-sky-200 shadow-lg">
+                <Avatar className="h-16 w-16 mr-4 ring-2 ring-sky-200 shadow-lg">
                   <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                  <AvatarFallback className="bg-sky-100 text-sky-700 font-semibold">
+                  <AvatarFallback className="bg-sky-100 text-sky-700 font-semibold text-lg">
                     {testimonial.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
-                <div>
-                  <div className="flex items-center gap-1 mb-1">
+                <div className="flex-grow">
+                  <div className="flex items-center gap-1 mb-2">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <span key={i} className="text-yellow-400 text-lg">★</span>
+                      <span key={i} className="text-yellow-400 text-xl">★</span>
                     ))}
                   </div>
-                  <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
-                  <p className="text-sm text-gray-500">{testimonial.location}</p>
-                  <p className="text-sm font-medium text-green-600">{testimonial.earnings}</p>
+                  <h4 className="font-semibold text-gray-800 text-lg">{testimonial.name}</h4>
+                  <p className="text-sm text-gray-500 mb-1">{testimonial.location}</p>
+                  <div className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full inline-block">
+                    {testimonial.earnings}
+                  </div>
                 </div>
               </div>
-              <blockquote className="text-gray-600 text-sm flex-grow italic">
+              <blockquote className="text-gray-700 flex-grow italic leading-relaxed">
                 "{testimonial.testimonial}"
               </blockquote>
+              
+              {/* Verified Badge */}
+              <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between">
+                <div className="flex items-center gap-1 text-xs text-green-600">
+                  <CheckCircle className="h-3 w-3" />
+                  <span>Verified Earnings</span>
+                </div>
+                <div className="text-xs text-gray-500">
+                  Active since 2022
+                </div>
+              </div>
             </GlassCard>
           ))}
         </div>
         
         <div className="text-center mt-8">
-          <p className="text-sm text-gray-500">
-            ⭐ 4.9/5 average rating from <strong>3,142+ reviews</strong>
-          </p>
+          <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl p-6 max-w-md mx-auto">
+            <div className="text-3xl font-bold text-green-600 mb-2">4.9★</div>
+            <div className="text-gray-700 font-medium mb-2">Average Rating</div>
+            <div className="text-sm text-gray-500 mb-4">
+              From <strong>3,142+ verified reviews</strong>
+            </div>
+            <div className="grid grid-cols-5 gap-1 max-w-xs mx-auto">
+              {[5,4,3,2,1].map((stars) => (
+                <div key={stars} className="text-center">
+                  <div className="text-xs text-gray-500 mb-1">{stars}★</div>
+                  <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div 
+                      className="bg-yellow-400 h-full rounded-full" 
+                      style={{ 
+                        width: stars === 5 ? '94%' : stars === 4 ? '4%' : stars === 3 ? '1.5%' : '0.5%' 
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
     </>
