@@ -3,37 +3,37 @@ import Link from "next/link"
 import { MapPin, Building2, TrendingUp, Star, DollarSign, CheckCircle, ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: &apos;Nominee Director Jobs in London - £18,000+ Average Earnings | NomineeJobs&apos;,
-  description: &apos;Find nominee director opportunities in London, UK. Highest demand market with £18,000+ average annual earnings. 45,000+ active companies seeking professional nominees.&apos;,
+  title: 'Nominee Director Jobs in London - £18,000+ Average Earnings | NomineeJobs',
+  description: 'Find nominee director opportunities in London, UK. Highest demand market with £18,000+ average annual earnings. 45,000+ active companies seeking professional nominees.',
   keywords: [
-    &apos;nominee director jobs London&apos;,
-    &apos;London nominee services&apos;,
-    &apos;director services London UK&apos;,
-    &apos;London company nominee director&apos;,
-    &apos;nominee director work London&apos;,
-    &apos;London business director services&apos;,
-    &apos;professional nominee London&apos;,
-    &apos;London director for hire&apos;,
-    &apos;company formation London nominee&apos;,
-    &apos;London registered office services&apos;
+    'nominee director jobs London',
+    'London nominee services',
+    'director services London UK',
+    'London company nominee director',
+    'nominee director work London',
+    'London business director services',
+    'professional nominee London',
+    'London director for hire',
+    'company formation London nominee',
+    'London registered office services'
   ],
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    title: &apos;Nominee Director Jobs in London - £18,000+ Average Earnings&apos;,
-    description: &apos;Premium nominee director opportunities in London. Highest demand market in the UK with excellent earning potential.&apos;,
-    type: &apos;article&apos;,
-    url: &apos;https://nomineejobs.co.uk/locations/london&apos;,
+    title: 'Nominee Director Jobs in London - £18,000+ Average Earnings',
+    description: 'Premium nominee director opportunities in London. Highest demand market in the UK with excellent earning potential.',
+    type: 'article',
+    url: 'https://nomineejobs.co.uk/locations/london',
   },
   twitter: {
-    card: &apos;summary_large_image&apos;,
-    title: &apos;Nominee Director Jobs in London - £18,000+ Average&apos;,
-    description: &apos;Premium nominee director opportunities in London with excellent earning potential.&apos;,
+    card: 'summary_large_image',
+    title: 'Nominee Director Jobs in London - £18,000+ Average',
+    description: 'Premium nominee director opportunities in London with excellent earning potential.',
   },
   alternates: {
-    canonical: &apos;/locations/london&apos;,
+    canonical: '/locations/london',
   },
 }
 
@@ -42,52 +42,52 @@ export default function LondonPage() {
     <>
       {/* Local Business Schema for London */}
       <script
-        type="application/ld+json&quot;
+        type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            &apos;@context&apos;: &apos;https://schema.org&apos;,
-            &apos;@type&apos;: &apos;LocalBusiness&apos;,
-            name: &apos;NomineeJobs London&apos;,
-            description: &apos;Professional nominee director services in London, UK&apos;,
-            url: &apos;https://nomineejobs.co.uk/locations/london&apos;,
-            telephone: &apos;+44-xxx-xxx-xxxx&apos;,
+            '@context': 'https://schema.org',
+            '@type': 'LocalBusiness',
+            name: 'NomineeJobs London',
+            description: 'Professional nominee director services in London, UK',
+            url: 'https://nomineejobs.co.uk/locations/london',
+            telephone: '+44-xxx-xxx-xxxx',
             address: {
-              &apos;@type&apos;: &apos;PostalAddress&apos;,
-              addressLocality: &apos;London&apos;,
-              addressRegion: &apos;England&apos;,
-              addressCountry: &apos;GB&apos;
+              '@type': 'PostalAddress',
+              addressLocality: 'London',
+              addressRegion: 'England',
+              addressCountry: 'GB'
             },
             geo: {
-              &apos;@type&apos;: &apos;GeoCoordinates&apos;,
+              '@type': 'GeoCoordinates',
               latitude: 51.5074,
               longitude: -0.1278
             },
-            serviceType: &apos;Nominee Director Services&apos;,
+            serviceType: 'Nominee Director Services',
             areaServed: {
-              &apos;@type&apos;: &apos;City&apos;,
-              name: &apos;London&apos;,
+              '@type': 'City',
+              name: 'London',
               containedInPlace: {
-                &apos;@type&apos;: &apos;Country&apos;,
-                name: &apos;United Kingdom&apos;
+                '@type': 'Country',
+                name: 'United Kingdom'
               }
             },
-            priceRange: &apos;£600-£20000&apos;,
+            priceRange: '£600-£20000',
             hasOfferCatalog: {
-              &apos;@type&apos;: &apos;OfferCatalog&apos;,
-              name: &apos;London Nominee Director Services&apos;,
+              '@type': 'OfferCatalog',
+              name: 'London Nominee Director Services',
               itemListElement: [
                 {
-                  &apos;@type&apos;: &apos;Offer&apos;,
+                  '@type': 'Offer',
                   itemOffered: {
-                    &apos;@type&apos;: &apos;Service&apos;,
-                    name: &apos;Premium Nominee Director Services&apos;,
-                    description: &apos;High-end nominee director services for London-based companies&apos;
+                    '@type': 'Service',
+                    name: 'Premium Nominee Director Services',
+                    description: 'High-end nominee director services for London-based companies'
                   },
                   priceSpecification: {
-                    &apos;@type&apos;: &apos;PriceSpecification&apos;,
-                    price: &apos;18000&apos;,
-                    priceCurrency: &apos;GBP&apos;,
-                    description: &apos;Average annual earnings&apos;
+                    '@type': 'PriceSpecification',
+                    price: '18000',
+                    priceCurrency: 'GBP',
+                    description: 'Average annual earnings'
                   }
                 }
               ]
@@ -98,34 +98,34 @@ export default function LondonPage() {
 
       {/* FAQ Schema for London-specific questions */}
       <script
-        type="application/ld+json&quot;
+        type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            &apos;@context&apos;: &apos;https://schema.org&apos;,
-            &apos;@type&apos;: &apos;FAQPage&apos;,
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
             mainEntity: [
               {
-                &apos;@type&apos;: &apos;Question&apos;,
-                name: &apos;What is the average salary for a nominee director in London?&apos;,
+                '@type': 'Question',
+                name: 'What is the average salary for a nominee director in London?',
                 acceptedAnswer: {
-                  &apos;@type&apos;: &apos;Answer&apos;,
-                  text: &apos;Nominee directors in London earn an average of £18,000+ annually, with top performers earning up to £25,000+. The high concentration of financial services and international businesses drives premium rates.&apos;
+                  '@type': 'Answer',
+                  text: 'Nominee directors in London earn an average of £18,000+ annually, with top performers earning up to £25,000+. The high concentration of financial services and international businesses drives premium rates.'
                 }
               },
               {
-                &apos;@type&apos;: &apos;Question&apos;,
-                name: &apos;How many companies in London need nominee director services?&apos;,
+                '@type': 'Question',
+                name: 'How many companies in London need nominee director services?',
                 acceptedAnswer: {
-                  &apos;@type&apos;: &apos;Answer&apos;,
-                  text: &apos;London has over 45,000 active companies that regularly use nominee director services, making it the largest market in the UK with consistently high demand.&apos;
+                  '@type': 'Answer',
+                  text: 'London has over 45,000 active companies that regularly use nominee director services, making it the largest market in the UK with consistently high demand.'
                 }
               },
               {
-                &apos;@type&apos;: &apos;Question&apos;,
-                name: &apos;Can I work as a nominee director in London remotely?&apos;,
+                '@type': 'Question',
+                name: 'Can I work as a nominee director in London remotely?',
                 acceptedAnswer: {
-                  &apos;@type&apos;: &apos;Answer&apos;,
-                  text: &apos;Yes, most nominee director work in London can be done remotely. You\&apos;ll handle document signing, compliance, and communication electronically, with occasional in-person meetings when required.&apos;
+                  '@type': 'Answer',
+                  text: 'Yes, most nominee director work in London can be done remotely. You\'ll handle document signing, compliance, and communication electronically, with occasional in-person meetings when required.'
                 }
               }
             ]
@@ -133,91 +133,91 @@ export default function LondonPage() {
         }}
       />
 
-      <div className="space-y-12&quot;>
+      <div className="space-y-12">
         {/* Hero Section */}
-        <div className="text-center&quot;>
-          <div className="flex items-center justify-center gap-3 mb-4&quot;>
-            <MapPin className="h-8 w-8 text-blue-600&quot; />
-            <h1 className="text-4xl font-bold text-gray-800&quot;>Nominee Director Jobs in London</h1>
+        <div className="text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <MapPin className="h-8 w-8 text-blue-600" />
+            <h1 className="text-4xl font-bold text-gray-800">Nominee Director Jobs in London</h1>
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8&quot;>
-            London offers the UK&apos;s most lucrative nominee director opportunities. With over 45,000 active companies 
-            and premium service rates, it&apos;s the ideal market for experienced professionals.
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            London offers the UK's most lucrative nominee director opportunities. With over 45,000 active companies 
+            and premium service rates, it's the ideal market for experienced professionals.
           </p>
 
           {/* Key Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto&quot;>
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4&quot;>
-              <div className="text-2xl font-bold text-green-600&quot;>£18,000+</div>
-              <div className="text-sm text-green-700&quot;>Average Earnings</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="text-2xl font-bold text-green-600">£18,000+</div>
+              <div className="text-sm text-green-700">Average Earnings</div>
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4&quot;>
-              <div className="text-2xl font-bold text-blue-600&quot;>45,000+</div>
-              <div className="text-sm text-blue-700&quot;>Active Companies</div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="text-2xl font-bold text-blue-600">45,000+</div>
+              <div className="text-sm text-blue-700">Active Companies</div>
             </div>
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4&quot;>
-              <div className="text-2xl font-bold text-purple-600&quot;>Very High</div>
-              <div className="text-sm text-purple-700&quot;>Market Demand</div>
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+              <div className="text-2xl font-bold text-purple-600">Very High</div>
+              <div className="text-sm text-purple-700">Market Demand</div>
             </div>
-            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4&quot;>
-              <div className="text-2xl font-bold text-orange-600&quot;>+12%</div>
-              <div className="text-sm text-orange-700&quot;>Annual Growth</div>
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <div className="text-2xl font-bold text-orange-600">+12%</div>
+              <div className="text-sm text-orange-700">Annual Growth</div>
             </div>
           </div>
         </div>
 
         {/* Why London */}
-        <section className="bg-white border border-gray-200 rounded-xl p-8&quot;>
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2&quot;>
-            <Building2 className="h-6 w-6 text-blue-600&quot; />
+        <section className="bg-white border border-gray-200 rounded-xl p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <Building2 className="h-6 w-6 text-blue-600" />
             Why London is the Premier Market
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8&quot;>
-            <div className="space-y-4&quot;>
-              <div className="flex items-start gap-3&quot;>
-                <CheckCircle className="h-5 w-5 text-green-500 mt-1&quot; />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-800&quot;>Financial Services Hub</h3>
-                  <p className="text-sm text-gray-600&quot;>Home to major banks, investment firms, and fintech companies requiring sophisticated nominee services</p>
+                  <h3 className="font-semibold text-gray-800">Financial Services Hub</h3>
+                  <p className="text-sm text-gray-600">Home to major banks, investment firms, and fintech companies requiring sophisticated nominee services</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3&quot;>
-                <CheckCircle className="h-5 w-5 text-green-500 mt-1&quot; />
+              <div className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-800&quot;>International Business Center</h3>
-                  <p className="text-sm text-gray-600&quot;>Multinational corporations and foreign investment companies drive premium demand</p>
+                  <h3 className="font-semibold text-gray-800">International Business Center</h3>
+                  <p className="text-sm text-gray-600">Multinational corporations and foreign investment companies drive premium demand</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3&quot;>
-                <CheckCircle className="h-5 w-5 text-green-500 mt-1&quot; />
+              <div className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-800&quot;>High-Value Transactions</h3>
-                  <p className="text-sm text-gray-600&quot;>Complex corporate structures and high-stakes decisions justify premium rates</p>
+                  <h3 className="font-semibold text-gray-800">High-Value Transactions</h3>
+                  <p className="text-sm text-gray-600">Complex corporate structures and high-stakes decisions justify premium rates</p>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4&quot;>
-              <div className="flex items-start gap-3&quot;>
-                <CheckCircle className="h-5 w-5 text-green-500 mt-1&quot; />
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-800&quot;>Professional Network</h3>
-                  <p className="text-sm text-gray-600&quot;>Access to London&apos;s extensive legal, accounting, and business professional networks</p>
+                  <h3 className="font-semibold text-gray-800">Professional Network</h3>
+                  <p className="text-sm text-gray-600">Access to London's extensive legal, accounting, and business professional networks</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3&quot;>
-                <CheckCircle className="h-5 w-5 text-green-500 mt-1&quot; />
+              <div className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-800&quot;>Regulatory Excellence</h3>
-                  <p className="text-sm text-gray-600&quot;>World-class regulatory environment ensures high professional standards</p>
+                  <h3 className="font-semibold text-gray-800">Regulatory Excellence</h3>
+                  <p className="text-sm text-gray-600">World-class regulatory environment ensures high professional standards</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3&quot;>
-                <CheckCircle className="h-5 w-5 text-green-500 mt-1&quot; />
+              <div className="flex items-start gap-3">
+                <CheckCircle className="h-5 w-5 text-green-500 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-800&quot;>Career Development</h3>
-                  <p className="text-sm text-gray-600&quot;>Opportunities to work with leading companies and advance your professional reputation</p>
+                  <h3 className="font-semibold text-gray-800">Career Development</h3>
+                  <p className="text-sm text-gray-600">Opportunities to work with leading companies and advance your professional reputation</p>
                 </div>
               </div>
             </div>
@@ -225,128 +225,128 @@ export default function LondonPage() {
         </section>
 
         {/* Market Analysis */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-6&quot;>
-          <div className="bg-white border border-gray-200 rounded-xl p-6&quot;>
-            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2&quot;>
-              <DollarSign className="h-5 w-5 text-green-600&quot; />
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white border border-gray-200 rounded-xl p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <DollarSign className="h-5 w-5 text-green-600" />
               Earnings Breakdown
             </h3>
-            <div className="space-y-4&quot;>
-              <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg&quot;>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
                 <div>
-                  <div className="font-medium text-gray-800&quot;>Premium Companies</div>
-                  <div className="text-xs text-gray-600&quot;>Financial services, international firms</div>
+                  <div className="font-medium text-gray-800">Premium Companies</div>
+                  <div className="text-xs text-gray-600">Financial services, international firms</div>
                 </div>
-                <div className="text-green-600 font-bold&quot;>£40-60/hr</div>
+                <div className="text-green-600 font-bold">£40-60/hr</div>
               </div>
-              <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg&quot;>
+              <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
                 <div>
-                  <div className="font-medium text-gray-800&quot;>Standard Companies</div>
-                  <div className="text-xs text-gray-600&quot;>Professional services, tech companies</div>
+                  <div className="font-medium text-gray-800">Standard Companies</div>
+                  <div className="text-xs text-gray-600">Professional services, tech companies</div>
                 </div>
-                <div className="text-blue-600 font-bold&quot;>£30-45/hr</div>
+                <div className="text-blue-600 font-bold">£30-45/hr</div>
               </div>
-              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg&quot;>
+              <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                 <div>
-                  <div className="font-medium text-gray-800&quot;>Basic Services</div>
-                  <div className="text-xs text-gray-600&quot;>Simple corporate structures</div>
+                  <div className="font-medium text-gray-800">Basic Services</div>
+                  <div className="text-xs text-gray-600">Simple corporate structures</div>
                 </div>
-                <div className="text-gray-600 font-bold&quot;>£20-30/hr</div>
+                <div className="text-gray-600 font-bold">£20-30/hr</div>
               </div>
             </div>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-xl p-6&quot;>
-            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2&quot;>
-              <TrendingUp className="h-5 w-5 text-blue-600&quot; />
+          <div className="bg-white border border-gray-200 rounded-xl p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-blue-600" />
               Industry Sectors
             </h3>
-            <div className="space-y-3&quot;>
-              <div className="flex justify-between items-center&quot;>
-                <span className="text-gray-700&quot;>Financial Services</span>
-                <span className="text-blue-600 font-medium&quot;>35%</span>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700">Financial Services</span>
+                <span className="text-blue-600 font-medium">35%</span>
               </div>
-              <div className="flex justify-between items-center&quot;>
-                <span className="text-gray-700&quot;>Professional Services</span>
-                <span className="text-blue-600 font-medium&quot;>22%</span>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700">Professional Services</span>
+                <span className="text-blue-600 font-medium">22%</span>
               </div>
-              <div className="flex justify-between items-center&quot;>
-                <span className="text-gray-700&quot;>Technology</span>
-                <span className="text-blue-600 font-medium&quot;>18%</span>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700">Technology</span>
+                <span className="text-blue-600 font-medium">18%</span>
               </div>
-              <div className="flex justify-between items-center&quot;>
-                <span className="text-gray-700&quot;>Real Estate</span>
-                <span className="text-blue-600 font-medium&quot;>12%</span>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700">Real Estate</span>
+                <span className="text-blue-600 font-medium">12%</span>
               </div>
-              <div className="flex justify-between items-center&quot;>
-                <span className="text-gray-700&quot;>Other</span>
-                <span className="text-blue-600 font-medium&quot;>13%</span>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700">Other</span>
+                <span className="text-blue-600 font-medium">13%</span>
               </div>
             </div>
           </div>
         </section>
 
         {/* Success Stories */}
-        <section className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-8&quot;>
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2&quot;>
-            <Star className="h-6 w-6 text-blue-600&quot; />
+        <section className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <Star className="h-6 w-6 text-blue-600" />
             Success Stories from London Nominees
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6&quot;>
-            <div className="bg-white rounded-lg p-6&quot;>
-              <div className="text-2xl font-bold text-green-600 mb-2&quot;>£24,000</div>
-              <div className="text-sm text-gray-600 mb-3&quot;>Sarah K., Financial Services Specialist</div>
-              <p className="text-sm text-gray-700 mb-3&quot;>
-                &quot;Working with London&apos;s fintech companies has been incredibly rewarding. The complexity keeps me engaged.&quot;
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white rounded-lg p-6">
+              <div className="text-2xl font-bold text-green-600 mb-2">£24,000</div>
+              <div className="text-sm text-gray-600 mb-3">Sarah K., Financial Services Specialist</div>
+              <p className="text-sm text-gray-700 mb-3">
+                "Working with London's fintech companies has been incredibly rewarding. The complexity keeps me engaged."
               </p>
-              <div className="text-xs text-gray-500&quot;>3 years experience</div>
+              <div className="text-xs text-gray-500">3 years experience</div>
             </div>
             
-            <div className="bg-white rounded-lg p-6&quot;>
-              <div className="text-2xl font-bold text-blue-600 mb-2&quot;>£19,500</div>
-              <div className="text-sm text-gray-600 mb-3&quot;>James M., Professional Services</div>
-              <p className="text-sm text-gray-700 mb-3&quot;>
-                &quot;London&apos;s professional network has opened doors to high-quality appointments with leading firms.&quot;
+            <div className="bg-white rounded-lg p-6">
+              <div className="text-2xl font-bold text-blue-600 mb-2">£19,500</div>
+              <div className="text-sm text-gray-600 mb-3">James M., Professional Services</div>
+              <p className="text-sm text-gray-700 mb-3">
+                "London's professional network has opened doors to high-quality appointments with leading firms."
               </p>
-              <div className="text-xs text-gray-500&quot;>2 years experience</div>
+              <div className="text-xs text-gray-500">2 years experience</div>
             </div>
             
-            <div className="bg-white rounded-lg p-6&quot;>
-              <div className="text-2xl font-bold text-purple-600 mb-2&quot;>£21,800</div>
-              <div className="text-sm text-gray-600 mb-3&quot;>Emma R., International Business</div>
-              <p className="text-sm text-gray-700 mb-3&quot;>
-                &quot;The international nature of London business provides diverse and interesting work opportunities.&quot;
+            <div className="bg-white rounded-lg p-6">
+              <div className="text-2xl font-bold text-purple-600 mb-2">£21,800</div>
+              <div className="text-sm text-gray-600 mb-3">Emma R., International Business</div>
+              <p className="text-sm text-gray-700 mb-3">
+                "The international nature of London business provides diverse and interesting work opportunities."
               </p>
-              <div className="text-xs text-gray-500&quot;>4 years experience</div>
+              <div className="text-xs text-gray-500">4 years experience</div>
             </div>
           </div>
         </section>
 
         {/* FAQ Section */}
-        <section className="bg-white border border-gray-200 rounded-xl p-8&quot;>
-          <h2 className="text-2xl font-bold text-gray-800 mb-6&quot;>Frequently Asked Questions</h2>
+        <section className="bg-white border border-gray-200 rounded-xl p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Frequently Asked Questions</h2>
           
-          <div className="space-y-6&quot;>
-            <div className="border-l-4 border-blue-500 pl-4&quot;>
-              <h3 className="font-semibold text-gray-800 mb-2&quot;>What makes London different from other UK cities for nominee directors?</h3>
-              <p className="text-gray-600 text-sm&quot;>
+          <div className="space-y-6">
+            <div className="border-l-4 border-blue-500 pl-4">
+              <h3 className="font-semibold text-gray-800 mb-2">What makes London different from other UK cities for nominee directors?</h3>
+              <p className="text-gray-600 text-sm">
                 London offers the highest earning potential due to its concentration of international businesses, 
                 financial services, and complex corporate structures. The market is more competitive but also more rewarding.
               </p>
             </div>
             
-            <div className="border-l-4 border-blue-500 pl-4&quot;>
-              <h3 className="font-semibold text-gray-800 mb-2&quot;>Do I need to be physically present in London to work as a nominee director?</h3>
-              <p className="text-gray-600 text-sm&quot;>
+            <div className="border-l-4 border-blue-500 pl-4">
+              <h3 className="font-semibold text-gray-800 mb-2">Do I need to be physically present in London to work as a nominee director?</h3>
+              <p className="text-gray-600 text-sm">
                 While most work can be done remotely, London-based companies may occasionally require in-person meetings 
                 for important decisions or complex transactions. Proximity to London can be advantageous.
               </p>
             </div>
             
-            <div className="border-l-4 border-blue-500 pl-4&quot;>
-              <h3 className="font-semibold text-gray-800 mb-2&quot;>What qualifications are preferred for London nominee director roles?</h3>
-              <p className="text-gray-600 text-sm&quot;>
+            <div className="border-l-4 border-blue-500 pl-4">
+              <h3 className="font-semibold text-gray-800 mb-2">What qualifications are preferred for London nominee director roles?</h3>
+              <p className="text-gray-600 text-sm">
                 While standard qualifications apply, London clients often prefer nominees with backgrounds in finance, 
                 law, or business management. Professional certifications and relevant experience command premium rates.
               </p>
@@ -355,23 +355,23 @@ export default function LondonPage() {
         </section>
 
         {/* Call to Action */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl p-8 text-center&quot;>
-          <h2 className="text-2xl font-bold mb-4&quot;>Ready to Work in London&apos;s Premium Market?</h2>
-          <p className="text-blue-100 mb-6 max-w-2xl mx-auto&quot;>
-            Join London&apos;s elite network of nominee directors and access the UK&apos;s highest-paying opportunities. 
-            With over 45,000 active companies, there&apos;s never been a better time to start.
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl p-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">Ready to Work in London's Premium Market?</h2>
+          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+            Join London's elite network of nominee directors and access the UK's highest-paying opportunities. 
+            With over 45,000 active companies, there's never been a better time to start.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center&quot;>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/apply&quot;
-              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center gap-2&quot;
+              href="/apply"
+              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
             >
               Apply for London Opportunities
-              <ArrowRight className="h-4 w-4&quot; />
+              <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/request-info&quot;
-              className="border border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors&quot;
+              href="/request-info"
+              className="border border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
             >
               Get More Information
             </Link>
