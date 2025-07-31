@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
+import Navigation from "@/components/navigation"
 import { ArrowLeft, BookOpen, ChevronRight, FileText, DollarSign, Shield, Users, Calculator, Gavel, HelpCircle } from "lucide-react"
 
 const sections = [
@@ -50,6 +51,7 @@ export default function LearnMoreLayout({
 }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
+      <Navigation />
       {/* Header */}
       <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200/60 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">

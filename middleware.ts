@@ -37,7 +37,8 @@ export async function middleware(request: NextRequest) {
   
   // Add preload hints for critical resources
   if (request.nextUrl.pathname === '/') {
-    response.headers.set('Link', '</fonts/inter.woff2>; rel=preload; as=font; crossorigin')
+    // Font preload removed - using system fonts for better performance
+    // response.headers.set('Link', '</fonts/inter.woff2>; rel=preload; as=font; crossorigin')
   }
   
   return response

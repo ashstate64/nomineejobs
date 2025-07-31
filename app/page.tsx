@@ -6,6 +6,7 @@ import Link from "next/link"
 
 // Lazy load only critical icons for above-the-fold content
 import { AlertCircle, ArrowRight, IconWrapper } from '@/components/icons/optimized-icons'
+import Navigation from '@/components/navigation'
 
 // Dynamic imports for heavy sections (below the fold)
 const HeroSection = dynamic(() => import("@/components/sections/hero-section"), {
@@ -20,6 +21,7 @@ const BelowFoldContent = dynamic(() => import("@/components/sections/below-fold-
 export default function LandingPage() {
   return (
     <>
+      <Navigation />
       {/* Optimized structured data */}
       <script
         type="application/ld+json"
