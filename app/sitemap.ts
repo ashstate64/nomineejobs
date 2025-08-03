@@ -1,7 +1,17 @@
 import { MetadataRoute } from 'next'
+import { getAllDemographicSlugs } from '@/lib/demographic-config'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://nomineejobs.co.uk'
+
+  // Get all demographic pages
+  const demographicSlugs = getAllDemographicSlugs()
+  const demographicPages = demographicSlugs.map((slug) => ({
+    url: `${baseUrl}/for/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.9,
+  }))
 
   return [
     {
@@ -10,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 1,
     },
+    ...demographicPages,
     {
       url: `${baseUrl}/apply`,
       lastModified: new Date(),

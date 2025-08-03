@@ -129,6 +129,43 @@ const HeroSection = memo(() => {
           </span>
         </div>
       </div>
+
+      {/* Quick Demographic Links */}
+      <div className="mb-8">
+        <p className="text-sm text-gray-600 text-center mb-4">Perfect for:</p>  
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Link 
+            href="/for/stay-at-home-moms"
+            className="bg-white/80 border border-pink-200 text-pink-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-pink-50 hover:border-pink-300 transition-all transform hover:scale-105"
+          >
+            Stay-at-Home Mums
+          </Link>
+          <Link 
+            href="/for/side-hustle-income"
+            className="bg-white/80 border border-purple-200 text-purple-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-purple-50 hover:border-purple-300 transition-all transform hover:scale-105"
+          >
+            Side Hustlers
+          </Link>
+          <Link 
+            href="/for/urgent-income-needed"
+            className="bg-white/80 border border-red-200 text-red-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-red-50 hover:border-red-300 transition-all transform hover:scale-105"
+          >
+            Urgent Income
+          </Link>
+          <Link 
+            href="/for/part-time-income"
+            className="bg-white/80 border border-blue-200 text-blue-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-50 hover:border-blue-300 transition-all transform hover:scale-105"
+          >
+            Part-Time Work
+          </Link>
+          <Link 
+            href="/demographics"
+            className="bg-white/80 border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-50 hover:border-gray-400 transition-all transform hover:scale-105"
+          >
+            View All →
+          </Link>
+        </div>
+      </div>
       
       {/* Enhanced trust signals */}
       <div className="mt-8 text-xs text-gray-500 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">

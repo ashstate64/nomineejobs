@@ -28,6 +28,12 @@ export default function Navigation() {
               Learn More
             </Link>
             <Link 
+              href="/demographics" 
+              className="px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium"
+            >
+              Find Your Match
+            </Link>
+            <Link 
               href="/blog" 
               className="px-4 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium flex items-center gap-2"
             >
@@ -90,8 +96,15 @@ export default function Navigation() {
                 Learn More
               </Link>
               <Link 
+                href="/demographics" 
+                className="block px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Find Your Match
+              </Link>
+              <Link 
                 href="/blog" 
-                className="block px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors flex items-center gap-2"
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <BookOpen className="h-4 w-4" />

@@ -18,6 +18,10 @@ const BelowFoldContent = dynamic(() => import("@/components/sections/below-fold-
   ssr: false, // Don't server-render this heavy content
 })
 
+const ComprehensiveFooter = dynamic(() => import("@/components/comprehensive-footer"), {
+  loading: () => <div className="h-32 bg-slate-900 animate-pulse" />,
+})
+
 export default function LandingPage() {
   return (
     <>
@@ -89,18 +93,7 @@ export default function LandingPage() {
           <BelowFoldContent />
         </main>
 
-        {/* Enhanced Footer */}
-        <footer className="bg-slate-100 border-t border-gray-200 mt-16">
-          <div className="container mx-auto px-4 py-10 text-center text-xs text-gray-500">
-            <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">Contact Us</p>
-              <a href="mailto:info@nomineejobs.co.uk" className="text-blue-600 hover:text-blue-700 font-medium">
-                info@nomineejobs.co.uk
-              </a>
-            </div>
-            <p>&copy; {new Date().getFullYear()} Nominee Jobs UK Ltd. All rights reserved.</p>
-          </div>
-        </footer>
+        <ComprehensiveFooter />
       </div>
     </>
   )
