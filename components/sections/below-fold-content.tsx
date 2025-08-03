@@ -11,6 +11,7 @@ import {
   Building, 
   TrendingUp, 
   HelpCircle,
+  CheckCircle,
   IconWrapper
 } from '@/components/icons/optimized-icons'
 
