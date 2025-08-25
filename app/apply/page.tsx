@@ -70,6 +70,7 @@ export default function ApplyPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [showEmailFallback, setShowEmailFallback] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
 
   // Load saved form data from localStorage (client-side only)
@@ -104,6 +105,55 @@ export default function ApplyPage() {
 
   const updateFormData = (newData: Partial<FormData>) => {
     setFormData(prev => ({ ...prev, ...newData }))
+  }
+
+  const generateEmailSubmission = () => {
+    const applicationDetails = `
+NOMINEE DIRECTOR APPLICATION
+
+==== PERSONAL INFORMATION ====
+Name: ${formData.firstName} ${formData.lastName}
+Date of Birth: ${formData.dateOfBirth || 'Not provided'}
+Place of Birth: ${formData.placeOfBirth || 'Not provided'}
+
+==== CONTACT & ADDRESS ====
+Email: ${formData.email}
+Phone: ${formData.phone}
+Address: ${formData.addressLine1}${formData.addressLine2 ? ', ' + formData.addressLine2 : ''}
+City: ${formData.city}
+Postcode: ${formData.postcode}
+Country: ${formData.country || 'United Kingdom'}
+
+==== IDENTIFICATION ====
+ID Type: ${formData.idType}
+ID Number: ${formData.idNumber || 'Not provided'}
+National Insurance: ${formData.nationalInsurance || 'Not provided'}
+
+==== PAYMENT INFORMATION ====
+Payment Method: ${formData.paymentMethod}
+${formData.paymentMethod === 'crypto' ? `Preferred Cryptocurrency: ${formData.preferredCrypto || 'Not selected'}` : ''}
+${formData.paymentMethod === 'bank_transfer' ? `Bank Name: ${formData.bankName || 'Not provided'}
+Account Holder: ${formData.accountHolderName || 'Not provided'}
+Account Number: ${formData.accountNumber || 'Not provided'}
+Sort Code: ${formData.sortCode || 'Not provided'}` : ''}
+
+==== DECLARATIONS ====
+Terms Accepted: ${formData.termsAccepted ? 'Yes' : 'No'}
+Privacy Policy Accepted: ${formData.privacyAccepted ? 'Yes' : 'No'}
+Marketing Consent: ${formData.marketingConsent ? 'Yes' : 'No'}
+
+Application submitted on: ${new Date().toISOString()}
+
+NOTE: Please also attach the following documents:
+- ID Document (front and back if applicable)
+- Proof of Address
+    `.trim()
+
+    const subject = `Nominee Director Application - ${formData.firstName} ${formData.lastName}`
+    const mailtoLink = `mailto:applications@nomineejobs.co.uk?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(applicationDetails)}`
+    
+    window.open(mailtoLink, '_blank')
+    setShowEmailFallback(true)
   }
 
   const getStepValidation = (step: number): boolean => {
@@ -182,6 +232,12 @@ export default function ApplyPage() {
       console.log('🚀 Submitting application using FormSubmit...')
       console.log('📧 Target email: info@nomineejobs.co.uk')
       console.log('🔗 Success URL:', successUrl)
+      
+      // Add timeout to detect FormSubmit issues
+      const submissionTimeout = setTimeout(() => {
+        console.warn('⚠️ FormSubmit submission taking longer than expected')
+        setSubmitError('⏱️ Submission is taking longer than expected. If this continues, please email us directly at applications@nomineejobs.co.uk with your application details.')
+      }, 10000) // 10 second warning
 
       // Create application summary for email
       const applicationSummary = `
@@ -337,6 +393,9 @@ The NomineeJobs Team`)
       // Submit the form - this should redirect to successUrl after processing
       form.submit()
       
+      // Clear the timeout since submission started
+      clearTimeout(submissionTimeout)
+      
       // Clear saved form data immediately (before redirect)
       try {
         localStorage.removeItem('nominee-application')
@@ -347,18 +406,39 @@ The NomineeJobs Team`)
       // The form submission will handle the redirect via FormSubmit's _next parameter
       // No need for additional success handling here as the page will redirect
       
+      // Set a longer timeout to detect if FormSubmit fails to redirect
+      setTimeout(() => {
+        if (!window.location.href.includes('/success')) {
+          console.error('❌ FormSubmit failed to redirect after submission')
+          setSubmitError(`📧 There seems to be an issue with our form service. Your application may not have been submitted successfully. 
+          
+Please email us directly at applications@nomineejobs.co.uk with your application details, or try submitting again in a few minutes.
+
+We apologize for the inconvenience and will process your application as soon as we receive it.`)
+          setIsSubmitting(false)
+        }
+      }, 30000) // 30 second timeout for redirect
+      
     } catch (error) {
       console.error('❌ Application submission error:', error)
       if (error instanceof Error) {
         if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
-          setSubmitError('🌐 Network connection error. Please check your internet and try again.')
+          setSubmitError(`🌐 Network connection error. Please check your internet connection and try again.
+
+If the problem persists, please email your application details directly to applications@nomineejobs.co.uk`)
         } else if (error.message.includes('timeout')) {
-          setSubmitError('⏱️ Request timed out. Please try again.')
+          setSubmitError(`⏱️ Request timed out. This may be due to temporary server issues.
+
+Please try again in a few minutes, or email your application details directly to applications@nomineejobs.co.uk`)
         } else {
-          setSubmitError(`📧 ${error.message}. Need help? Email us directly at applications@nomineejobs.co.uk`)
+          setSubmitError(`📧 Submission error: ${error.message}
+
+Please try again, or email your application details directly to applications@nomineejobs.co.uk for immediate processing.`)
         }
       } else {
-        setSubmitError('❗ Unexpected error. Please email us directly at applications@nomineejobs.co.uk')
+        setSubmitError(`❗ An unexpected error occurred during submission.
+
+Please email your application details directly to applications@nomineejobs.co.uk and we'll process it immediately.`)
       }
       
       // Scroll to top so user can see error message
@@ -533,9 +613,27 @@ The NomineeJobs Team`)
 
         <div className="flex items-center gap-4">
           {submitError && (
-            <div className="flex items-center gap-2 text-red-600 text-sm">
-              <AlertTriangle className="h-4 w-4" />
-              {submitError}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-red-600 text-sm">
+                <AlertTriangle className="h-4 w-4" />
+                <span className="whitespace-pre-line">{submitError}</span>
+              </div>
+              {!showEmailFallback && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={generateEmailSubmission}
+                  className="text-sm"
+                >
+                  📧 Submit via Email Instead
+                </Button>
+              )}
+              {showEmailFallback && (
+                <div className="text-green-600 text-sm flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4" />
+                  Email client opened! Please send the email with your documents attached.
+                </div>
+              )}
             </div>
           )}
 
