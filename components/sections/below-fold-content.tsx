@@ -46,27 +46,27 @@ const FAQ_DATA = [
 const TESTIMONIALS_DATA = [
   {
     name: "Thomas B.",
-    location: "Birmingham, Retired Teacher",
-    avatar: "/thomas-avatar.svg",
+    location: "Bristol, UK",
+    avatar: "/testimonials/thomas.png",
     rating: 5,
-    earnings: "£4,200 last year",
-    testimonial: "Perfect for my retirement. The tasks are straightforward, and the extra income helps considerably. The team is always available when I have questions."
+    earnings: "£4,200 earned",
+    testimonial: "I started with just one company and now manage 7 across multiple sectors. It's been an incredibly consistent side income for my retirement. The NomineeJobs team handles all the heavy lifting—from legal contracts to insurance—making the whole process seamless and secure. Highly professional."
   },
   {
-    name: "Sarah L.", 
-    location: "Edinburgh, Part-time Consultant",
-    avatar: "/sarah-avatar.svg",
+    name: "Sarah M.", 
+    location: "London, UK",
+    avatar: "/testimonials/sarah.png",
     rating: 5,
-    earnings: "£6,800 last year", 
-    testimonial: "I love the flexibility. I can handle everything from my home office, and it fits perfectly around my consulting work. The electronic signing system is brilliant."
+    earnings: "£12,400 earned", 
+    testimonial: "As a professional consultant, I was looking for a way to leverage my director experience. This programme is exceptional. The identity verification was straightforward, and I'm fully protected by their professional indemnity insurance. It fits perfectly into my existing workload without any stress."
   },
   {
-    name: "James M.",
-    location: "Manchester, Business Owner", 
-    avatar: "/james-avatar.svg",
+    name: "James H.",
+    location: "Manchester, UK", 
+    avatar: "/testimonials/james.png",
     rating: 5,
-    earnings: "£8,900 last year",
-    testimonial: "Great additional income stream. The processes are well-documented, and I feel confident handling the responsibilities. Payments are always on time."
+    earnings: "£8,950 earned",
+    testimonial: "The transparency is what sold me. I manage 5 companies now and the monthly payments are always on time. Having a dedicated legal team on call gives me total peace of mind. It's rare to find a professional service that actually delivers on its promises with this level of support."
   }
 ]
 
