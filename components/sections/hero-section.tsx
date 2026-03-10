@@ -55,12 +55,12 @@ const HeroSection = memo(() => {
       </div>
 
       <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 mb-6 animate-fade-in">
-        Earn <span className="text-sky-600 relative">
-          £1,200+ monthly
+        Become a UK Nominee Director and Earn <span className="text-sky-600 relative">
+          £1200–£20,000 Per Year
           <svg className="absolute -bottom-2 left-0 w-full h-3" viewBox="0 0 300 12" fill="none">
             <path d="M1 8C50 2 100 2 150 8C200 14 250 14 299 8" stroke="rgb(2 132 199)" strokeWidth="3" strokeLinecap="round"/>
           </svg>
-        </span> as a UK Nominee Director
+        </span>
       </h1>
       
       <p className="max-w-3xl mx-auto text-lg md:text-xl text-gray-600 mb-6">
