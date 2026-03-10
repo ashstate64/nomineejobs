@@ -18,7 +18,18 @@ export const metadata: Metadata = {
   },
 }
 
-const resources = [
+type ResourceItem = {
+  title: string
+  description: string
+  icon: any
+  link: string
+  type: string
+  popular?: boolean
+  coming?: boolean
+  size?: string
+}
+
+const resources: { category: string; items: ResourceItem[] }[] = [
   {
     category: "Calculators & Tools",
     items: [

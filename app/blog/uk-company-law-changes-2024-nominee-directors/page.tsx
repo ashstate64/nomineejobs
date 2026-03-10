@@ -18,8 +18,6 @@ export const metadata: Metadata = {
     'company law amendments UK'
   ],
   authors: [{ name: 'Sarah Mitchell' }],
-  publishedTime: '2024-01-15T09:00:00.000Z',
-  modifiedTime: '2024-01-15T09:00:00.000Z',
   robots: {
     index: true,
     follow: true,
@@ -28,7 +26,6 @@ export const metadata: Metadata = {
     title: 'New UK Company Law Changes 2024: What Nominee Directors Need to Know',
     description: 'Comprehensive guide to the latest UK company law changes affecting nominee directors in 2024.',
     type: 'article',
-    publishedTime: '2024-01-15T09:00:00.000Z',
     authors: ['Sarah Mitchell'],
     url: 'https://nomineejobs.co.uk/blog/uk-company-law-changes-2024-nominee-directors',
   },

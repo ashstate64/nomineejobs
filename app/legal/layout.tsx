@@ -12,11 +12,10 @@ const GlassCard = ({ children, className }: { children: React.ReactNode; classNa
 
 export default function LegalLayout({
   children,
-  pageTitle,
 }: {
   children: React.ReactNode
-  pageTitle: string
 }) {
+  const pageTitle = "Legal Information"
   return (
     <div className="min-h-screen bg-slate-100 text-gray-800 font-sans">
       <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">

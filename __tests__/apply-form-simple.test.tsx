@@ -1,6 +1,8 @@
+/// <reference types="@testing-library/jest-dom" />
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import '@testing-library/jest-dom'
 
 // Simple test component that mimics the form behavior
 function SimpleApplyForm() {

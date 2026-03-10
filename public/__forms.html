@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Netlify Forms Definitions</title>
+</head>
+<body>
+  <!-- 
+    These forms are here purely for Netlify's build-time parser to detect them. 
+    The Next.js React forms use AJAX and submit using the same names.
+  -->
+
+  <!-- Request Info Form -->
+  <form name="request-info" data-netlify="true">
+    <input type="hidden" name="form-name" value="request-info" />
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <input type="text" name="phone" />
+    <input type="text" name="inquiry_type" />
+    <textarea name="message"></textarea>
+    <input type="text" name="preferred_contact" />
+  </form>
+
+  <!-- Nominee Application Form -->
+  <form name="nominee-application" data-netlify="true" enctype="multipart/form-data">
+    <input type="hidden" name="form-name" value="nominee-application" />
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <textarea name="message"></textarea>
+    <input type="text" name="phone" />
+    <input type="text" name="application_type" />
+    <input type="text" name="first_name" />
+    <input type="text" name="last_name" />
+    <input type="text" name="date_of_birth" />
+    <input type="text" name="place_of_birth" />
+    <input type="text" name="address_line_1" />
+    <input type="text" name="address_line_2" />
+    <input type="text" name="city" />
+    <input type="text" name="postcode" />
+    <input type="text" name="country" />
+    <input type="text" name="id_type" />
+    <input type="text" name="id_number" />
+    <input type="text" name="national_insurance" />
+    <input type="text" name="payment_method" />
+    <input type="text" name="preferred_crypto" />
+    <input type="text" name="bank_name" />
+    <input type="text" name="account_holder_name" />
+    <input type="text" name="account_number" />
+    <input type="text" name="sort_code" />
+    <input type="file" name="id_document_front" />
+    <input type="file" name="id_document_back" />
+    <input type="file" name="proof_of_address" />
+    <input type="text" name="terms_accepted" />
+    <input type="text" name="privacy_accepted" />
+    <input type="text" name="legal_declarations" />
+    <input type="text" name="marketing_consent" />
+  </form>
+
+</body>
+</html>

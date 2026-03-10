@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { submitFormToFormSubmit } from "@/lib/formsubmit-api"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, ChevronLeft, ChevronRight, Send, AlertTriangle, Clock, Users, Trophy, Shield } from "lucide-react"
@@ -233,11 +232,11 @@ NOTE: Please also attach the following documents:
       console.log('📧 Target email: info@nomineejobs.co.uk')
       console.log('🔗 Success URL:', successUrl)
       
-      // Add timeout to detect FormSubmit issues
+      // Add timeout to detect fetch issues
       const submissionTimeout = setTimeout(() => {
-        console.warn('⚠️ FormSubmit submission taking longer than expected')
+        console.warn('⚠️ Submission taking longer than expected')
         setSubmitError('⏱️ Submission is taking longer than expected. If this continues, please email us directly at applications@nomineejobs.co.uk with your application details.')
-      }, 10000) // 10 second warning
+      }, 15000) // 15 second warning
 
       // Create application summary for email
       const applicationSummary = `
@@ -278,35 +277,19 @@ Marketing Consent: ${formData.marketingConsent ? 'Yes' : 'No'}
 Application submitted on: ${new Date().toISOString()}
       `.trim()
 
-      // Create form element and submit traditionally for file upload support
-      const form = document.createElement('form')
-      // Use privacy string for better security (hides email from spam bots)
-      form.action = 'https://formsubmit.co/fc7d1651993738107212b6426636a1b4'
-      form.method = 'POST'
-      form.enctype = 'multipart/form-data'
-      form.style.display = 'none'
+      const formPayload = new FormData()
+      formPayload.append("form-name", "nominee-application")
       
-      // Helper function to add form field
+      // Helper function to add form field to FormData
       const addField = (name: string, value: string | File) => {
         if (value instanceof File) {
-          const input = document.createElement('input')
-          input.type = 'file'
-          input.name = name
-          // Create a DataTransfer to properly set the files property
-          const dt = new DataTransfer()
-          dt.items.add(value)
-          input.files = dt.files
-          form.appendChild(input)
+          formPayload.append(name, value)
         } else if (value) { // Only add non-empty values
-          const input = document.createElement('input')
-          input.type = 'hidden'
-          input.name = name
-          input.value = String(value)
-          form.appendChild(input)
+          formPayload.append(name, String(value))
         }
       }
       
-      // FormSubmit required fields (these must be present)
+      // Basic Contact/Submission info
       addField('name', `${formData.firstName || ''} ${formData.lastName || ''}`.trim())
       addField('email', formData.email || '')
       addField('message', applicationSummary)
@@ -350,74 +333,30 @@ Application submitted on: ${new Date().toISOString()}
       addField('legal_declarations', formData.legalDeclarations ? 'Yes' : 'No')
       addField('marketing_consent', formData.marketingConsent ? 'Yes' : 'No')
       
-      // FormSubmit configuration
-      addField('_subject', `🎯 New Nominee Director Application - ${formData.firstName} ${formData.lastName}`)
-      addField('_template', 'table')
-      addField('_captcha', 'true') // Required for autoresponse with file uploads
-      addField('_next', successUrl) // This should redirect properly
-      addField('_replyto', formData.email || '')
-      addField('_honey', '') // Honeypot spam protection
+      console.log('📤 Submitting form to Netlify Forms with all data and files...')
       
-      // Auto-response message
-      addField('_autoresponse', `Thank you for your application, ${formData.firstName}! 
-
-We have successfully received your nominee director application with all required documents and will begin processing it immediately.
-
-What happens next:
-✅ Initial review within 24 hours
-✅ Document verification within 48 hours  
-✅ Background checks within 3-5 business days
-✅ Welcome package and first opportunities within 1 week
-
-You will receive email updates throughout the process at ${formData.email}.
-
-If you have any questions, please don't hesitate to contact us at applications@nomineejobs.co.uk.
-
-Best regards,
-The NomineeJobs Team`)
+      // Submit the form
+      const response = await fetch("/", {
+        method: "POST",
+        body: formPayload
+      })
       
-      // Debug: Log form data being sent
-      console.log('📋 Form fields being sent:', Array.from(form.elements).map(el => {
-        const input = el as HTMLInputElement
-        return {
-          name: input.name, 
-          type: input.type,
-          value: input.type === 'file' ? 'FILE' : input.value
-        }
-      }))
-      
-      // Append form to document and submit
-      document.body.appendChild(form)
-      console.log('📤 Submitting form with all data and files...')
-      
-      // Submit the form - this should redirect to successUrl after processing
-      form.submit()
-      
-      // Clear the timeout since submission started
       clearTimeout(submissionTimeout)
-      
-      // Clear saved form data immediately (before redirect)
-      try {
-        localStorage.removeItem('nominee-application')
-      } catch (e) {
-        console.warn('Could not clear localStorage:', e)
+
+      if (response.ok) {
+        // Clear saved form data immediately 
+        try {
+          localStorage.removeItem('nominee-application')
+        } catch (e) {
+          console.warn('Could not clear localStorage:', e)
+        }
+        
+        // Redirect to success URL
+        window.location.href = successUrl
+      } else {
+        throw new Error('Submission failed - please try again')
       }
       
-      // The form submission will handle the redirect via FormSubmit's _next parameter
-      // No need for additional success handling here as the page will redirect
-      
-      // Set a longer timeout to detect if FormSubmit fails to redirect
-      setTimeout(() => {
-        if (!window.location.href.includes('/success')) {
-          console.error('❌ FormSubmit failed to redirect after submission')
-          setSubmitError(`📧 There seems to be an issue with our form service. Your application may not have been submitted successfully. 
-          
-Please email us directly at applications@nomineejobs.co.uk with your application details, or try submitting again in a few minutes.
-
-We apologize for the inconvenience and will process your application as soon as we receive it.`)
-          setIsSubmitting(false)
-        }
-      }, 30000) // 30 second timeout for redirect
       
     } catch (error) {
       console.error('❌ Application submission error:', error)
@@ -503,10 +442,13 @@ Please email your application details directly to applications@nomineejobs.co.uk
       ref={formRef} 
       onSubmit={handleSubmit} 
       className="w-full" 
+      name="nominee-application"
+      data-netlify="true"
       encType="multipart/form-data"
     >
-      {/* Hidden FormSubmit fields for spam protection */}
-      <input type="hidden" name="_honey" style={{ display: 'none' }} />
+      <input type="hidden" name="form-name" value="nominee-application" />
+      {/* Honeypot fields for spam protection */}
+      <input type="text" name="_honey" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
       
       {/* Step Progress Header */}
       <div className="mb-8">

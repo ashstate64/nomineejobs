@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { submitFormToFormSubmit } from "@/lib/formsubmit-api"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -10,8 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CheckCircle, AlertTriangle, Send, Clock, Mail, Phone, MessageSquare, User, HelpCircle, Shield } from "lucide-react"
 import Link from "next/link"
 
-// FormSubmit configuration for info requests
-const FORMSUBMIT_EMAIL = "info@nomineejobs.co.uk" 
 const SUCCESS_URL = "/request-info/success"
 
 export default function RequestInfoPage() {
@@ -72,21 +69,24 @@ export default function RequestInfoPage() {
     setSubmitError(null)
 
     try {
-      console.log('🚀 Submitting contact form using FormSubmit AJAX API...')
+      console.log('🚀 Submitting contact form using Netlify Forms AJAX API...')
       
-      // Use the FormSubmit utility for reliable submission
-      const result = await submitFormToFormSubmit({
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        message: formData.message.trim(),
-        phone: formData.phone.trim(),
-        inquiry_type: formData.inquiry_type,
-        preferred_contact: formData.preferred_contact,
+      const formPayload = new URLSearchParams()
+      formPayload.append("form-name", "request-info")
+      formPayload.append("name", formData.name.trim())
+      formPayload.append("email", formData.email.trim())
+      formPayload.append("message", formData.message.trim())
+      formPayload.append("phone", formData.phone.trim())
+      formPayload.append("inquiry_type", formData.inquiry_type)
+      formPayload.append("preferred_contact", formData.preferred_contact)
+
+      const response = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formPayload.toString(),
       })
 
-      console.log('✅ FormSubmit success:', result)
-
-      if (result.success) {
+      if (response.ok) {
         setSubmitSuccess(true)
         
         // Clear form data
@@ -104,7 +104,7 @@ export default function RequestInfoPage() {
           window.location.href = SUCCESS_URL
         }, 2000)
       } else {
-        throw new Error(result.message || 'Submission failed - please try again')
+        throw new Error('Submission failed - please try again')
       }
       
     } catch (error) {
@@ -170,9 +170,12 @@ export default function RequestInfoPage() {
           {/* Contact Form */}
           <div className="lg:col-span-2">
             <form 
+              name="request-info"
+              data-netlify="true"
               onSubmit={handleSubmit} 
               className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8"
             >
+              <input type="hidden" name="form-name" value="request-info" />
               {/* Honeypot field for spam protection - hidden with CSS */}
               <input 
                 type="text" 

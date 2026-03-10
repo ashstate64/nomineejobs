@@ -6,12 +6,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  turbopack: {},
   images: {
     unoptimized: true,
   },
@@ -40,7 +35,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: process.env.NODE_ENV === 'production' 
+            value: process.env.NODE_ENV === 'production'
               ? 'public, max-age=3600, stale-while-revalidate=86400'
               : 'no-cache, no-store, must-revalidate', // Dev mode
           },
@@ -119,18 +114,18 @@ const nextConfig = {
         },
       }
     }
-    
+
     // Optimize for better tree shaking
     config.resolve.alias = {
       ...config.resolve.alias,
     }
-    
+
     // Enable tree shaking for lucide-react specifically
     config.module.rules.push({
       test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
       sideEffects: false,
     })
-    
+
     // Client-side optimizations
     if (!isServer) {
       config.resolve.fallback = {
@@ -140,7 +135,7 @@ const nextConfig = {
         tls: false,
       }
     }
-    
+
     // Disable WebSocket in production for bfcache compatibility
     if (!dev && !isServer) {
       config.resolve.alias = {
@@ -148,7 +143,7 @@ const nextConfig = {
         // Prevent WebSocket usage in production client bundle
       }
     }
-    
+
     return config
   },
 }

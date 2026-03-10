@@ -16,13 +16,10 @@ export const metadata: Metadata = {
     'UK nominee services fees'
   ],
   authors: [{ name: 'NomineeJobs Research Team' }],
-  publishedTime: '2024-01-05T10:00:00.000Z',
-  modifiedTime: '2024-01-05T10:00:00.000Z',
   openGraph: {
     title: 'Nominee Director Salary UK 2024: Complete Earnings Guide',
     description: 'Comprehensive guide to nominee director salaries and earnings potential in the UK for 2024.',
     type: 'article',
-    publishedTime: '2024-01-05T10:00:00.000Z',
     url: 'https://nomineejobs.co.uk/blog/nominee-director-salary-uk-2024',
   },
   twitter: {

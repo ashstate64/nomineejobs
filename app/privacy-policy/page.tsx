@@ -12,7 +12,7 @@ export default function PrivacyPolicyPage() {
   const lastUpdated = "June 22, 2025" // Example date
 
   return (
-    <LegalLayout pageTitle="Privacy Policy">
+    <LegalLayout>
       <div>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Privacy Policy</h1>
         <p className="text-sm text-gray-500 mb-8">Last Updated: {lastUpdated}</p>

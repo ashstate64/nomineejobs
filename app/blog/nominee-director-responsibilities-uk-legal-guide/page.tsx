@@ -16,13 +16,10 @@ export const metadata: Metadata = {
     'UK director compliance requirements'
   ],
   authors: [{ name: 'NomineeJobs Legal Team' }],
-  publishedTime: '2024-01-08T11:00:00.000Z',
-  modifiedTime: '2024-01-08T11:00:00.000Z',
   openGraph: {
     title: 'Nominee Director Responsibilities UK: Complete Legal Guide 2024',
     description: 'Everything you need to know about nominee director legal responsibilities and duties in the UK.',
     type: 'article',
-    publishedTime: '2024-01-08T11:00:00.000Z',
     url: 'https://nomineejobs.co.uk/blog/nominee-director-responsibilities-uk-legal-guide',
   },
   twitter: {

@@ -16,13 +16,10 @@ export const metadata: Metadata = {
     'professional director requirements'
   ],
   authors: [{ name: 'NomineeJobs Expert Team' }],
-  publishedTime: '2024-01-10T09:00:00.000Z',
-  modifiedTime: '2024-01-10T09:00:00.000Z',
   openGraph: {
     title: 'How to Become a Nominee Director in the UK 2024: Complete Guide',
     description: 'Step-by-step guide to becoming a UK nominee director. Requirements, qualifications, earnings, and application process.',
     type: 'article',
-    publishedTime: '2024-01-10T09:00:00.000Z',
     url: 'https://nomineejobs.co.uk/blog/how-to-become-nominee-director-uk-2024',
   },
   twitter: {
