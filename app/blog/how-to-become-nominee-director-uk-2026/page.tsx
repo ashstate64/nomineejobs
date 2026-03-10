@@ -44,7 +44,7 @@ export default function HowToBecomeNomineeDirectorPage() {
             '@type': 'Article',
             headline: 'How to Become a Nominee Director in the UK 2026: Complete Guide',
             description: 'Step-by-step guide to becoming a UK nominee director with requirements, IDV qualifications, and earnings potential.',
-            image: 'https://nomineejobs.co.uk/blog/images/become-nominee-director-uk.jpg',
+            image: 'https://nomineejobs.co.uk/blog/images/become-nominee-director-uk.png',
             author: {
               '@type': 'Organization',
               name: 'NomineeJobs Expert Team',

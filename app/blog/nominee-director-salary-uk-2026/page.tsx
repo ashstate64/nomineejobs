@@ -44,7 +44,7 @@ export default function NomineeDirectorSalaryPage() {
             '@type': 'Article',
             headline: 'Nominee Director Salary UK 2026: Complete Earnings Guide',
             description: 'Comprehensive guide to nominee director salaries, pay rates, and earnings potential in the UK for 2026.',
-            image: 'https://nomineejobs.co.uk/blog/images/nominee-director-salary-2026.jpg',
+            image: 'https://nomineejobs.co.uk/blog/images/nominee-director-salary-2026.png',
             author: {
               '@type': 'Organization',
               name: 'NomineeJobs Research Team',

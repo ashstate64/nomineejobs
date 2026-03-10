@@ -51,7 +51,7 @@ export default function BlogPost() {
             '@type': 'Article',
             headline: 'New UK Company Law Changes: What Nominee Directors Need to Know in 2026',
             description: 'Comprehensive guide to the latest UK company law changes (ECCTA) affecting nominee directors, including new identity verification requirements and regulatory updates.',
-            image: 'https://nomineejobs.co.uk/blog/images/uk-company-law-2026.jpg',
+            image: 'https://nomineejobs.co.uk/blog/images/uk-company-law-2026.png',
             author: {
               '@type': 'Person',
               name: 'Sarah Mitchell',

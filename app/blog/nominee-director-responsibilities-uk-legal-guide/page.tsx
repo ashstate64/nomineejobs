@@ -44,7 +44,7 @@ export default function NomineeDirectorResponsibilitiesPage() {
             '@type': 'Article',
             headline: 'Nominee Director Responsibilities UK: Complete Legal Guide 2026',
             description: 'Comprehensive guide to nominee director legal responsibilities, duties, and obligations under UK company law.',
-            image: 'https://nomineejobs.co.uk/blog/images/nominee-director-responsibilities-uk.jpg',
+            image: 'https://nomineejobs.co.uk/blog/images/nominee-director-responsibilities-uk.png',
             author: {
               '@type': 'Organization',
               name: 'NomineeJobs Legal Team',
