@@ -67,6 +67,30 @@ const HeroSection = memo(() => {
         Work from home just <strong>2-8 hours per week</strong>. We pay you to be a professional nominee director for UK companies—sign documents electronically, handle mail, fully insured and legally protected.
       </p>
 
+      {/* Trust Section */}
+      <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8 mb-8 text-sm md:text-base font-medium text-gray-700">
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 text-green-500" />
+          <span>UK Registered Company</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 text-green-500" />
+          <span>Fully Insured Roles</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 text-green-500" />
+          <span>Legally Structured Agreements</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 text-green-500" />
+          <span>GDPR Compliant</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+          <span>4.9★ Member Rating</span>
+        </div>
+      </div>
+
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 mb-10 max-w-2xl mx-auto">
         <div className="flex items-center justify-center gap-8 text-sm font-medium">
           <div className="text-center">
