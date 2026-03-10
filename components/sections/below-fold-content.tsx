@@ -138,21 +138,25 @@ const BelowFoldContent = memo(() => {
             <p className="text-lg text-gray-700">Illustrative annual income based on active companies.</p>
           </div>
           <div className="space-y-4">
-            <div className="grid grid-cols-2 font-semibold text-gray-500 border-b border-gray-200 pb-3">
-              <span>Active companies</span>
-              <span className="text-right">Typical annual income</span>
+            <div className="grid grid-cols-3 font-semibold text-gray-500 border-b border-gray-200 pb-3 text-sm md:text-base gap-2">
+              <span>Companies</span>
+              <span className="text-center">Monthly Income</span>
+              <span className="text-right">Annual Income</span>
             </div>
             {[
-              { companies: 1, income: "£600 – £1,000" },
-              { companies: 5, income: "£3,200 – £5,000" },
-              { companies: 10, income: "£6,500 – £10,000" },
-              { companies: 20, income: "£13,000 – £20,000" }
+              { companies: 1, monthly: "£50–£165", annual: "£600–£2,000" },
+              { companies: 5, monthly: "£250–£825", annual: "£3,000–£10,000" },
+              { companies: 10, monthly: "£500–£1,650", annual: "£6,000–£20,000" },
             ].map((item, index) => (
-              <div key={index} className="grid grid-cols-2 py-3 border-b border-gray-100 last:border-b-0">
-                <span className="text-gray-700">{item.companies} {item.companies === 1 ? 'company' : 'companies'}</span>
-                <span className="text-right font-semibold text-gray-800">{item.income}</span>
+              <div key={index} className="grid grid-cols-3 py-3 border-b border-gray-100 last:border-b-0 text-sm md:text-base gap-2 items-center">
+                <span className="text-gray-700 font-medium">{item.companies}</span>
+                <span className="text-center font-semibold text-sky-600">{item.monthly}</span>
+                <span className="text-right font-semibold text-gray-800">{item.annual}</span>
               </div>
             ))}
+            <div className="pt-2 text-center text-sm font-medium text-slate-500">
+              Most nominees manage 3–12 companies
+            </div>
           </div>
         </GlassCard>
       </section>
