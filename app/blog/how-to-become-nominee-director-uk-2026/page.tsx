@@ -3,32 +3,32 @@ import Link from "next/link"
 import { ArrowLeft, Calendar, Clock, User, CheckCircle, AlertTriangle, DollarSign } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: 'How to Become a Nominee Director in the UK 2024: Complete Guide',
-  description: 'Step-by-step guide to becoming a UK nominee director in 2024. Requirements, qualifications, earnings potential, and application process explained.',
+  title: 'How to Become a Nominee Director in the UK 2026: Complete Guide',
+  description: 'Step-by-step guide to becoming a UK nominee director in 2026. Requirements, new Companies House Identity Verification (IDV), qualifications, earnings potential, and application process explained.',
   keywords: [
     'how to become nominee director UK',
-    'nominee director requirements 2024',
+    'nominee director requirements 2026',
     'UK nominee director qualifications',
     'nominee director application process',
     'become company director UK',
-    'nominee director jobs UK 2024',
-    'UK director services career',
-    'professional director requirements'
+    'nominee director jobs UK 2026',
+    'Companies House identity verification',
+    'ECCTA director requirements 2026'
   ],
   authors: [{ name: 'NomineeJobs Expert Team' }],
   openGraph: {
-    title: 'How to Become a Nominee Director in the UK 2024: Complete Guide',
-    description: 'Step-by-step guide to becoming a UK nominee director. Requirements, qualifications, earnings, and application process.',
+    title: 'How to Become a Nominee Director in the UK 2026: Complete Guide',
+    description: 'Step-by-step guide to becoming a UK nominee director. Requirements, IDV qualifications, earnings, and application process.',
     type: 'article',
-    url: 'https://nomineejobs.co.uk/blog/how-to-become-nominee-director-uk-2024',
+    url: 'https://nomineejobs.co.uk/blog/how-to-become-nominee-director-uk-2026',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'How to Become a Nominee Director in the UK 2024',
-    description: 'Complete guide to becoming a UK nominee director with requirements and earnings potential.',
+    title: 'How to Become a Nominee Director in the UK 2026',
+    description: 'Complete guide to becoming a UK nominee director with new 2026 IDV requirements and earnings potential.',
   },
   alternates: {
-    canonical: '/blog/how-to-become-nominee-director-uk-2024',
+    canonical: '/blog/how-to-become-nominee-director-uk-2026',
   },
 }
 
@@ -42,8 +42,8 @@ export default function HowToBecomeNomineeDirectorPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Article',
-            headline: 'How to Become a Nominee Director in the UK 2024: Complete Guide',
-            description: 'Step-by-step guide to becoming a UK nominee director with requirements, qualifications, and earnings potential.',
+            headline: 'How to Become a Nominee Director in the UK 2026: Complete Guide',
+            description: 'Step-by-step guide to becoming a UK nominee director with requirements, IDV qualifications, and earnings potential.',
             image: 'https://nomineejobs.co.uk/blog/images/become-nominee-director-uk.jpg',
             author: {
               '@type': 'Organization',
@@ -58,11 +58,11 @@ export default function HowToBecomeNomineeDirectorPage() {
                 url: 'https://nomineejobs.co.uk/logo.png'
               }
             },
-            datePublished: '2024-01-10T09:00:00.000Z',
-            dateModified: '2024-01-10T09:00:00.000Z',
+            datePublished: '2026-01-10T09:00:00.000Z',
+            dateModified: '2026-03-01T09:00:00.000Z',
             mainEntityOfPage: {
               '@type': 'WebPage',
-              '@id': 'https://nomineejobs.co.uk/blog/how-to-become-nominee-director-uk-2024'
+              '@id': 'https://nomineejobs.co.uk/blog/how-to-become-nominee-director-uk-2026'
             },
             articleSection: 'Career Guide',
             wordCount: 2800,
@@ -88,7 +88,7 @@ export default function HowToBecomeNomineeDirectorPage() {
           </div>
 
           <h1 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
-            How to Become a Nominee Director in the UK: Complete 2024 Guide
+            How to Become a Nominee Director in the UK: Complete 2026 Guide
           </h1>
 
           <div className="flex items-center gap-6 text-sm text-gray-600 mb-8">
@@ -98,7 +98,7 @@ export default function HowToBecomeNomineeDirectorPage() {
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              <span>January 10, 2024</span>
+              <span>March 1, 2026</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4" />
@@ -111,7 +111,7 @@ export default function HowToBecomeNomineeDirectorPage() {
           <p className="text-xl text-gray-700 mb-8 leading-relaxed">
             Becoming a nominee director in the UK offers an excellent opportunity to earn £600-£20,000+ annually 
             while working from home. This comprehensive guide covers everything you need to know about entering 
-            this growing profession in 2024.
+            this growing profession in 2026, including the new mandatory Identity Verification (IDV) rules introduced by the Economic Crime and Corporate Transparency Act.
           </p>
 
           <div className="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8">
@@ -158,6 +158,11 @@ export default function HowToBecomeNomineeDirectorPage() {
               <h4 className="font-semibold text-gray-800 mb-1">Age & Residency</h4>
               <p className="text-sm text-gray-600">Must be 18+ and UK resident</p>
             </div>
+            <div className="border border-gray-200 rounded-lg p-4 bg-blue-50/50">
+              <CheckCircle className="h-5 w-5 text-green-500 mb-2" />
+              <h4 className="font-semibold text-gray-800 mb-1">Companies House IDV (New for 2026)</h4>
+              <p className="text-sm text-gray-600">Must pass mandatory identity verification to act as a director</p>
+            </div>
             <div className="border border-gray-200 rounded-lg p-4">
               <CheckCircle className="h-5 w-5 text-green-500 mb-2" />
               <h4 className="font-semibold text-gray-800 mb-1">Clean Record</h4>
@@ -165,13 +170,8 @@ export default function HowToBecomeNomineeDirectorPage() {
             </div>
             <div className="border border-gray-200 rounded-lg p-4">
               <CheckCircle className="h-5 w-5 text-green-500 mb-2" />
-              <h4 className="font-semibold text-gray-800 mb-1">Valid ID</h4>
-              <p className="text-sm text-gray-600">Passport or driving licence</p>
-            </div>
-            <div className="border border-gray-200 rounded-lg p-4">
-              <CheckCircle className="h-5 w-5 text-green-500 mb-2" />
-              <h4 className="font-semibold text-gray-800 mb-1">Proof of Address</h4>
-              <p className="text-sm text-gray-600">Recent utility bill or bank statement</p>
+              <h4 className="font-semibold text-gray-800 mb-1">Valid ID & Address</h4>
+              <p className="text-sm text-gray-600">Passport/driving licence and recent utility bill</p>
             </div>
           </div>
 
@@ -193,7 +193,7 @@ export default function HowToBecomeNomineeDirectorPage() {
             <div className="flex items-start gap-3">
               <DollarSign className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-lg font-semibold text-green-900 mb-3">2024 Earnings Breakdown</h3>
+                <h3 className="text-lg font-semibold text-green-900 mb-3">2026 Earnings Breakdown</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-green-700">£600-£2,000</div>
@@ -244,16 +244,16 @@ export default function HowToBecomeNomineeDirectorPage() {
             <div className="flex gap-4">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
               <div>
-                <h4 className="font-semibold text-gray-800 mb-2">Professional Review</h4>
-                <p className="text-gray-600 text-sm">Our team reviews your application, conducts background checks, and verifies all information.</p>
+                <h4 className="font-semibold text-gray-800 mb-2">Companies House IDV (New)</h4>
+                <p className="text-gray-600 text-sm">Under the new ECCTA rules, you will need to undergo direct Identity Verification via Companies House before your first appointment.</p>
               </div>
             </div>
             
             <div className="flex gap-4">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
               <div>
-                <h4 className="font-semibold text-gray-800 mb-2">Onboarding & Training</h4>
-                <p className="text-gray-600 text-sm">Complete our training program covering legal responsibilities, procedures, and best practices.</p>
+                <h4 className="font-semibold text-gray-800 mb-2">Professional Review & Training</h4>
+                <p className="text-gray-600 text-sm">Our team reviews your application and provides training covering legal responsibilities, procedures, and best practices.</p>
               </div>
             </div>
             
@@ -358,9 +358,8 @@ export default function HowToBecomeNomineeDirectorPage() {
           <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6">Ready to Start?</h2>
 
           <p className="mb-8">
-            The demand for professional nominee directors continues to grow in 2024. With proper regulation, 
-            comprehensive training, and full support, you can build a profitable side income or even a 
-            full-time career in this growing industry.
+            The demand for professional nominee directors continues to grow in 2026. As corporate directors from overseas are phased out and strictly regulated verified UK individuals become the standard, 
+            the premium placed on your compliance status will only increase. With proper regulation and full support, you can build a highly profitable income stream.
           </p>
         </div>
 

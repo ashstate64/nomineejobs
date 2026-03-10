@@ -37,7 +37,7 @@ export default function LandingPage() {
             description: 'Join the UK\'s leading nominee director programme. Earn £600-£20,000+ annually providing professional nominee services to companies.',
             url: 'https://nomineejobs.co.uk',
             title: 'Nominee Director',
-            datePosted: '2024-01-01',
+            datePosted: '2026-01-01',
             employmentType: 'CONTRACTOR',
             hiringOrganization: {
               '@type': 'Organization',

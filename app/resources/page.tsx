@@ -42,7 +42,7 @@ const resources: { category: string; items: ResourceItem[] }[] = [
         popular: true
       },
       {
-        title: "Tax Calculator 2024",
+        title: "Tax Calculator 2026",
         description: "Calculate tax obligations on nominee director income (coming soon)",
         icon: Calculator,
         link: "#",
@@ -92,19 +92,19 @@ const resources: { category: string; items: ResourceItem[] }[] = [
     category: "Industry Reports",
     items: [
       {
-        title: "UK Nominee Director Market Report 2024",
+        title: "UK Nominee Director Market Report 2026",
         description: "Comprehensive analysis of the nominee director industry, rates, and trends",
         icon: TrendingUp,
-        link: "/resources/market-report-2024.pdf",
+        link: "/resources/market-report-2026.pdf",
         type: "download",
         size: "PDF, 2.1MB",
         popular: true
       },
       {
-        title: "Regulatory Changes Update Q4 2024",
+        title: "Regulatory Changes Update Q4 2026",
         description: "Latest changes to UK company law affecting nominee directors",
         icon: AlertTriangle,
-        link: "/resources/regulatory-update-q4-2024.pdf",
+        link: "/resources/regulatory-update-q4-2026.pdf",
         type: "download",
         size: "PDF, 800KB"
       },
@@ -198,7 +198,7 @@ export default function ResourcesPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                      UK Market Report 2024
+                      UK Market Report 2026
                     </h3>
                     <p className="text-sm text-gray-600">Industry analysis & trends</p>
                   </div>

@@ -104,7 +104,7 @@ export const DEMOGRAPHIC_CONFIGS: Record<string, DemographicConfig> = {
   'side-hustle-income': {
     slug: 'side-hustle-income',
     title: 'The Ultimate Side Hustle for Ambitious People',
-    metaTitle: 'Best Side Hustle UK 2024 | Earn £500-£2,000+ Monthly | Keep Your Day Job | NomineeJobs',
+    metaTitle: 'Best Side Hustle UK 2026 | Earn £500-£2,000+ Monthly | Keep Your Day Job | NomineeJobs',
     metaDescription: 'Perfect side hustle! Earn £500-£2,000+ monthly while keeping your day job. Work weekends and evenings. 95% of our members keep their main career. Start now!',
     keywords: [
       'side hustle UK',

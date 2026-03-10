@@ -44,7 +44,7 @@ const HeroSection = memo(() => {
           <React.Suspense fallback={<div className="h-4 w-4 bg-gray-200 rounded" />}>
             <Target className="h-4 w-4 text-green-500" />
           </React.Suspense>
-          <AnimatedCounter prefix="£" value={12800000} suffix=" paid to nominees in 2024" />
+          <AnimatedCounter prefix="£" value={14200000} suffix=" paid to nominees in 2025" />
         </div>
         <div className="flex items-center gap-2">
           <React.Suspense fallback={<div className="h-4 w-4 bg-gray-200 rounded" />}>

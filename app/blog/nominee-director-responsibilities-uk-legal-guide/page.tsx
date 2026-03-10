@@ -3,7 +3,7 @@ import Link from "next/link"
 import { ArrowLeft, Calendar, Clock, User, Scale, FileCheck, AlertTriangle, Shield } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: 'Nominee Director Responsibilities UK: Complete Legal Guide 2024',
+  title: 'Nominee Director Responsibilities UK: Complete Legal Guide 2026',
   description: 'Comprehensive guide to nominee director legal responsibilities, duties, and obligations in the UK. Understand your role, liabilities, and protections under UK company law.',
   keywords: [
     'nominee director responsibilities UK',
@@ -11,20 +11,20 @@ export const metadata: Metadata = {
     'UK company director obligations',
     'nominee director liability UK',
     'director responsibilities UK law',
-    'company director duties 2024',
+    'company director duties 2026',
     'nominee services legal framework',
     'UK director compliance requirements'
   ],
   authors: [{ name: 'NomineeJobs Legal Team' }],
   openGraph: {
-    title: 'Nominee Director Responsibilities UK: Complete Legal Guide 2024',
+    title: 'Nominee Director Responsibilities UK: Complete Legal Guide 2026',
     description: 'Everything you need to know about nominee director legal responsibilities and duties in the UK.',
     type: 'article',
     url: 'https://nomineejobs.co.uk/blog/nominee-director-responsibilities-uk-legal-guide',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Nominee Director Responsibilities UK: Legal Guide 2024',
+    title: 'Nominee Director Responsibilities UK: Legal Guide 2026',
     description: 'Complete guide to nominee director duties, responsibilities, and legal obligations in the UK.',
   },
   alternates: {
@@ -42,7 +42,7 @@ export default function NomineeDirectorResponsibilitiesPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Article',
-            headline: 'Nominee Director Responsibilities UK: Complete Legal Guide 2024',
+            headline: 'Nominee Director Responsibilities UK: Complete Legal Guide 2026',
             description: 'Comprehensive guide to nominee director legal responsibilities, duties, and obligations under UK company law.',
             image: 'https://nomineejobs.co.uk/blog/images/nominee-director-responsibilities-uk.jpg',
             author: {
@@ -58,8 +58,8 @@ export default function NomineeDirectorResponsibilitiesPage() {
                 url: 'https://nomineejobs.co.uk/logo.png'
               }
             },
-            datePublished: '2024-01-08T11:00:00.000Z',
-            dateModified: '2024-01-08T11:00:00.000Z',
+            datePublished: '2026-01-08T11:00:00.000Z',
+            dateModified: '2026-01-08T11:00:00.000Z',
             mainEntityOfPage: {
               '@type': 'WebPage',
               '@id': 'https://nomineejobs.co.uk/blog/nominee-director-responsibilities-uk-legal-guide'
@@ -88,7 +88,7 @@ export default function NomineeDirectorResponsibilitiesPage() {
           </div>
 
           <h1 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
-            Nominee Director Responsibilities UK: Complete Legal Guide 2024
+            Nominee Director Responsibilities UK: Complete Legal Guide 2026
           </h1>
 
           <div className="flex items-center gap-6 text-sm text-gray-600 mb-8">
@@ -98,7 +98,7 @@ export default function NomineeDirectorResponsibilitiesPage() {
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              <span>January 8, 2024</span>
+              <span>January 8, 2026</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4" />
