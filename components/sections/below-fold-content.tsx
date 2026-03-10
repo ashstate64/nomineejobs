@@ -196,40 +196,40 @@ const BelowFoldContent = memo(() => {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-sm md:max-w-none mx-auto">
           {TESTIMONIALS_DATA.map((testimonial, index) => (
-            <GlassCard key={index} className="flex flex-col group hover:scale-105 transition-transform duration-300">
+            <GlassCard key={index} className="flex flex-col group hover:scale-[1.02] transition-transform duration-300">
               <div className="flex items-center mb-4">
-                <Avatar className="h-16 w-16 mr-4 ring-2 ring-sky-200 shadow-lg">
+                <Avatar className="h-14 w-14 md:h-16 md:w-16 mr-4 ring-2 ring-sky-200 shadow-lg">
                   <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                  <AvatarFallback className="bg-sky-100 text-sky-700 font-semibold text-lg">
+                  <AvatarFallback className="bg-sky-100 text-sky-700 font-semibold text-lg md:text-xl">
                     {testimonial.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-grow">
-                  <div className="flex items-center gap-1 mb-2">
+                  <div className="flex items-center gap-1 mb-1">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <span key={i} className="text-yellow-400 text-xl">★</span>
+                      <span key={i} className="text-yellow-400 text-lg md:text-xl leading-none">★</span>
                     ))}
                   </div>
-                  <h4 className="font-semibold text-gray-800 text-lg">{testimonial.name}</h4>
-                  <p className="text-sm text-gray-500 mb-1">{testimonial.location}</p>
-                  <div className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full inline-block">
+                  <h4 className="font-semibold text-gray-800 text-base md:text-lg leading-tight">{testimonial.name}</h4>
+                  <p className="text-xs text-gray-500 mb-1 leading-tight">{testimonial.location}</p>
+                  <div className="bg-green-100 text-green-700 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full inline-block mt-0.5">
                     {testimonial.earnings}
                   </div>
                 </div>
               </div>
-              <blockquote className="text-gray-700 flex-grow italic leading-relaxed">
+              <blockquote className="text-gray-700 flex-grow italic leading-relaxed text-sm md:text-base">
                 "{testimonial.testimonial}"
               </blockquote>
               
               {/* Verified Badge */}
               <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between">
-                <div className="flex items-center gap-1 text-xs text-green-600">
-                  <CheckCircle className="h-3 w-3" />
+                <div className="flex items-center gap-1 text-[10px] md:text-xs text-green-600 font-medium">
+                  <CheckCircle className="h-3 w-3 md:h-3.5 md:w-3.5" />
                   <span>Verified Earnings</span>
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-[10px] md:text-xs text-gray-500 font-medium whitespace-nowrap">
                   Active since 2022
                 </div>
               </div>

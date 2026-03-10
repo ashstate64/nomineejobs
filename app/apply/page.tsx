@@ -541,39 +541,39 @@ Please email your application details directly to applications@nomineejobs.co.uk
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
+      <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-gray-200">
         <Button
           type="button"
           variant="outline"
           onClick={prevStep}
           disabled={currentStep === 1}
-          className="flex items-center gap-2 px-6"
+          className="flex items-center justify-center gap-2 px-6 w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm"
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft className="h-5 w-5 sm:h-4 sm:w-4" />
           Previous
         </Button>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col items-center gap-4 w-full sm:w-auto">
           {submitError && (
-            <div className="space-y-3">
-              <div className="flex items-center gap-2 text-red-600 text-sm">
-                <AlertTriangle className="h-4 w-4" />
-                <span className="whitespace-pre-line">{submitError}</span>
+            <div className="space-y-3 w-full">
+              <div className="flex items-center justify-center sm:justify-start gap-2 text-red-600 text-sm">
+                <AlertTriangle className="h-4 w-4 shrink-0" />
+                <span className="whitespace-pre-line text-center sm:text-left">{submitError}</span>
               </div>
               {!showEmailFallback && (
                 <Button
                   type="button"
                   variant="outline"
                   onClick={generateEmailSubmission}
-                  className="text-sm"
+                  className="w-full text-sm"
                 >
                   📧 Submit via Email Instead
                 </Button>
               )}
               {showEmailFallback && (
-                <div className="text-green-600 text-sm flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4" />
-                  Email client opened! Please send the email with your documents attached.
+                <div className="text-green-600 text-sm flex items-center justify-center sm:justify-start gap-2">
+                  <CheckCircle className="h-4 w-4 shrink-0" />
+                  <span className="text-center sm:text-left">Email client opened! Please send the email with your documents attached.</span>
                 </div>
               )}
             </div>
@@ -583,17 +583,17 @@ Please email your application details directly to applications@nomineejobs.co.uk
             <Button
               type="submit"
               disabled={!canProceed || isSubmitting}
-              className="flex items-center gap-2 px-8 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+              className="flex items-center justify-center gap-2 px-8 w-full sm:w-auto h-14 sm:h-10 text-lg sm:text-sm bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg shadow-green-600/20 active:scale-95 transition-all"
               suppressHydrationWarning
             >
               {isSubmitting ? (
                 <>
-                  <Clock className="h-4 w-4 animate-spin" />
+                  <Clock className="h-5 w-5 sm:h-4 sm:w-4 animate-spin" />
                   Submitting...
                 </>
               ) : (
                 <>
-                  <Send className="h-4 w-4" />
+                  <Send className="h-5 w-5 sm:h-4 sm:w-4" />
                   Submit Application
                 </>
               )}
@@ -603,10 +603,10 @@ Please email your application details directly to applications@nomineejobs.co.uk
               type="button"
               onClick={nextStep}
               disabled={!canProceed}
-              className="flex items-center gap-2 px-6"
+              className="flex items-center justify-center gap-2 px-6 w-full sm:w-auto h-12 sm:h-10 text-base sm:text-sm shadow-md active:scale-95 transition-all"
             >
               Continue
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-5 w-5 sm:h-4 sm:w-4" />
             </Button>
           )}
         </div>
